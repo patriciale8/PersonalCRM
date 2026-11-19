@@ -1422,6 +1422,21 @@
 
       var STORAGE_KEY = 'pink_white_linkedin_crm_v1';
       var API_KEY_STORAGE = 'pink_white_linkedin_crm_apikey_v1';
+      var CRM_CSV_COLUMNS = [
+        'First Name',
+        'Last Name',
+        'URL',
+        'Email Address',
+        'Company',
+        'Position',
+        'Connected On',
+        'Tags',
+        'Relationship Strength',
+        'Last Contacted',
+        'Next Action',
+        'Notes',
+        'Prep Notes'
+      ];
       var STRENGTH_LIST = ['Strong', 'Warm', 'Acquaintance', 'Dormant'];
       var STRENGTH_WEIGHT = { Strong: 4, Warm: 3, Acquaintance: 2, Dormant: 1 };
 
@@ -1673,7 +1688,6 @@
           strength: headers.indexOf('relationship strength'),
           lastContacted: headers.indexOf('last contacted'),
           nextAction: headers.indexOf('next action'),
-          nextActionDue: headers.findIndex(function (h) { return h === 'next action due' || h === 'follow-up due'; }),
           notes: headers.indexOf('notes'),
           prepNotes: headers.indexOf('prep notes')
         };
@@ -1698,7 +1712,6 @@
           var strengthRaw = col.strength > -1 ? String(cells[col.strength] || '').trim() : '';
           var lastContacted = col.lastContacted > -1 ? String(cells[col.lastContacted] || '').trim() : '';
           var nextAction = col.nextAction > -1 ? String(cells[col.nextAction] || '').trim() : '';
-          var nextActionDue = col.nextActionDue > -1 ? String(cells[col.nextActionDue] || '').trim() : '';
           var notes = col.notes > -1 ? String(cells[col.notes] || '').trim() : '';
           var prepNotes = col.prepNotes > -1 ? String(cells[col.prepNotes] || '').trim() : '';
 
@@ -1729,7 +1742,6 @@
             if (strengthRaw) match.relationshipStrength = normalizeStrength(strengthRaw);
             if (lastContacted) match.lastContacted = lastContacted;
             if (nextAction) match.nextAction = nextAction;
-            if (nextActionDue) match.nextActionDue = nextActionDue;
             if (notes) match.notes = notes;
             if (prepNotes) match.prepNotes = prepNotes;
             mergedCount++;
@@ -1747,7 +1759,6 @@
               relationshipStrength: strengthRaw ? normalizeStrength(strengthRaw) : 'Acquaintance',
               lastContacted: lastContacted,
               nextAction: nextAction,
-              nextActionDue: nextActionDue,
               notes: notes,
               prepNotes: prepNotes
             });
@@ -1775,11 +1786,7 @@
           setStatus('Nothing to export — load or add contacts first.', true);
           return;
         }
-        var cols = [
-          'First Name', 'Last Name', 'URL', 'Email Address', 'Company', 'Position', 'Connected On',
-          'Tags', 'Relationship Strength', 'Last Contacted', 'Next Action', 'Next Action Due', 'Notes', 'Prep Notes'
-        ];
-        var out = [cols.map(csvCell).join(',')];
+        var out = [CRM_CSV_COLUMNS.map(csvCell).join(',')];
 
         state.contacts.forEach(function (c) {
           out.push([
@@ -1794,14 +1801,13 @@
             c.relationshipStrength || 'Acquaintance',
             c.lastContacted || '',
             c.nextAction || '',
-            c.nextActionDue || '',
             c.notes || '',
             c.prepNotes || ''
           ].map(csvCell).join(','));
         });
 
         try {
-          var blob = new Blob([out.join('\n')], { type: 'text/csv;charset=utf-8;' });
+          var blob = new Blob([out.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
           var url = URL.createObjectURL(blob);
           var link = document.createElement('a');
           link.href = url;
@@ -1810,7 +1816,7 @@
           link.click();
           document.body.removeChild(link);
           URL.revokeObjectURL(url);
-          setStatus('Exported ' + state.contacts.length + ' contacts to CSV.');
+          setStatus('Exported ' + state.contacts.length + ' contacts using exact 13-column CRM CSV schema.');
           showToast('Exported ' + state.contacts.length + ' contacts.');
         } catch (err) {
           setStatus('Export failed in sandbox: use Paste/Copy or open in a standard tab.', true);
@@ -1989,15 +1995,15 @@
             lastContacted: offsetDateStr(-94),
             nextAction: 'Quarterly catch-up call',
             nextActionDue: offsetDateStr(6),
-            notes: 'Great mentor for career framing and GTM clarity.',
-            prepNotes: ''
-          }
-        ];
+      function isDue(c) {
+        if (!c.nextAction) return false;
+        return Boolean(String(c.nextAction).trim());
+      }
 
-        persistAll();
-        renderAll();
-        setStatus('Loaded 10 sample contacts into vault.');
-        showToast('Loaded 10 sample contacts.');
+      function isStale(c) {
+        if (!c.lastContacted) return true;
+        var ago = daysBetween(c.lastContacted, todayStr());
+        return ago === null || ago > 90;
       }
 
       // =========================================================================
@@ -2149,9 +2155,7 @@
       function renderDashboard() {
         var contacts = state.contacts;
         var tagged = contacts.filter(function (c) { return c.tags && c.tags.length > 0; }).length;
-        var due = contacts.filter(isDue).sort(function (a, b) {
-          return String(a.nextActionDue || '').localeCompare(String(b.nextActionDue || ''));
-        });
+        var due = contacts.filter(isDue);
         var stale = contacts.filter(isStale).sort(function (a, b) {
           return String(a.lastContacted || '0000-00-00').localeCompare(String(b.lastContacted || '0000-00-00'));
         });
@@ -2165,19 +2169,16 @@
 
         var dueListEl = document.getElementById('listDueQueue');
         if (!due.length) {
-          dueListEl.innerHTML = '<div style="padding: 20px; text-align: center; font-size: 12px; color: var(--text-muted);">No follow-ups due within 7 days.</div>';
+          dueListEl.innerHTML = '<div style="padding: 20px; text-align: center; font-size: 12px; color: var(--text-muted);">No next actions queued yet.</div>';
         } else {
           dueListEl.innerHTML = due.slice(0, 8).map(function (c) {
-            var d = daysBetween(todayStr(), c.nextActionDue);
-            var cls = d < 0 ? 'due-overdue' : 'due-soon';
-            var tagTxt = d < 0 ? (Math.abs(d) + 'd overdue') : (d === 0 ? 'Due today' : ('In ' + d + 'd'));
             return (
               '<button type="button" class="queue-item" data-contact-id="' + esc(c.id) + '" onclick="window.crmOpenDrawer(\'' + esc(c.id) + '\')">' +
                 '<div style="min-width: 0;">' +
                   '<div class="queue-item-title">' + esc((c.firstName + ' ' + c.lastName).trim()) + ' <span style="font-weight: 400; color: var(--text-muted);">\u2022 ' + esc(c.company || 'Independent') + '</span></div>' +
                   '<div class="queue-item-sub">' + esc(c.nextAction || 'Scheduled follow-up') + '</div>' +
                 '</div>' +
-                '<span class="badge ' + cls + '">' + esc(tagTxt) + '</span>' +
+                '<span class="badge due-soon">Action Set</span>' +
               '</button>'
             );
           }).join('');
@@ -2298,7 +2299,7 @@
             case 'lastContacted-asc':
               return String(a.lastContacted || '0000-00-00').localeCompare(String(b.lastContacted || '0000-00-00'));
             case 'nextActionDue-asc':
-              return String(a.nextActionDue || '9999-12-31').localeCompare(String(b.nextActionDue || '9999-12-31'));
+              return String(a.nextAction || 'zzz').localeCompare(String(b.nextAction || 'zzz'));
             default:
               return 0;
           }
@@ -2330,19 +2331,13 @@
           if (c.lastContacted) {
             var ago = daysBetween(c.lastContacted, todayStr());
             lastTxt = '<div style="font-weight:600;">' + esc(c.lastContacted) + '</div>' +
-              '<div style="font-size:11px; color:var(--text-muted);">' + (ago === 0 ? 'Today' : (ago + 'd ago')) + '</div>';
+              '<div style="font-size:11px; color:var(--text-muted);">' + (ago !== null ? (ago === 0 ? 'Today' : (ago + 'd ago')) : 'Logged') + '</div>';
           }
 
           var nextHtml = '<span style="color:var(--text-muted); font-size:12px;">\u2014</span>';
-          if (c.nextAction || c.nextActionDue) {
-            var dueBadge = '';
-            if (c.nextActionDue) {
-              var diff = daysBetween(todayStr(), c.nextActionDue);
-              var cls = diff < 0 ? 'due-overdue' : (diff <= 7 ? 'due-soon' : '');
-              var lbl = diff < 0 ? ('Overdue ' + c.nextActionDue) : ('Due ' + c.nextActionDue);
-              dueBadge = '<div><span class="badge ' + cls + '" style="margin-top:3px;">' + esc(lbl) + '</span></div>';
-            }
-            nextHtml = '<div>' + esc(c.nextAction || 'Follow-up') + '</div>' + dueBadge;
+          if (c.nextAction) {
+            nextHtml = '<div>' + esc(c.nextAction) + '</div>' +
+              '<div><span class="badge due-soon" style="margin-top:3px;">Next Action</span></div>';
           }
 
           return (
