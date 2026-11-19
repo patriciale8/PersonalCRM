@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexus Private CRM — Local-First LinkedIn Network Manager</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#fdf2f8',
+              100: '#fce7f3',
+              500: '#ec4899',
+              600: '#db2777',
+              700: '#be185d',
+              900: '#831843',
+            },
+            blush: {
+              bg: '#fff5f8',
+              tint: '#ffeef3',
+              plum: '#1f1218',
+              mauve: '#6b4c5b'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom subtle scrollbars & transitions */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #f9a8d4;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f472b6;
+    }
+    .drawer-backdrop {
+      transition: opacity 0.25s ease-in-out;
+    }
+    .drawer-panel {
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="bg-[#fff5f8] text-[#1f1218] font-sans antialiased selection:bg-pink-100 selection:text-pink-900 min-h-screen flex flex-col">
+
+  <!-- Hidden File Input for CSV Import -->
+  <input type="file" id="csvFileInput" accept=".csv,text/csv" class="hidden" />
+
+  <!-- Top Navigation & Privacy Header -->
+  <header class="bg-white border-b border-pink-200 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3.5 gap-3">
+        <!-- Brand & Local Privacy Shield -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-pink-600 flex items-center justify-center text-white shadow-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 class="text-base sm:text-lg font-bold tracking-tight text-[#1f1218]">Nexus Personal CRM</h1>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[#ffeef3] text-pink-800 border border-pink-200" title="All data is stored exclusively in your browser's localStorage. Zero server uploads.">
+                  <svg class="w-3 h-3 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+                  </svg>
+                  Local-Only Private Vault
+                </span>
+              </div>
+              <p class="text-xs text-[#6b4c5b] hidden sm:block">100% browser-resident network intelligence &bull; Zero cloud storage</p>
+            </div>
+          </div>
+
+          <!-- Save Indicator (Mobile) -->
+          <span id="saveIndicatorMobile" class="md:hidden text-xs font-medium text-pink-600 opacity-0 transition-opacity duration-300">Saved locally</span>
+        </div>
+
+        <!-- Primary Action Toolbar -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span id="saveIndicator" class="hidden md:inline-flex items-center gap-1 text-xs font-medium text-pink-600 mr-2 opacity-0 transition-opacity duration-300">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+            Saved to browser
+          </span>
+
+          <button id="btnLoadSample" type="button" class="px-3 py-1.5 text-xs font-medium text-[#1f1218] bg-white border border-pink-200 rounded-lg hover:bg-[#ffeef3] focus:outline-none focus:ring-2 focus:ring-pink-500/30 transition">
+            Load Sample Data
+          </button>
+
+          <button id="btnImportCsv" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-pink-800 bg-[#ffeef3] border border-pink-300 rounded-lg hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-pink-500/30 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            Import CSV
+          </button>
+
+          <button id="btnExportCsv" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-pink-600 rounded-lg hover:bg-pink-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500/40 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            Export Clean CSV
+          </button>
+
+          <button id="btnOpenSettings" type="button" class="p-1.5 text-[#6b4c5b] hover:text-[#1f1218] hover:bg-[#ffeef3] rounded-lg border border-transparent hover:border-pink-200 transition" title="Privacy & AI Settings">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex space-x-6 -mb-px" aria-label="Tabs">
+        <button id="tabDashboard" type="button" class="tab-btn border-b-2 border-pink-600 text-pink-600 py-2.5 px-1 text-sm font-semibold flex items-center gap-2 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+          Network Dashboard
+        </button>
+        <button id="tabDirectory" type="button" class="tab-btn border-b-2 border-transparent text-[#6b4c5b] hover:text-[#1f1218] hover:border-pink-300 py-2.5 px-1 text-sm font-medium flex items-center gap-2 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          Connections &amp; CRM Workspace
+          <span id="navTotalBadge" class="ml-1 px-2 py-0.5 text-xs rounded-full bg-[#ffeef3] text-pink-800 border border-pink-200 font-semibold">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Toast Notification Banner -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- Empty State Onboarding Banner (Shown when 0 contacts) -->
+    <section id="emptyStateBanner" class="hidden bg-white border border-pink-200 rounded-2xl p-8 sm:p-10 text-center shadow-sm mb-6">
+      <div class="w-12 h-12 rounded-2xl bg-[#ffeef3] text-pink-600 border border-pink-200 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+      </div>
+      <h2 class="text-lg font-bold text-[#1f1218]">Your Private Network Vault is Ready</h2>
+      <p class="text-sm text-[#6b4c5b] max-w-xl mx-auto mt-1.5 leading-relaxed">
+        Import your LinkedIn <code class="px-1.5 py-0.5 bg-[#ffeef3] border border-pink-200 rounded text-xs font-mono text-[#1f1218]">Connections.csv</code> file (preamble lines are automatically skipped) or re-import a previously exported CRM CSV. Everything stays strictly inside your browser's <code class="px-1.5 py-0.5 bg-[#ffeef3] border border-pink-200 rounded text-xs font-mono text-[#1f1218]">localStorage</code>.
+      </p>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <button id="btnEmptyImport" type="button" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-pink-600 rounded-xl hover:bg-pink-700 shadow-sm transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+          Import LinkedIn Connections.csv
+        </button>
+        <button id="btnEmptySample" type="button" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[#1f1218] bg-white border border-pink-300 rounded-xl hover:bg-[#ffeef3] transition">
+          Explore with Sample Network
+        </button>
+      </div>
+      <p class="text-xs text-[#6b4c5b] mt-4">
+        Privacy Note: Do not paste raw contact lists into unapproved public AI tools. Use local controls or enterprise-approved endpoints only.
+      </p>
+    </section>
+
+    <!-- VIEW 1: NETWORK DASHBOARD -->
+    <div id="viewDashboard" class="space-y-6">
+      <!-- KPI Cards Row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl border border-pink-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Total Connections</span>
+            <span class="p-2 rounded-lg bg-[#ffeef3] text-pink-600">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            </span>
+          </div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span id="kpiTotal" class="text-3xl font-bold text-[#1f1218]">0</span>
+            <span id="kpiTaggedPct" class="text-xs font-medium text-[#6b4c5b]">0% tagged</span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-pink-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Follow-Ups Due</span>
+            <span class="p-2 rounded-lg bg-pink-100 text-pink-700">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </span>
+          </div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span id="kpiFollowUps" class="text-3xl font-bold text-pink-600">0</span>
+            <span class="text-xs font-medium text-[#6b4c5b]">due within 7 days / overdue</span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-pink-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Need Re-Engagement</span>
+            <span class="p-2 rounded-lg bg-rose-100 text-rose-700">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            </span>
+          </div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span id="kpiStale" class="text-3xl font-bold text-[#1f1218]">0</span>
+            <span class="text-xs font-medium text-[#6b4c5b]">&gt;90 days or never contacted</span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-pink-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Strong &amp; Inner Circle</span>
+            <span class="p-2 rounded-lg bg-[#ffeef3] text-[#9d174d]">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+            </span>
+          </div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span id="kpiStrong" class="text-3xl font-bold text-[#9d174d]">0</span>
+            <span class="text-xs font-medium text-[#6b4c5b]">high-trust relationships</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actionable Queues Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Follow-Ups Due List -->
+        <div class="bg-white rounded-2xl border border-pink-200 shadow-sm flex flex-col">
+          <div class="px-5 py-4 border-b border-pink-100 flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-[#1f1218]">Action Queue: Follow-Ups Due</h3>
+              <p class="text-xs text-[#6b4c5b]">Overdue or scheduled within the next 7 days</p>
+            </div>
+            <button id="btnViewAllDue" type="button" class="text-xs font-semibold text-pink-600 hover:text-pink-800">Filter in Workspace &rarr;</button>
+          </div>
+          <div id="listFollowUpsDue" class="divide-y divide-pink-100 max-h-80 overflow-y-auto p-2">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Haven't Contacted in a While List -->
+        <div class="bg-white rounded-2xl border border-pink-200 shadow-sm flex flex-col">
+          <div class="px-5 py-4 border-b border-pink-100 flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-[#1f1218]">Haven't Contacted in a While</h3>
+              <p class="text-xs text-[#6b4c5b]">Warm/Strong contacts or general connections overdue for a check-in</p>
+            </div>
+            <button id="btnViewStale" type="button" class="text-xs font-semibold text-pink-600 hover:text-pink-800">Sort by Oldest &rarr;</button>
+          </div>
+          <div id="listStaleContacts" class="divide-y divide-pink-100 max-h-80 overflow-y-auto p-2">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Network Breakdown Charts Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- By Company -->
+        <div class="bg-white rounded-2xl border border-pink-200 p-5 shadow-sm">
+          <h3 class="text-sm font-bold text-[#1f1218]">Top Companies</h3>
+          <p class="text-xs text-[#6b4c5b] mb-4">Click a company to filter directory</p>
+          <div id="chartCompanies" class="space-y-3"></div>
+        </div>
+
+        <!-- By Tag -->
+        <div class="bg-white rounded-2xl border border-pink-200 p-5 shadow-sm">
+          <h3 class="text-sm font-bold text-[#1f1218]">Connections by Tag</h3>
+          <p class="text-xs text-[#6b4c5b] mb-4">Click a tag to filter directory</p>
+          <div id="chartTags" class="space-y-3"></div>
+        </div>
+
+        <!-- By Relationship Strength -->
+        <div class="bg-white rounded-2xl border border-pink-200 p-5 shadow-sm">
+          <h3 class="text-sm font-bold text-[#1f1218]">Relationship Strength</h3>
+          <p class="text-xs text-[#6b4c5b] mb-4">Distribution across trust tiers</p>
+          <div id="chartStrength" class="space-y-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: CONNECTIONS DIRECTORY & CRM WORKSPACE -->
+    <div id="viewDirectory" class="hidden space-y-4">
+      <!-- Filter & Search Control Bar -->
+      <div class="bg-white rounded-2xl border border-pink-200 p-4 shadow-sm space-y-3">
+        <div class="flex flex-col lg:flex-row gap-3">
+          <!-- Search Input -->
+          <div class="relative flex-1">
+            <svg class="w-4 h-4 text-[#6b4c5b] absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <input id="searchInput" type="text" placeholder="Search name, company, role, tags, next action, or notes..." class="w-full pl-10 pr-4 py-2 text-sm bg-white border border-pink-200 rounded-xl text-[#1f1218] placeholder-[#6b4c5b]/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-pink-500/30 focus:border-pink-500 transition" />
+          </div>
+
+          <!-- Dropdown Filters & Sort -->
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="filterTag" aria-label="Filter by Tag" class="px-3 py-2 text-xs font-medium bg-white border border-pink-200 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30">
+              <option value="">All Tags</option>
+            </select>
+
+            <select id="filterStrength" aria-label="Filter by Relationship Strength" class="px-3 py-2 text-xs font-medium bg-white border border-pink-200 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30">
+              <option value="">All Strengths</option>
+              <option value="Inner Circle">Inner Circle (4)</option>
+              <option value="Strong">Strong (3)</option>
+              <option value="Warm">Warm (2)</option>
+              <option value="Cold">Cold / Dormant (1)</option>
+            </select>
+
+            <label class="inline-flex items-center gap-2 px-3 py-2 text-xs font-medium bg-white border border-pink-200 rounded-xl text-[#1f1218] cursor-pointer hover:bg-[#ffeef3] select-none">
+              <input id="filterDueOnly" type="checkbox" class="rounded accent-pink-600 text-pink-600 focus:ring-pink-500" />
+              <span>Follow-Ups Due Only</span>
+            </label>
+
+            <select id="sortSelect" aria-label="Sort Connections" class="px-3 py-2 text-xs font-medium bg-white border border-pink-200 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30">
+              <option value="name-asc">Sort: Name (A–Z)</option>
+              <option value="strength-desc">Sort: Strength (Highest)</option>
+              <option value="lastContacted-asc">Sort: Last Contacted (Oldest First)</option>
+              <option value="lastContacted-desc">Sort: Last Contacted (Most Recent)</option>
+              <option value="dueDate-asc">Sort: Next Due Date (Soonest)</option>
+              <option value="company-asc">Sort: Company (A–Z)</option>
+              <option value="connectedOn-desc">Sort: Connected On (Newest)</option>
+            </select>
+
+            <button id="btnAddContact" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-[#9d174d] rounded-xl hover:bg-pink-800 transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+              Add Contact
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Filter Pills & Result Count -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-pink-100 text-xs text-[#6b4c5b]">
+          <div id="activeFilterSummary" class="flex flex-wrap items-center gap-1.5">
+            <span>Showing all connections</span>
+          </div>
+          <button id="btnClearFilters" type="button" class="hidden text-pink-600 hover:text-pink-800 font-medium">Reset filters</button>
+        </div>
+      </div>
+
+      <!-- Connections Table Card -->
+      <div class="bg-white rounded-2xl border border-pink-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-pink-200">
+            <thead class="bg-[#ffeef3]">
+              <tr>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Contact</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Company &amp; Role</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Strength</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Tags</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Last Contacted</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Next Action</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-[#6b4c5b]">Workspace</th>
+              </tr>
+            </thead>
+            <tbody id="connectionsTableBody" class="divide-y divide-pink-100 bg-white text-sm">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- SLIDE-OVER CONTACT DETAIL & TIER 2 AI PREP DRAWER -->
+  <div id="contactDrawerWrapper" class="fixed inset-0 z-40 hidden" aria-labelledby="drawerTitle" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div id="drawerBackdrop" class="drawer-backdrop fixed inset-0 bg-[#1f1218]/40 backdrop-blur-[1px] opacity-0"></div>
+
+    <!-- Drawer Panel -->
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div id="drawerPanel" class="drawer-panel w-screen max-w-2xl bg-white shadow-2xl border-l border-pink-200 flex flex-col translate-x-full">
+        <!-- Drawer Header -->
+        <div class="px-6 py-4 bg-[#ffeef3] border-b border-pink-200 flex items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div id="drawerAvatar" class="w-11 h-11 rounded-2xl bg-pink-600 text-white font-bold text-base flex items-center justify-center shrink-0 shadow-sm">
+              JD
+            </div>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h2 id="drawerTitle" class="text-lg font-bold text-[#1f1218] truncate">Contact Name</h2>
+                <a id="drawerLinkedInLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium text-pink-800 bg-white border border-pink-300 rounded-md hover:bg-pink-100 transition">
+                  LinkedIn
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </a>
+              </div>
+              <p id="drawerSubtitle" class="text-xs text-[#6b4c5b] truncate mt-0.5">Role at Company</p>
+            </div>
+          </div>
+          <button id="btnCloseDrawer" type="button" class="p-1.5 rounded-lg text-[#6b4c5b] hover:text-[#1f1218] hover:bg-pink-200/60 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <!-- Drawer Scrollable Body -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+          <!-- Core Identity Fields (Editable) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#fff5f8] p-4 rounded-xl border border-pink-200">
+            <div>
+              <label class="block text-xs font-semibold text-[#6b4c5b] mb-1">First Name</label>
+              <input id="fieldFirstName" type="text" class="w-full px-3 py-1.5 text-sm bg-white border border-pink-200 rounded-lg text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#6b4c5b] mb-1">Last Name</label>
+              <input id="fieldLastName" type="text" class="w-full px-3 py-1.5 text-sm bg-white border border-pink-200 rounded-lg text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#6b4c5b] mb-1">Company</label>
+              <input id="fieldCompany" type="text" class="w-full px-3 py-1.5 text-sm bg-white border border-pink-200 rounded-lg text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#6b4c5b] mb-1">Position / Title</label>
+              <input id="fieldPosition" type="text" class="w-full px-3 py-1.5 text-sm bg-white border border-pink-200 rounded-lg text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#6b4c5b] mb-1">Email Address</label>
+              <input id="fieldEmail" type="email" placeholder="Optional" class="w-full px-3 py-1.5 text-sm bg-white border border-pink-200 rounded-lg text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-[#6b4c5b] mb-1">LinkedIn URL &bull; <span id="metaConnectedOn" class="font-normal text-[#6b4c5b]/80">Connected: —</span></label>
+              <input id="fieldUrl" type="url" placeholder="https://www.linkedin.com/in/..." class="w-full px-3 py-1.5 text-sm bg-white border border-pink-200 rounded-lg text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+            </div>
+          </div>
+
+          <!-- CRM Relationship & Action Fields -->
+          <div class="space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#6b4c5b]">Relationship &amp; Cadence</h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="fieldStrength" class="block text-xs font-semibold text-[#1f1218] mb-1">Relationship Strength</label>
+                <select id="fieldStrength" class="w-full px-3 py-2 text-sm bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30">
+                  <option value="Cold">Cold (1) — Dormant / New</option>
+                  <option value="Warm">Warm (2) — Acquaintance / Periodic</option>
+                  <option value="Strong">Strong (3) — Trusted Colleague / Ally</option>
+                  <option value="Inner Circle">Inner Circle (4) — Champion / Close Advisor</option>
+                </select>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label for="fieldLastContacted" class="block text-xs font-semibold text-[#1f1218]">Last Contacted</label>
+                  <button id="btnSetToday" type="button" class="text-xs font-semibold text-pink-600 hover:text-pink-800">Set Today</button>
+                </div>
+                <input id="fieldLastContacted" type="date" class="w-full px-3 py-2 text-sm bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+              </div>
+            </div>
+
+            <div>
+              <label for="fieldTags" class="block text-xs font-semibold text-[#1f1218] mb-1">Tags (comma-separated)</label>
+              <input id="fieldTags" type="text" placeholder="e.g., AI Leaders, Hiring Manager, Mentor, Omaha, FinTech" class="w-full px-3 py-2 text-sm bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+              <div id="quickTagSuggestions" class="flex flex-wrap gap-1.5 mt-2">
+                <!-- Quick clickable tag pills populated from existing tags -->
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="sm:col-span-2">
+                <label for="fieldNextAction" class="block text-xs font-semibold text-[#1f1218] mb-1">Next Action</label>
+                <input id="fieldNextAction" type="text" placeholder="e.g., Send Q4 product benchmark note & ask for 15-min coffee" class="w-full px-3 py-2 text-sm bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+              </div>
+              <div>
+                <label for="fieldNextActionDue" class="block text-xs font-semibold text-[#1f1218] mb-1">Follow-Up Due Date</label>
+                <input id="fieldNextActionDue" type="date" class="w-full px-3 py-2 text-sm bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+              </div>
+            </div>
+          </div>
+
+          <!-- CRM Notes & Deep-Research Prep Notes -->
+          <div class="space-y-4">
+            <div>
+              <label for="fieldNotes" class="block text-xs font-semibold text-[#1f1218] mb-1">Running CRM Notes</label>
+              <textarea id="fieldNotes" rows="3" placeholder="How you met, shared interests, past conversation highlights..." class="w-full px-3 py-2 text-sm bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30"></textarea>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label for="fieldPrepNotes" class="block text-xs font-semibold text-[#1f1218]">Prep Notes &amp; Deep-Research Brief</label>
+                <span class="text-[11px] text-[#6b4c5b]">Paste research briefs or AI prep output here</span>
+              </div>
+              <textarea id="fieldPrepNotes" rows="5" placeholder="Drop your deep-research brief, company news, talking points, or tailored outreach drafts here..." class="w-full px-3 py-2 text-sm bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:bg-white focus:outline-none focus:ring-2 focus:ring-pink-500/30 font-normal leading-relaxed"></textarea>
+            </div>
+          </div>
+
+          <!-- TIER 2: AI PREP & OUTREACH ASSISTANT (ON USER'S DIRECTION) -->
+          <div class="rounded-2xl border border-pink-300 bg-gradient-to-br from-[#ffeef3] via-white to-[#fff5f8] p-4 sm:p-5 space-y-3.5 shadow-sm">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-pink-600 text-white flex items-center justify-center shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                </span>
+                <div>
+                  <h3 class="text-sm font-bold text-[#1f1218]">Tier 2: AI Outreach &amp; Meeting Prep</h3>
+                  <p class="text-xs text-[#6b4c5b]">Runs only on this single contact when you click Generate.</p>
+                </div>
+              </div>
+              <span id="aiModeBadge" class="px-2 py-0.5 text-[11px] font-medium rounded-full bg-white border border-pink-200 text-pink-800">
+                Single-Contact Context
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="aiTaskSelect" class="block text-xs font-semibold text-[#1f1218] mb-1">Prep Mode</label>
+                <select id="aiTaskSelect" class="w-full px-3 py-2 text-xs font-medium bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30">
+                  <option value="outreach">Draft Tailored Reach-Out Message</option>
+                  <option value="brief">Generate Short Pre-Call Prep Brief</option>
+                </select>
+              </div>
+              <div>
+                <label for="aiToneSelect" class="block text-xs font-semibold text-[#1f1218] mb-1">Tone / Channel</label>
+                <select id="aiToneSelect" class="w-full px-3 py-2 text-xs font-medium bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30">
+                  <option value="Warm & Concise LinkedIn DM">Warm &amp; Concise LinkedIn DM</option>
+                  <option value="Executive & Direct Email">Executive &amp; Direct Email</option>
+                  <option value="Curious Peer / Coffee Chat">Curious Peer / Coffee Chat</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="aiGoalInput" class="block text-xs font-semibold text-[#1f1218] mb-1">Your Specific Angle / Context (Optional)</label>
+              <input id="aiGoalInput" type="text" placeholder="e.g., Congratulate on recent launch, ask about AI ops roadmap, reconnect after 6 months" class="w-full px-3 py-2 text-xs bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+              <button id="btnGenerateAi" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-pink-600 rounded-xl hover:bg-pink-700 shadow-sm disabled:opacity-60 transition">
+                <svg id="aiSpinner" class="hidden animate-spin w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                <span id="btnGenerateAiLabel">Generate with AI</span>
+              </button>
+
+              <button id="btnCopyEnterprisePrompt" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#1f1218] bg-white border border-pink-300 rounded-xl hover:bg-[#ffeef3] transition" title="Copies a structured prompt for this single contact to paste into your organization's enterprise-approved AI tool">
+                <svg class="w-3.5 h-3.5 text-pink-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                Copy Prompt for Enterprise AI
+              </button>
+            </div>
+
+            <!-- AI Output Display Box -->
+            <div id="aiOutputWrapper" class="hidden space-y-2 pt-2 border-t border-pink-200">
+              <div class="flex items-center justify-between">
+                <span id="aiSourceLabel" class="text-[11px] font-semibold uppercase tracking-wider text-pink-700">AI Draft Output</span>
+                <div class="flex items-center gap-2">
+                  <button id="btnCopyAiOutput" type="button" class="px-2.5 py-1 text-xs font-medium text-[#1f1218] bg-white border border-pink-200 rounded-lg hover:bg-[#ffeef3] transition">
+                    Copy Output
+                  </button>
+                  <button id="btnAppendPrepNotes" type="button" class="px-2.5 py-1 text-xs font-semibold text-pink-800 bg-[#ffeef3] border border-pink-300 rounded-lg hover:bg-pink-100 transition">
+                    + Append to Prep Notes
+                  </button>
+                </div>
+              </div>
+              <textarea id="aiOutputText" rows="6" class="w-full px-3 py-2 text-xs sm:text-sm bg-white border border-pink-300 rounded-xl text-[#1f1218] leading-relaxed focus:outline-none focus:ring-2 focus:ring-pink-500/30"></textarea>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="px-6 py-3.5 bg-[#ffeef3] border-t border-pink-200 flex items-center justify-between gap-3">
+          <button id="btnDeleteContact" type="button" class="px-3 py-2 text-xs font-medium text-rose-700 hover:bg-rose-100/80 rounded-xl transition">
+            Delete Contact
+          </button>
+          <div class="flex items-center gap-2">
+            <button id="btnCancelDrawer" type="button" class="px-4 py-2 text-xs font-medium text-[#1f1218] bg-white border border-pink-300 rounded-xl hover:bg-[#fff5f8] transition">
+              Close
+            </button>
+            <button id="btnSaveContact" type="button" class="px-4 py-2 text-xs font-semibold text-white bg-pink-600 rounded-xl hover:bg-pink-700 shadow-sm transition">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIVACY & AI SETTINGS MODAL -->
+  <div id="settingsModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-[#1f1218]/50 backdrop-blur-[1px]">
+    <div class="bg-white rounded-2xl border border-pink-200 max-w-lg w-full shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 bg-[#ffeef3] border-b border-pink-200 flex items-center justify-between">
+        <h3 class="text-base font-bold text-[#1f1218]">Privacy, Storage &amp; AI Configuration</h3>
+        <button id="btnCloseSettings" type="button" class="p-1 text-[#6b4c5b] hover:text-[#1f1218] rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <div class="p-6 space-y-5 text-sm">
+        <!-- Privacy Posture Summary -->
+        <div class="p-3.5 rounded-xl bg-[#fff5f8] border border-pink-200 text-[#1f1218] text-xs space-y-1.5 leading-relaxed">
+          <p class="font-bold flex items-center gap-1.5 text-pink-800">
+            <svg class="w-4 h-4 text-pink-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+            Data Governance &amp; Local Storage Guarantee
+          </p>
+          <p class="text-[#6b4c5b]">Your contact directory is stored solely in this browser's <code class="font-mono bg-white px-1 rounded border border-pink-200 text-[#1f1218]">localStorage</code>. Export a backup CSV regularly to keep a portable copy on your machine.</p>
+        </div>
+
+        <!-- Optional Gemini API Key for Standalone Offline/Local Usage -->
+        <div class="space-y-2">
+          <label for="settingApiKey" class="block text-xs font-bold text-[#1f1218]">
+            Optional Enterprise / Opted-Out Gemini API Key (For Standalone Local File Use)
+          </label>
+          <input id="settingApiKey" type="password" placeholder="AIzaSy... (Leave blank in Canvas or to use local smart templates)" class="w-full px-3 py-2 text-xs bg-white border border-pink-300 rounded-xl text-[#1f1218] focus:outline-none focus:ring-2 focus:ring-pink-500/30" />
+          <p class="text-[11px] text-[#6b4c5b] leading-normal">
+            In Canvas, Gemini works automatically without entering a key. If you save this HTML file locally and want live AI generation, enter an enterprise/zero-data-retention Gemini API key (stored only in <code class="font-mono">localStorage</code>), or leave blank to use the built-in offline template synthesizer &amp; "Copy Prompt for Enterprise AI".
+          </p>
+        </div>
+
+        <!-- Danger Zone: Clear Local Data -->
+        <div class="pt-4 border-t border-pink-200 flex items-center justify-between gap-4">
+          <div>
+            <p class="text-xs font-bold text-rose-700">Clear Local Vault</p>
+            <p class="text-[11px] text-[#6b4c5b]">Permanently removes all contacts from this browser.</p>
+          </div>
+          <div id="clearConfirmGroup" class="flex items-center gap-2">
+            <button id="btnInitiateClear" type="button" class="px-3 py-1.5 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-xl hover:bg-rose-100 transition">
+              Reset Local Data
+            </button>
+            <button id="btnConfirmClear" type="button" class="hidden px-3 py-1.5 text-xs font-semibold text-white bg-rose-600 rounded-xl hover:bg-rose-700 transition">
+              Confirm Wipe
+            </button>
+            <button id="btnCancelClear" type="button" class="hidden px-2.5 py-1.5 text-xs font-medium text-[#1f1218] bg-[#ffeef3] rounded-xl hover:bg-pink-200 transition">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="px-6 py-3.5 bg-[#ffeef3] border-t border-pink-200 flex justify-end gap-2">
+        <button id="btnSaveSettings" type="button" class="px-4 py-2 text-xs font-semibold text-white bg-pink-600 rounded-xl hover:bg-pink-700 transition">
+          Save Settings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    (function () {
+      'use strict';
+
+      // =========================================================================
+      // 1. CONSTANTS & STATE MANAGEMENT
+      // =========================================================================
+      const STORAGE_KEY = 'nexus_personal_crm_contacts_v1';
+      const SETTINGS_KEY = 'nexus_personal_crm_settings_v1';
+
+      const STRENGTH_META = {
+        'Inner Circle': { rank: 4, badgeClass: 'bg-[#9d174d] text-white border-[#9d174d]',           barClass: 'bg-[#9d174d]' },
+        'Strong':       { rank: 3, badgeClass: 'bg-pink-100 text-pink-800 border-pink-300',         barClass: 'bg-pink-600' },
+        'Warm':         { rank: 2, badgeClass: 'bg-[#ffeef3] text-pink-700 border-pink-200',       barClass: 'bg-pink-400' },
+        'Cold':         { rank: 1, badgeClass: 'bg-white text-[#6b4c5b] border-pink-200',          barClass: 'bg-pink-200' }
+      };
+
+      const TAG_COLORS = [
+        'bg-[#ffeef3] text-pink-800 border-pink-200',
+        'bg-pink-100 text-[#9d174d] border-pink-300',
+        'bg-rose-50 text-rose-800 border-rose-200',
+        'bg-fuchsia-50 text-fuchsia-800 border-fuchsia-200',
+        'bg-white text-pink-700 border-pink-300',
+        'bg-pink-50 text-pink-900 border-pink-200'
+      ];
+
+      let state = {
+        contacts: [],
+        settings: {
+          apiKey: ''
+        },
+        activeTab: 'dashboard',
+        filters: {
+          search: '',
+          tag: '',
+          strength: '',
+          dueOnly: false,
+          sort: 'name-asc'
+        },
+        editingContactId: null
+      };
+
+      // =========================================================================
+      // 2. UTILITY HELPERS
+      // =========================================================================
+      function generateId() {
+        return 'c_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+      }
+
+      function getTodayISO() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
+      function offsetDateISO(daysDelta) {
+        const d = new Date();
+        d.setDate(d.getDate() + daysDelta);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
+      function daysBetween(dateStrA, dateStrB) {
+        if (!dateStrA || !dateStrB) return null;
+        const a = new Date(dateStrA + 'T00:00:00');
+        const b = new Date(dateStrB + 'T00:00:00');
+        if (isNaN(a.getTime()) || isNaN(b.getTime())) return null;
+        return Math.round((b - a) / (1000 * 60 * 60 * 24));
+      }
+
+      function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function getTagColorClass(tag) {
+        let hash = 0;
+        for (let i = 0; i < tag.length; i++) {
+          hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return TAG_COLORS[Math.abs(hash) % TAG_COLORS.length];
+      }
+
+      function parseTagsArray(tagsInput) {
+        if (Array.isArray(tagsInput)) return tagsInput.map(t => t.trim()).filter(Boolean);
+        if (!tagsInput) return [];
+        return String(tagsInput)
+          .split(',')
+          .map(t => t.trim())
+          .filter(Boolean);
+      }
+
+      function normalizeStrength(val) {
+        if (!val) return 'Cold';
+        const v = String(val).trim().toLowerCase();
+        if (v.includes('inner') || v === '4' || v === '5') return 'Inner Circle';
+        if (v.includes('strong') || v === '3') return 'Strong';
+        if (v.includes('warm') || v === '2') return 'Warm';
+        return 'Cold';
+      }
+
+      function isFollowUpDue(contact) {
+        if (!contact.nextActionDue) return false;
+        const today = getTodayISO();
+        const diff = daysBetween(today, contact.nextActionDue);
+        return diff !== null && diff <= 7; // Overdue or due within 7 days
+      }
+
+      function isContactStale(contact) {
+        if (!contact.lastContacted) return true;
+        const today = getTodayISO();
+        const daysSince = daysBetween(contact.lastContacted, today);
+        return daysSince === null || daysSince > 90;
+      }
+
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        const colors = {
+          success: 'bg-[#9d174d] text-white border-pink-400/50',
+          error: 'bg-rose-900 text-white border-rose-400/50',
+          info: 'bg-[#1f1218] text-white border-pink-300/30'
+        };
+        toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-2.5 rounded-xl shadow-lg border text-xs font-medium transform transition-all duration-300 translate-y-2 opacity-0 ${colors[type] || colors.info}`;
+        toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+        container.appendChild(toast);
+
+        requestAnimationFrame(() => {
+          toast.classList.remove('translate-y-2', 'opacity-0');
+        });
+
+        setTimeout(() => {
+          toast.classList.add('translate-y-2', 'opacity-0');
+          setTimeout(() => toast.remove(), 300);
+        }, 3200);
+      }
+
+      function flashSavedIndicator() {
+        const desktopEl = document.getElementById('saveIndicator');
+        const mobileEl = document.getElementById('saveIndicatorMobile');
+        [desktopEl, mobileEl].forEach(el => {
+          if (!el) return;
+          el.classList.remove('opacity-0');
+          clearTimeout(el._hideTimer);
+          el._hideTimer = setTimeout(() => el.classList.add('opacity-0'), 2000);
+        });
+      }
+
+      function copyTextToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        let ok = false;
+        try {
+          ok = document.execCommand('copy');
+        } catch (err) {
+          ok = false;
+        }
+        document.body.removeChild(textarea);
+        return ok;
+      }
+
+      // =========================================================================
+      // 3. LOCALSTORAGE PERSISTENCE
+      // =========================================================================
+      function loadFromStorage() {
+        try {
+          const rawContacts = localStorage.getItem(STORAGE_KEY);
+          if (rawContacts) {
+            const parsed = JSON.parse(rawContacts);
+            if (Array.isArray(parsed)) {
+              state.contacts = parsed;
+            }
+          }
+          const rawSettings = localStorage.getItem(SETTINGS_KEY);
+          if (rawSettings) {
+            const parsedSettings = JSON.parse(rawSettings);
+            state.settings = { ...state.settings, ...parsedSettings };
+          }
+        } catch (err) {
+          console.error('Error reading localStorage:', err);
+          showToast('Could not read saved browser storage.', 'error');
+        }
+      }
+
+      function saveContactsToStorage() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state.contacts));
+          flashSavedIndicator();
+        } catch (err) {
+          console.error('Error saving to localStorage:', err);
+          showToast('Storage quota exceeded. Please export a CSV backup.', 'error');
+        }
+      }
+
+      function saveSettingsToStorage() {
+        try {
+          localStorage.setItem(SETTINGS_KEY, JSON.stringify(state.settings));
+          flashSavedIndicator();
+        } catch (err) {
+          console.error('Error saving settings:', err);
+        }
+      }
+
+      // =========================================================================
+      // 4. ROBUST CSV PARSER & EXPORTER (RFC 4180 + LINKEDIN PREAMBLE DETECTION)
+      // =========================================================================
+      function parseCSVRows(csvText) {
+        const rows = [];
+        let currentRow = [];
+        let currentField = '';
+        let inQuotes = false;
+
+        // Normalize line endings
+        const text = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+        for (let i = 0; i < text.length; i++) {
+          const char = text[i];
+          const nextChar = text[i + 1];
+
+          if (inQuotes) {
+            if (char === '"' && nextChar === '"') {
+              currentField += '"';
+              i++; // Skip escaped quote
+            } else if (char === '"') {
+              inQuotes = false;
+            } else {
+              currentField += char;
+            }
+          } else {
+            if (char === '"') {
+              inQuotes = true;
+            } else if (char === ',') {
+              currentRow.push(currentField);
+              currentField = '';
+            } else if (char === '\n') {
+              currentRow.push(currentField);
+              rows.push(currentRow);
+              currentRow = [];
+              currentField = '';
+            } else {
+              currentField += char;
+            }
+          }
+        }
+        if (currentField.length > 0 || currentRow.length > 0) {
+          currentRow.push(currentField);
+          rows.push(currentRow);
+        }
+        return rows;
+      }
+
+      function importLinkedInOrCrmCsv(csvText) {
+        const rows = parseCSVRows(csvText);
+        if (!rows || rows.length === 0) {
+          showToast('CSV file appears to be empty.', 'error');
+          return;
+        }
+
+        // Auto-detect the header row containing "First Name" and "Last Name"
+        // (Skips LinkedIn's 2-3 preamble/Notes rows automatically)
+        let headerRowIndex = -1;
+        for (let i = 0; i < Math.min(rows.length, 15); i++) {
+          const normalizedCells = rows[i].map(c => c.trim().toLowerCase());
+          if (normalizedCells.includes('first name') && normalizedCells.includes('last name')) {
+            headerRowIndex = i;
+            break;
+          }
+        }
+
+        if (headerRowIndex === -1) {
+          showToast('Could not locate "First Name" and "Last Name" header row in CSV.', 'error');
+          return;
+        }
+
+        const headers = rows[headerRowIndex].map(h => h.trim().toLowerCase());
+        const colIdx = {
+          firstName: headers.indexOf('first name'),
+          lastName: headers.indexOf('last name'),
+          url: headers.indexOf('url'),
+          email: headers.findIndex(h => h === 'email address' || h === 'email'),
+          company: headers.indexOf('company'),
+          position: headers.indexOf('position'),
+          connectedOn: headers.indexOf('connected on'),
+          tags: headers.indexOf('tags'),
+          strength: headers.indexOf('relationship strength'),
+          lastContacted: headers.indexOf('last contacted'),
+          nextAction: headers.indexOf('next action'),
+          nextActionDue: headers.findIndex(h => h === 'next action due' || h === 'follow-up due' || h === 'due date'),
+          notes: headers.indexOf('notes'),
+          prepNotes: headers.indexOf('prep notes')
+        };
+
+        let addedCount = 0;
+        let updatedCount = 0;
+
+        for (let r = headerRowIndex + 1; r < rows.length; r++) {
+          const row = rows[r];
+          if (!row || row.every(cell => !cell.trim())) continue;
+
+          const firstName = (row[colIdx.firstName] || '').trim();
+          const lastName = (row[colIdx.lastName] || '').trim();
+          if (!firstName && !lastName) continue;
+
+          const url = colIdx.url > -1 ? (row[colIdx.url] || '').trim() : '';
+          const email = colIdx.email > -1 ? (row[colIdx.email] || '').trim() : '';
+          const company = colIdx.company > -1 ? (row[colIdx.company] || '').trim() : '';
+          const position = colIdx.position > -1 ? (row[colIdx.position] || '').trim() : '';
+          const connectedOn = colIdx.connectedOn > -1 ? (row[colIdx.connectedOn] || '').trim() : '';
+
+          const importedTags = colIdx.tags > -1 ? parseTagsArray(row[colIdx.tags]) : [];
+          const importedStrength = colIdx.strength > -1 && row[colIdx.strength].trim()
+            ? normalizeStrength(row[colIdx.strength])
+            : null;
+          const importedLastContacted = colIdx.lastContacted > -1 ? (row[colIdx.lastContacted] || '').trim() : '';
+          const importedNextAction = colIdx.nextAction > -1 ? (row[colIdx.nextAction] || '').trim() : '';
+          const importedNextActionDue = colIdx.nextActionDue > -1 ? (row[colIdx.nextActionDue] || '').trim() : '';
+          const importedNotes = colIdx.notes > -1 ? (row[colIdx.notes] || '').trim() : '';
+          const importedPrepNotes = colIdx.prepNotes > -1 ? (row[colIdx.prepNotes] || '').trim() : '';
+
+          // Deduplicate by LinkedIn URL (if present) or First+Last+Company
+          const existing = state.contacts.find(c => {
+            if (url && c.url && c.url.toLowerCase() === url.toLowerCase()) return true;
+            return (
+              c.firstName.toLowerCase() === firstName.toLowerCase() &&
+              c.lastName.toLowerCase() === lastName.toLowerCase() &&
+              (c.company || '').toLowerCase() === company.toLowerCase()
+            );
+          });
+
+          if (existing) {
+            // Preserve existing CRM fields unless the imported CSV explicitly provides richer data
+            existing.url = url || existing.url;
+            existing.email = email || existing.email;
+            existing.company = company || existing.company;
+            existing.position = position || existing.position;
+            existing.connectedOn = connectedOn || existing.connectedOn;
+            if (importedTags.length > 0) {
+              existing.tags = Array.from(new Set([...existing.tags, ...importedTags]));
+            }
+            if (importedStrength) existing.relationshipStrength = importedStrength;
+            if (importedLastContacted) existing.lastContacted = importedLastContacted;
+            if (importedNextAction) existing.nextAction = importedNextAction;
+            if (importedNextActionDue) existing.nextActionDue = importedNextActionDue;
+            if (importedNotes) existing.notes = importedNotes;
+            if (importedPrepNotes) existing.prepNotes = importedPrepNotes;
+            updatedCount++;
+          } else {
+            state.contacts.push({
+              id: generateId(),
+              firstName,
+              lastName,
+              url,
+              email,
+              company,
+              position,
+              connectedOn,
+              tags: importedTags,
+              relationshipStrength: importedStrength || 'Cold',
+              lastContacted: importedLastContacted,
+              nextAction: importedNextAction,
+              nextActionDue: importedNextActionDue,
+              notes: importedNotes,
+              prepNotes: importedPrepNotes
+            });
+            addedCount++;
+          }
+        }
+
+        saveContactsToStorage();
+        renderAll();
+        showToast(`Imported ${addedCount} new & updated ${updatedCount} existing connections.`, 'success');
+      }
+
+      function escapeCsvCell(val) {
+        const str = val === null || val === undefined ? '' : String(val);
+        if (str.includes('"') || str.includes(',') || str.includes('\n')) {
+          return `"${str.replace(/"/g, '""')}"`;
+        }
+        return str;
+      }
+
+      function exportCleanCsv() {
+        if (state.contacts.length === 0) {
+          showToast('No contacts to export yet.', 'info');
+          return;
+        }
+
+        const headers = [
+          'First Name',
+          'Last Name',
+          'URL',
+          'Email Address',
+          'Company',
+          'Position',
+          'Connected On',
+          'Tags',
+          'Relationship Strength',
+          'Last Contacted',
+          'Next Action',
+          'Next Action Due',
+          'Notes',
+          'Prep Notes'
+        ];
+
+        const lines = [headers.map(escapeCsvCell).join(',')];
+
+        state.contacts.forEach(c => {
+          const row = [
+            c.firstName,
+            c.lastName,
+            c.url,
+            c.email,
+            c.company,
+            c.position,
+            c.connectedOn,
+            (c.tags || []).join(', '),
+            c.relationshipStrength || 'Cold',
+            c.lastContacted || '',
+            c.nextAction || '',
+            c.nextActionDue || '',
+            c.notes || '',
+            c.prepNotes || ''
+          ];
+          lines.push(row.map(escapeCsvCell).join(','));
+        });
+
+        const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `linkedin-personal-crm-${getTodayISO()}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast('Exported clean enriched CRM CSV.', 'success');
+      }
+
+      // =========================================================================
+      // 5. SAMPLE DATA GENERATOR (FOR IMMEDIATE TESTING)
+      // =========================================================================
+      function loadSampleData() {
+        const samples = [
+          {
+            id: generateId(),
+            firstName: 'Maya',
+            lastName: 'Lin-Kowalski',
+            url: 'https://www.linkedin.com/in/example-maya-lk',
+            email: 'maya.lk@example.com',
+            company: 'Aether Cloud Systems',
+            position: 'VP of AI Engineering',
+            connectedOn: '14 Mar 2024',
+            tags: ['AI Leaders', 'Enterprise', 'Speaker'],
+            relationshipStrength: 'Inner Circle',
+            lastContacted: offsetDateISO(-18),
+            nextAction: 'Share evaluation notes on agentic workflows & confirm coffee next week',
+            nextActionDue: offsetDateISO(2),
+            notes: 'Met at Enterprise AI Summit. Deep expertise in evaluation harnesses and private model deployments.',
+            prepNotes: 'Recent focus: Aether launched multi-region VPC inference last month. Ask how their enterprise customers handle audit logging.'
+          },
+          {
+            id: generateId(),
+            firstName: 'David',
+            lastName: 'Okafor',
+            url: 'https://www.linkedin.com/in/example-david-okafor',
+            email: '',
+            company: 'Heartland FinTech Group',
+            position: 'Director of Product Strategy',
+            connectedOn: '09 Nov 2023',
+            tags: ['FinTech', 'Omaha', 'Product'],
+            relationshipStrength: 'Strong',
+            lastContacted: offsetDateISO(-112),
+            nextAction: 'Reconnect over Q4 product roadmap & intro to payments team',
+            nextActionDue: offsetDateISO(-1),
+            notes: 'Former colleague from product guild. Always generous with customer discovery feedback.',
+            prepNotes: ''
+          },
+          {
+            id: generateId(),
+            firstName: 'Elena',
+            lastName: 'Rostova',
+            url: 'https://www.linkedin.com/in/example-elena-rostova',
+            email: 'elena@veridianbio.example',
+            company: 'Veridian Health Labs',
+            position: 'Chief Information Security Officer',
+            connectedOn: '22 Jan 2025',
+            tags: ['Security', 'Healthcare', 'Advisor'],
+            relationshipStrength: 'Strong',
+            lastContacted: offsetDateISO(-45),
+            nextAction: 'Send zero-trust data governance checklist',
+            nextActionDue: offsetDateISO(5),
+            notes: 'Very sharp on HIPAA + LLM privacy guardrails.',
+            prepNotes: 'Key angle: Local-first architectures eliminate third-party PII exposure.'
+          },
+          {
+            id: generateId(),
+            firstName: 'Marcus',
+            lastName: 'Vance',
+            url: 'https://www.linkedin.com/in/example-marcus-vance',
+            email: '',
+            company: 'Aether Cloud Systems',
+            position: 'Staff Solutions Architect',
+            connectedOn: '03 Aug 2024',
+            tags: ['Enterprise', 'Architecture'],
+            relationshipStrength: 'Warm',
+            lastContacted: offsetDateISO(-98),
+            nextAction: 'Follow up on reference architecture benchmark',
+            nextActionDue: offsetDateISO(14),
+            notes: 'Works closely with Maya Lin-Kowalski on customer PoCs.',
+            prepNotes: ''
+          },
+          {
+            id: generateId(),
+            firstName: 'Priya',
+            lastName: 'Subramanian',
+            url: 'https://www.linkedin.com/in/example-priya-subramanian',
+            email: 'priya@northstarvc.example',
+            company: 'Northstar Seed Partners',
+            position: 'Principal',
+            connectedOn: '19 May 2023',
+            tags: ['Investor', 'AI Leaders', 'Mentor'],
+            relationshipStrength: 'Inner Circle',
+            lastContacted: offsetDateISO(-12),
+            nextAction: 'Send monthly builder update & 2 portfolio intros',
+            nextActionDue: offsetDateISO(4),
+            notes: 'Focuses on B2B workflow software and vertical AI tools.',
+            prepNotes: ''
+          },
+          {
+            id: generateId(),
+            firstName: 'Jonas',
+            lastName: 'Lindqvist',
+            url: 'https://www.linkedin.com/in/example-jonas-lindqvist',
+            email: '',
+            company: 'Nordic Logistics Tech',
+            position: 'Head of Data Platform',
+            connectedOn: '11 Feb 2022',
+            tags: ['Data', 'Supply Chain'],
+            relationshipStrength: 'Cold',
+            lastContacted: '',
+            nextAction: 'Warm check-in on supply chain forecasting migration',
+            nextActionDue: '',
+            notes: 'Connected after webinar on lakehouse architectures.',
+            prepNotes: ''
+          }
+        ];
+
+        state.contacts = samples;
+        saveContactsToStorage();
+        renderAll();
+        showToast('Loaded 6 sample connections into your local vault.', 'success');
+      }
+
+      // =========================================================================
+      // 6. TIER 2 AI PREP & OUTREACH ASSISTANT (GEMINI API + SMART FALLBACK)
+      // =========================================================================
+      function buildSingleContactPrompt(contact, mode, tone, customGoal) {
+        const fullName = `${contact.firstName} ${contact.lastName}`.trim();
+        const roleLine = [contact.position, contact.company].filter(Boolean).join(' at ') || 'Professional';
+        const tagsStr = (contact.tags && contact.tags.length > 0) ? contact.tags.join(', ') : 'None';
+
+        const contextBlock = [
+          `Contact Name: ${fullName}`,
+          `Role & Company: ${roleLine}`,
+          `Relationship Strength: ${contact.relationshipStrength || 'Cold'}`,
+          `Tags: ${tagsStr}`,
+          `Last Contacted: ${contact.lastContacted || 'Never / Unknown'}`,
+          `Planned Next Action: ${contact.nextAction || 'General reconnect'}`,
+          `Running CRM Notes: ${contact.notes || 'None provided'}`,
+          `Deep-Research / Prep Notes: ${contact.prepNotes || 'None provided'}`,
+          customGoal ? `User's Specific Angle/Goal: ${customGoal}` : ''
+        ].filter(Boolean).join('\n');
+
+        if (mode === 'brief') {
+          return `You are an executive networking strategist. Create a concise, high-signal pre-call/outreach Prep Brief for the following single contact.\n\n${contextBlock}\n\nProvide:\n1. Relationship Snapshot (1-2 sentences)\n2. 3 High-Value Talking Points / Open-Ended Questions tailored to their role and notes\n3. Recommended Next Step to deepen trust.\nKeep it crisp, actionable, and free of fluff.`;
+        }
+
+        return `You are an executive networking advisor. Draft a tailored outreach message to the following single contact.\nTone/Channel: ${tone}\n\n${contextBlock}\n\nRules:\n- Keep it authentic, concise (under 110 words for LinkedIn DM, under 150 words for Email), and human.\n- Reference specific context from their role, notes, or prep notes naturally without sounding robotic.\n- Include a low-friction call to action.\n- Output ONLY the message draft (with a brief Subject line if Email).`;
+      }
+
+      function generateLocalSmartFallback(contact, mode, tone, customGoal) {
+        const first = contact.firstName || 'there';
+        const fullName = `${contact.firstName} ${contact.lastName}`.trim();
+        const company = contact.company || 'your team';
+        const position = contact.position || 'your current role';
+        const angle = customGoal || contact.nextAction || `your work at ${company}`;
+        const noteSnippet = contact.prepNotes
+          ? contact.prepNotes.split('\n')[0].slice(0, 140)
+          : (contact.notes ? contact.notes.split('\n')[0].slice(0, 140) : '');
+
+        if (mode === 'brief') {
+          return [
+            `PRE-OUTREACH BRIEF: ${fullName.toUpperCase()}`,
+            `• Role & Org: ${position} at ${company} (${contact.relationshipStrength} tier)`,
+            `• Last Touchpoint: ${contact.lastContacted || 'No prior logged date'}`,
+            ``,
+            `KEY TALKING POINTS:`,
+            `1. Context Hook: Anchor the conversation around ${angle}.`,
+            noteSnippet ? `2. Research/Note Tie-In: Follow up on "${noteSnippet}".` : `2. Role Perspective: Ask what top priorities are shaping ${company}'s roadmap this quarter.`,
+            `3. Value Offer: Share a concise insight, benchmark, or relevant peer introduction before making an ask.`,
+            ``,
+            `SUGGESTED NEXT STEP:`,
+            `• ${contact.nextAction || 'Propose a brief 15-minute catch-up call or async exchange.'}`
+          ].join('\n');
+        }
+
+        const isEmail = tone.toLowerCase().includes('email');
+        const subjectLine = isEmail ? `Subject: Quick hello / ${angle.slice(0, 48)}\n\n` : '';
+        const hook = noteSnippet
+          ? `I was thinking about our last note (${noteSnippet.replace(/\.$/, '')}) and wanted to reach out.`
+          : `I've been following ${company}'s momentum and wanted to reconnect around ${angle}.`;
+
+        return `${subjectLine}Hi ${first},\n\nHope your week is going well! ${hook}\n\nGiven your perspective as ${position}, I'd love to compare notes briefly on what you're seeing in the space right now. No rush at all—open to a quick 15-minute chat sometime over the next couple of weeks if your schedule permits?\n\nBest,\n[Your Name]`;
+      }
+
+      async function fetchGeminiWithBackoff(promptText, apiKey) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey || '')}`;
+        const payload = {
+          contents: [{ parts: [{ text: promptText }] }]
+        };
+
+        const delays = [1000, 2000, 4000];
+        for (let attempt = 0; attempt <= delays.length; attempt++) {
+          try {
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+              if ((response.status === 429 || response.status >= 500) && attempt < delays.length) {
+                await new Promise(res => setTimeout(res, delays[attempt]));
+                continue;
+              }
+              throw new Error(`API status ${response.status}`);
+            }
+
+            const data = await response.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) return text.trim();
+            throw new Error('Empty response candidate');
+          } catch (err) {
+            if (attempt < delays.length) {
+              await new Promise(res => setTimeout(res, delays[attempt]));
+              continue;
+            }
+            throw err;
+          }
+        }
+      }
+
+      async function handleGenerateAi() {
+        const contact = getDraftContactFromDrawer();
+        if (!contact) return;
+
+        const mode = document.getElementById('aiTaskSelect').value;
+        const tone = document.getElementById('aiToneSelect').value;
+        const customGoal = document.getElementById('aiGoalInput').value.trim();
+
+        const btn = document.getElementById('btnGenerateAi');
+        const spinner = document.getElementById('aiSpinner');
+        const label = document.getElementById('btnGenerateAiLabel');
+        const outputWrapper = document.getElementById('aiOutputWrapper');
+        const outputText = document.getElementById('aiOutputText');
+        const sourceLabel = document.getElementById('aiSourceLabel');
+
+        btn.disabled = true;
+        spinner.classList.remove('hidden');
+        label.textContent = 'Generating...';
+
+        const promptText = buildSingleContactPrompt(contact, mode, tone, customGoal);
+
+        try {
+          // Attempt Gemini API call (works automatically in Canvas runtime or with user-configured key)
+          const generated = await fetchGeminiWithBackoff(promptText, state.settings.apiKey);
+          outputText.value = generated;
+          sourceLabel.textContent = 'Gemini AI Output (Review & Edit Before Sending)';
+          outputWrapper.classList.remove('hidden');
+          showToast('AI draft generated for ' + contact.firstName, 'success');
+        } catch (err) {
+          // Graceful offline/standalone fallback when no API key is configured outside Canvas
+          const fallback = generateLocalSmartFallback(contact, mode, tone, customGoal);
+          outputText.value = fallback;
+          sourceLabel.textContent = 'Local Smart Template (Add Gemini API Key in Settings for Live LLM)';
+          outputWrapper.classList.remove('hidden');
+          showToast('Generated structured draft using local synthesizer.', 'info');
+        } finally {
+          btn.disabled = false;
+          spinner.classList.add('hidden');
+          label.textContent = 'Generate with AI';
+        }
+      }
+
+      // =========================================================================
+      // 7. RENDERING: DASHBOARD & DIRECTORY
+      // =========================================================================
+      function renderAll() {
+        const hasContacts = state.contacts.length > 0;
+        document.getElementById('emptyStateBanner').classList.toggle('hidden', hasContacts);
+        document.getElementById('navTotalBadge').textContent = state.contacts.length;
+
+        renderDashboard();
+        populateTagFilterDropdown();
+        renderDirectoryTable();
+      }
+
+      function renderDashboard() {
+        const total = state.contacts.length;
+        const taggedCount = state.contacts.filter(c => c.tags && c.tags.length > 0).length;
+        const dueContacts = state.contacts.filter(isFollowUpDue).sort((a, b) => (a.nextActionDue || '').localeCompare(b.nextActionDue || ''));
+        const staleContacts = state.contacts
+          .filter(isContactStale)
+          .sort((a, b) => {
+            // Prioritize Warm/Strong/Inner Circle contacts who haven't been contacted in a while
+            const rankDiff = (STRENGTH_META[b.relationshipStrength]?.rank || 1) - (STRENGTH_META[a.relationshipStrength]?.rank || 1);
+            if (rankDiff !== 0) return rankDiff;
+            return (a.lastContacted || '0000-00-00').localeCompare(b.lastContacted || '0000-00-00');
+          });
+        const strongCount = state.contacts.filter(c => c.relationshipStrength === 'Strong' || c.relationshipStrength === 'Inner Circle').length;
+
+        document.getElementById('kpiTotal').textContent = total;
+        document.getElementById('kpiTaggedPct').textContent = total > 0 ? `${Math.round((taggedCount / total) * 100)}% tagged` : '0% tagged';
+        document.getElementById('kpiFollowUps').textContent = dueContacts.length;
+        document.getElementById('kpiStale').textContent = staleContacts.length;
+        document.getElementById('kpiStrong').textContent = strongCount;
+
+        // Render Follow-Ups Due Queue
+        const dueListEl = document.getElementById('listFollowUpsDue');
+        if (dueContacts.length === 0) {
+          dueListEl.innerHTML = `<div class="p-6 text-center text-xs text-[#6b4c5b]">No follow-ups due within the next 7 days.</div>`;
+        } else {
+          const today = getTodayISO();
+          dueListEl.innerHTML = dueContacts.slice(0, 8).map(c => {
+            const diff = daysBetween(today, c.nextActionDue);
+            const badgeClass = diff < 0
+              ? 'bg-rose-100 text-rose-800 border-rose-300'
+              : 'bg-[#ffeef3] text-pink-800 border-pink-300';
+            const dueText = diff < 0 ? `${Math.abs(diff)}d overdue` : (diff === 0 ? 'Due today' : `In ${diff}d`);
+            return `
+              <button type="button" data-open-contact="${escapeHtml(c.id)}" class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#ffeef3]/70 transition flex items-center justify-between gap-3 group">
+                <div class="min-w-0">
+                  <p class="text-xs font-bold text-[#1f1218] group-hover:text-pink-600 truncate">${escapeHtml(c.firstName)} ${escapeHtml(c.lastName)} <span class="font-normal text-[#6b4c5b]">&bull; ${escapeHtml(c.company || 'Independent')}</span></p>
+                  <p class="text-xs text-[#6b4c5b] truncate mt-0.5">${escapeHtml(c.nextAction || 'Scheduled check-in')}</p>
+                </div>
+                <span class="shrink-0 px-2 py-0.5 text-[11px] font-semibold rounded-full border ${badgeClass}">${dueText}</span>
+              </button>
+            `;
+          }).join('');
+        }
+
+        // Render Haven't Contacted in a While Queue
+        const staleListEl = document.getElementById('listStaleContacts');
+        if (staleContacts.length === 0) {
+          staleListEl.innerHTML = `<div class="p-6 text-center text-xs text-[#6b4c5b]">All connections have been contacted within the last 90 days!</div>`;
+        } else {
+          const today = getTodayISO();
+          staleListEl.innerHTML = staleContacts.slice(0, 8).map(c => {
+            const daysSince = c.lastContacted ? daysBetween(c.lastContacted, today) : null;
+            const recencyLabel = daysSince !== null ? `${daysSince}d ago` : 'Never logged';
+            const strengthMeta = STRENGTH_META[c.relationshipStrength] || STRENGTH_META.Cold;
+            return `
+              <button type="button" data-open-contact="${escapeHtml(c.id)}" class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-[#ffeef3]/70 transition flex items-center justify-between gap-3 group">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2">
+                    <p class="text-xs font-bold text-[#1f1218] group-hover:text-pink-600 truncate">${escapeHtml(c.firstName)} ${escapeHtml(c.lastName)}</p>
+                    <span class="px-1.5 py-0.2 text-[10px] font-semibold rounded border ${strengthMeta.badgeClass}">${escapeHtml(c.relationshipStrength)}</span>
+                  </div>
+                  <p class="text-xs text-[#6b4c5b] truncate mt-0.5">${escapeHtml(c.position || '')}${c.position && c.company ? ' at ' : ''}${escapeHtml(c.company || '')}</p>
+                </div>
+                <span class="shrink-0 text-xs font-medium text-[#6b4c5b]">${recencyLabel}</span>
+              </button>
+            `;
+          }).join('');
+        }
+
+        // Render Haven't Contacted in a While Queue
+        const staleListEl = document.getElementById('listStaleContacts');
+        if (staleContacts.length === 0) {
+          staleListEl.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">All connections have been contacted within the last 90 days!</div>`;
+        } else {
+          const today = getTodayISO();
+          staleListEl.innerHTML = staleContacts.slice(0, 8).map(c => {
+            const daysSince = c.lastContacted ? daysBetween(c.lastContacted, today) : null;
+            const recencyLabel = daysSince !== null ? `${daysSince}d ago` : 'Never logged';
+            const strengthMeta = STRENGTH_META[c.relationshipStrength] || STRENGTH_META.Cold;
+            return `
+              <button type="button" data-open-contact="${escapeHtml(c.id)}" class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-50 transition flex items-center justify-between gap-3 group">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2">
+                    <p class="text-xs font-bold text-slate-900 group-hover:text-indigo-600 truncate">${escapeHtml(c.firstName)} ${escapeHtml(c.lastName)}</p>
+                    <span class="px-1.5 py-0.2 text-[10px] font-semibold rounded border ${strengthMeta.badgeClass}">${escapeHtml(c.relationshipStrength)}</span>
+                  </div>
+                  <p class="text-xs text-slate-500 truncate mt-0.5">${escapeHtml(c.position || '')}${c.position && c.company ? ' at ' : ''}${escapeHtml(c.company || '')}</p>
+                </div>
+                <span class="shrink-0 text-xs font-medium text-slate-500">${recencyLabel}</span>
+              </button>
+            `;
+          }).join('');
+        }
+
+        // Render Bar Chart: Top Companies
+        const companyCounts = {};
+        state.contacts.forEach(c => {
+          const comp = (c.company || '').trim();
+          if (comp) companyCounts[comp] = (companyCounts[comp] || 0) + 1;
+        });
+        const topCompanies = Object.entries(companyCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+        renderHorizontalBars('chartCompanies', topCompanies, total, 'company');
+
+        // Render Bar Chart: By Tag
+        const tagCounts = {};
+        state.contacts.forEach(c => {
+          (c.tags || []).forEach(t => {
+            tagCounts[t] = (tagCounts[t] || 0) + 1;
+          });
+        });
+        const topTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+        renderHorizontalBars('chartTags', topTags, total, 'tag');
+
+        // Render Bar Chart: Relationship Strength
+        const strengthOrder = ['Inner Circle', 'Strong', 'Warm', 'Cold'];
+        const strengthContainer = document.getElementById('chartStrength');
+        if (total === 0) {
+          strengthContainer.innerHTML = `<p class="text-xs text-[#6b4c5b]">Import connections to view distribution.</p>`;
+        } else {
+          strengthContainer.innerHTML = strengthOrder.map(tier => {
+            const count = state.contacts.filter(c => (c.relationshipStrength || 'Cold') === tier).length;
+            const pct = Math.round((count / total) * 100);
+            const meta = STRENGTH_META[tier];
+            return `
+              <button type="button" data-filter-strength="${tier}" class="w-full text-left group">
+                <div class="flex items-center justify-between text-xs mb-1">
+                  <span class="font-medium text-[#1f1218] group-hover:text-pink-600">${tier}</span>
+                  <span class="font-semibold text-[#1f1218]">${count} <span class="text-[#6b4c5b] font-normal">(${pct}%)</span></span>
+                </div>
+                <div class="w-full h-2 bg-[#ffeef3] rounded-full overflow-hidden">
+                  <div class="h-full ${meta.barClass} rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                </div>
+              </button>
+            `;
+          }).join('');
+        }
+      }
+
+      function renderHorizontalBars(containerId, items, total, filterType) {
+        const el = document.getElementById(containerId);
+        if (!items || items.length === 0) {
+          el.innerHTML = `<p class="text-xs text-[#6b4c5b]">No data recorded yet.</p>`;
+          return;
+        }
+        const maxVal = items[0][1] || 1;
+        el.innerHTML = items.map(([label, count]) => {
+          const widthPct = Math.max(8, Math.round((count / maxVal) * 100));
+          const dataAttr = filterType === 'company'
+            ? `data-filter-company="${escapeHtml(label)}"`
+            : `data-filter-tag="${escapeHtml(label)}"`;
+          return `
+            <button type="button" ${dataAttr} class="w-full text-left group">
+              <div class="flex items-center justify-between text-xs mb-1 gap-2">
+                <span class="font-medium text-[#1f1218] group-hover:text-pink-600 truncate">${escapeHtml(label)}</span>
+                <span class="font-semibold text-[#1f1218] shrink-0">${count}</span>
+              </div>
+              <div class="w-full h-2 bg-[#ffeef3] rounded-full overflow-hidden">
+                <div class="h-full bg-pink-500 group-hover:bg-pink-600 rounded-full transition-all duration-300" style="width: ${widthPct}%"></div>
+              </div>
+            </button>
+          `;
+        }).join('');
+      }
+
+      function populateTagFilterDropdown() {
+        const select = document.getElementById('filterTag');
+        const currentVal = state.filters.tag;
+        const allTags = new Set();
+        state.contacts.forEach(c => (c.tags || []).forEach(t => allTags.add(t)));
+        const sortedTags = Array.from(allTags).sort((a, b) => a.localeCompare(b));
+
+        select.innerHTML = `<option value="">All Tags (${sortedTags.length})</option>` +
+          sortedTags.map(t => `<option value="${escapeHtml(t)}" ${t === currentVal ? 'selected' : ''}>${escapeHtml(t)}</option>`).join('');
+      }
+
+      function getFilteredAndSortedContacts() {
+        const { search, tag, strength, dueOnly, sort } = state.filters;
+        const q = search.trim().toLowerCase();
+
+        const filtered = state.contacts.filter(c => {
+          if (tag && !(c.tags || []).includes(tag)) return false;
+          if (strength && (c.relationshipStrength || 'Cold') !== strength) return false;
+          if (dueOnly && !isFollowUpDue(c)) return false;
+
+          if (q) {
+            const haystack = [
+              c.firstName,
+              c.lastName,
+              `${c.firstName} ${c.lastName}`,
+              c.company,
+              c.position,
+              (c.tags || []).join(' '),
+              c.nextAction,
+              c.notes,
+              c.prepNotes
+            ].join(' ').toLowerCase();
+            if (!haystack.includes(q)) return false;
+          }
+          return true;
+        });
+
+        filtered.sort((a, b) => {
+          switch (sort) {
+            case 'name-asc':
+              return `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`);
+            case 'strength-desc': {
+              const rA = STRENGTH_META[a.relationshipStrength]?.rank || 1;
+              const rB = STRENGTH_META[b.relationshipStrength]?.rank || 1;
+              if (rB !== rA) return rB - rA;
+              return `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`);
+            }
+            case 'lastContacted-asc':
+              return (a.lastContacted || '0000-00-00').localeCompare(b.lastContacted || '0000-00-00');
+            case 'lastContacted-desc':
+              return (b.lastContacted || '0000-00-00').localeCompare(a.lastContacted || '0000-00-00');
+            case 'dueDate-asc':
+              return (a.nextActionDue || '9999-12-31').localeCompare(b.nextActionDue || '9999-12-31');
+            case 'company-asc':
+              return (a.company || 'zzz').localeCompare(b.company || 'zzz');
+            case 'connectedOn-desc':
+              return (b.connectedOn || '').localeCompare(a.connectedOn || '');
+            default:
+              return 0;
+          }
+        });
+
+        return filtered;
+      }
+
+      function renderDirectoryTable() {
+        const list = getFilteredAndSortedContacts();
+        const tbody = document.getElementById('connectionsTableBody');
+        const summaryEl = document.getElementById('activeFilterSummary');
+        const clearBtn = document.getElementById('btnClearFilters');
+
+        const hasActiveFilters = Boolean(
+          state.filters.search || state.filters.tag || state.filters.strength || state.filters.dueOnly
+        );
+        clearBtn.classList.toggle('hidden', !hasActiveFilters);
+        summaryEl.innerHTML = `<span>Showing <strong class="text-[#1f1218]">${list.length}</strong> of ${state.contacts.length} connections</span>`;
+
+        if (list.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" class="px-6 py-12 text-center text-sm text-[#6b4c5b]">
+                No connections match your current filter criteria.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        const today = getTodayISO();
+
+        tbody.innerHTML = list.map(c => {
+          const initials = `${(c.firstName || '?')[0]}${(c.lastName || '')[0] || ''}`.toUpperCase();
+          const strength = c.relationshipStrength || 'Cold';
+          const strengthMeta = STRENGTH_META[strength] || STRENGTH_META.Cold;
+
+          const tagsHtml = (c.tags && c.tags.length > 0)
+            ? c.tags.map(t => `<span class="inline-block px-2 py-0.5 text-[11px] font-medium rounded-full border ${getTagColorClass(t)}">${escapeHtml(t)}</span>`).join(' ')
+            : `<span class="text-xs text-[#6b4c5b]/60">—</span>`;
+
+          let lastContactedHtml = `<span class="text-xs text-[#6b4c5b]/60">Never</span>`;
+          if (c.lastContacted) {
+            const daysAgo = daysBetween(c.lastContacted, today);
+            const staleBadge = daysAgo > 90 ? 'text-rose-700 font-semibold' : 'text-[#1f1218]';
+            lastContactedHtml = `
+              <div class="text-xs ${staleBadge}">${escapeHtml(c.lastContacted)}</div>
+              <div class="text-[11px] text-[#6b4c5b]">${daysAgo === 0 ? 'Today' : `${daysAgo}d ago`}</div>
+            `;
+          }
+
+          let nextActionHtml = `<span class="text-xs text-[#6b4c5b]/60">—</span>`;
+          if (c.nextAction || c.nextActionDue) {
+            const dueDiff = c.nextActionDue ? daysBetween(today, c.nextActionDue) : null;
+            let duePill = '';
+            if (dueDiff !== null) {
+              const pillColor = dueDiff < 0
+                ? 'bg-rose-100 text-rose-800 border-rose-300'
+                : (dueDiff <= 7 ? 'bg-[#ffeef3] text-pink-800 border-pink-300' : 'bg-white text-[#6b4c5b] border-pink-200');
+              const label = dueDiff < 0 ? `Overdue (${c.nextActionDue})` : `Due ${c.nextActionDue}`;
+              duePill = `<span class="inline-block mt-1 px-1.5 py-0.5 text-[10px] font-semibold rounded border ${pillColor}">${label}</span>`;
+            }
+            nextActionHtml = `
+              <div class="text-xs text-[#1f1218] line-clamp-2 max-w-xs">${escapeHtml(c.nextAction || 'Follow-up scheduled')}</div>
+              ${duePill}
+            `;
+          }
+
+          return `
+            <tr data-open-contact="${escapeHtml(c.id)}" class="hover:bg-[#ffeef3]/60 cursor-pointer transition group">
+              <td class="px-4 py-3.5 whitespace-nowrap">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-[#ffeef3] group-hover:bg-pink-600 text-pink-800 group-hover:text-white border border-pink-200 font-bold text-xs flex items-center justify-center shrink-0 transition">
+                    ${escapeHtml(initials)}
+                  </div>
+                  <div>
+                    <div class="font-semibold text-[#1f1218] group-hover:text-pink-700 transition">${escapeHtml(c.firstName)} ${escapeHtml(c.lastName)}</div>
+                    ${c.prepNotes ? `<span class="inline-flex items-center gap-1 text-[10px] font-medium text-pink-600">Has Prep Notes</span>` : ''}
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-3.5">
+                <div class="text-xs font-semibold text-[#1f1218]">${escapeHtml(c.company || '—')}</div>
+                <div class="text-xs text-[#6b4c5b] line-clamp-1">${escapeHtml(c.position || '')}</div>
+              </td>
+              <td class="px-4 py-3.5 whitespace-nowrap">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${strengthMeta.badgeClass}">
+                  ${escapeHtml(strength)}
+                </span>
+              </td>
+              <td class="px-4 py-3.5">
+                <div class="flex flex-wrap gap-1 max-w-[200px]">${tagsHtml}</div>
+              </td>
+              <td class="px-4 py-3.5 whitespace-nowrap">
+                ${lastContactedHtml}
+              </td>
+              <td class="px-4 py-3.5">
+                ${nextActionHtml}
+              </td>
+              <td class="px-4 py-3.5 whitespace-nowrap text-right">
+                <button type="button" data-open-contact="${escapeHtml(c.id)}" class="px-2.5 py-1.5 text-xs font-semibold text-pink-700 bg-[#ffeef3] border border-pink-200 group-hover:bg-pink-600 group-hover:text-white group-hover:border-pink-600 rounded-lg transition">
+                  Prep &amp; Edit
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // =========================================================================
+      // 8. CONTACT DETAIL DRAWER & INTERACTIONS
+      // =========================================================================
+      function openContactDrawer(contactId) {
+        const isNew = !contactId;
+        const contact = isNew
+          ? {
+              id: null,
+              firstName: '',
+              lastName: '',
+              url: '',
+              email: '',
+              company: '',
+              position: '',
+              connectedOn: getTodayISO(),
+              tags: [],
+              relationshipStrength: 'Warm',
+              lastContacted: '',
+              nextAction: '',
+              nextActionDue: '',
+              notes: '',
+              prepNotes: ''
+            }
+          : state.contacts.find(c => c.id === contactId);
+
+        if (!contact) return;
+        state.editingContactId = contact.id;
+
+        const fullName = `${contact.firstName} ${contact.lastName}`.trim() || 'New Contact';
+        const initials = `${(contact.firstName || 'N')[0]}${(contact.lastName || 'C')[0]}`.toUpperCase();
+
+        document.getElementById('drawerAvatar').textContent = initials;
+        document.getElementById('drawerTitle').textContent = fullName;
+        document.getElementById('drawerSubtitle').textContent = [contact.position, contact.company].filter(Boolean).join(' at ') || 'Add role & company details';
+
+        const liLink = document.getElementById('drawerLinkedInLink');
+        if (contact.url) {
+          liLink.href = contact.url;
+          liLink.classList.remove('hidden');
+        } else {
+          liLink.classList.add('hidden');
+        }
+
+        document.getElementById('fieldFirstName').value = contact.firstName || '';
+        document.getElementById('fieldLastName').value = contact.lastName || '';
+        document.getElementById('fieldCompany').value = contact.company || '';
+        document.getElementById('fieldPosition').value = contact.position || '';
+        document.getElementById('fieldEmail').value = contact.email || '';
+        document.getElementById('fieldUrl').value = contact.url || '';
+        document.getElementById('metaConnectedOn').textContent = `Connected: ${contact.connectedOn || '—'}`;
+
+        document.getElementById('fieldStrength').value = contact.relationshipStrength || 'Cold';
+        document.getElementById('fieldLastContacted').value = contact.lastContacted || '';
+        document.getElementById('fieldTags').value = (contact.tags || []).join(', ');
+        document.getElementById('fieldNextAction').value = contact.nextAction || '';
+        document.getElementById('fieldNextActionDue').value = contact.nextActionDue || '';
+        document.getElementById('fieldNotes').value = contact.notes || '';
+        document.getElementById('fieldPrepNotes').value = contact.prepNotes || '';
+
+        // Reset AI assistant panel state
+        document.getElementById('aiGoalInput').value = '';
+        document.getElementById('aiOutputWrapper').classList.add('hidden');
+        document.getElementById('aiOutputText').value = '';
+
+        // Populate quick tag pills from existing network tags
+        const allTags = new Set();
+        state.contacts.forEach(c => (c.tags || []).forEach(t => allTags.add(t)));
+        const suggestionsEl = document.getElementById('quickTagSuggestions');
+        const tagArray = Array.from(allTags).slice(0, 8);
+        suggestionsEl.innerHTML = tagArray.map(t => `
+          <button type="button" data-add-tag="${escapeHtml(t)}" class="px-2 py-0.5 text-[11px] font-medium bg-[#ffeef3] hover:bg-pink-200 text-pink-800 border border-pink-200 rounded-full transition">
+            + ${escapeHtml(t)}
+          </button>
+        `).join('');
+
+        document.getElementById('btnDeleteContact').classList.toggle('hidden', isNew);
+
+        // Animate drawer open
+        const wrapper = document.getElementById('contactDrawerWrapper');
+        const backdrop = document.getElementById('drawerBackdrop');
+        const panel = document.getElementById('drawerPanel');
+        wrapper.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          backdrop.classList.remove('opacity-0');
+          panel.classList.remove('translate-x-full');
+        });
+      }
+
+      function closeContactDrawer() {
+        const wrapper = document.getElementById('contactDrawerWrapper');
+        const backdrop = document.getElementById('drawerBackdrop');
+        const panel = document.getElementById('drawerPanel');
+        backdrop.classList.add('opacity-0');
+        panel.classList.add('translate-x-full');
+        setTimeout(() => {
+          wrapper.classList.add('hidden');
+          state.editingContactId = null;
+        }, 260);
+      }
+
+      function getDraftContactFromDrawer() {
+        const firstName = document.getElementById('fieldFirstName').value.trim();
+        const lastName = document.getElementById('fieldLastName').value.trim();
+        return {
+          id: state.editingContactId || generateId(),
+          firstName,
+          lastName,
+          company: document.getElementById('fieldCompany').value.trim(),
+          position: document.getElementById('fieldPosition').value.trim(),
+          email: document.getElementById('fieldEmail').value.trim(),
+          url: document.getElementById('fieldUrl').value.trim(),
+          relationshipStrength: document.getElementById('fieldStrength').value,
+          lastContacted: document.getElementById('fieldLastContacted').value,
+          tags: parseTagsArray(document.getElementById('fieldTags').value),
+          nextAction: document.getElementById('fieldNextAction').value.trim(),
+          nextActionDue: document.getElementById('fieldNextActionDue').value,
+          notes: document.getElementById('fieldNotes').value.trim(),
+          prepNotes: document.getElementById('fieldPrepNotes').value.trim()
+        };
+      }
+
+      function saveDrawerContact() {
+        const draft = getDraftContactFromDrawer();
+        if (!draft.firstName && !draft.lastName) {
+          showToast('Please provide at least a first or last name.', 'error');
+          return;
+        }
+
+        if (state.editingContactId) {
+          const idx = state.contacts.findIndex(c => c.id === state.editingContactId);
+          if (idx > -1) {
+            state.contacts[idx] = {
+              ...state.contacts[idx],
+              ...draft
+            };
+          }
+        } else {
+          draft.connectedOn = getTodayISO();
+          state.contacts.unshift(draft);
+        }
+
+        saveContactsToStorage();
+        renderAll();
+        closeContactDrawer();
+        showToast(`Saved ${draft.firstName} ${draft.lastName}.`, 'success');
+      }
+
+      function deleteCurrentDrawerContact() {
+        if (!state.editingContactId) return;
+        state.contacts = state.contacts.filter(c => c.id !== state.editingContactId);
+        saveContactsToStorage();
+        renderAll();
+        closeContactDrawer();
+        showToast('Contact removed from local vault.', 'info');
+      }
+
+      // =========================================================================
+      // 9. TAB SWITCHING & EVENT LISTENERS
+      // =========================================================================
+      function switchTab(tabName) {
+        state.activeTab = tabName;
+        const isDash = tabName === 'dashboard';
+
+        document.getElementById('viewDashboard').classList.toggle('hidden', !isDash);
+        document.getElementById('viewDirectory').classList.toggle('hidden', isDash);
+
+        const tabDash = document.getElementById('tabDashboard');
+        const tabDir = document.getElementById('tabDirectory');
+
+        if (isDash) {
+          tabDash.className = 'tab-btn border-b-2 border-pink-600 text-pink-600 py-2.5 px-1 text-sm font-semibold flex items-center gap-2 transition';
+          tabDir.className = 'tab-btn border-b-2 border-transparent text-[#6b4c5b] hover:text-[#1f1218] hover:border-pink-300 py-2.5 px-1 text-sm font-medium flex items-center gap-2 transition';
+        } else {
+          tabDir.className = 'tab-btn border-b-2 border-pink-600 text-pink-600 py-2.5 px-1 text-sm font-semibold flex items-center gap-2 transition';
+          tabDash.className = 'tab-btn border-b-2 border-transparent text-[#6b4c5b] hover:text-[#1f1218] hover:border-pink-300 py-2.5 px-1 text-sm font-medium flex items-center gap-2 transition';
+        }
+      }
+
+      function bindEvents() {
+        // Navigation Tabs
+        document.getElementById('tabDashboard').addEventListener('click', () => switchTab('dashboard'));
+        document.getElementById('tabDirectory').addEventListener('click', () => switchTab('directory'));
+
+        // CSV Import Triggers
+        const fileInput = document.getElementById('csvFileInput');
+        document.getElementById('btnImportCsv').addEventListener('click', () => fileInput.click());
+        document.getElementById('btnEmptyImport').addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            importLinkedInOrCrmCsv(evt.target.result);
+            fileInput.value = '';
+          };
+          reader.onerror = () => showToast('Failed to read CSV file.', 'error');
+          reader.readAsText(file);
+        });
+
+        // CSV Export & Sample Data
+        document.getElementById('btnExportCsv').addEventListener('click', exportCleanCsv);
+        document.getElementById('btnLoadSample').addEventListener('click', loadSampleData);
+        document.getElementById('btnEmptySample').addEventListener('click', loadSampleData);
+
+        // Dashboard Quick Jump Buttons
+        document.getElementById('btnViewAllDue').addEventListener('click', () => {
+          state.filters.dueOnly = true;
+          document.getElementById('filterDueOnly').checked = true;
+          switchTab('directory');
+          renderDirectoryTable();
+        });
+
+        document.getElementById('btnViewStale').addEventListener('click', () => {
+          state.filters.sort = 'lastContacted-asc';
+          document.getElementById('sortSelect').value = 'lastContacted-asc';
+          switchTab('directory');
+          renderDirectoryTable();
+        });
+
+        // Directory Search, Filter & Sort Inputs
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+          state.filters.search = e.target.value;
+          renderDirectoryTable();
+        });
+        document.getElementById('filterTag').addEventListener('change', (e) => {
+          state.filters.tag = e.target.value;
+          renderDirectoryTable();
+        });
+        document.getElementById('filterStrength').addEventListener('change', (e) => {
+          state.filters.strength = e.target.value;
+          renderDirectoryTable();
+        });
+        document.getElementById('filterDueOnly').addEventListener('change', (e) => {
+          state.filters.dueOnly = e.target.checked;
+          renderDirectoryTable();
+        });
+        document.getElementById('sortSelect').addEventListener('change', (e) => {
+          state.filters.sort = e.target.value;
+          renderDirectoryTable();
+        });
+        document.getElementById('btnClearFilters').addEventListener('click', () => {
+          state.filters = { search: '', tag: '', strength: '', dueOnly: false, sort: 'name-asc' };
+          document.getElementById('searchInput').value = '';
+          document.getElementById('filterTag').value = '';
+          document.getElementById('filterStrength').value = '';
+          document.getElementById('filterDueOnly').checked = false;
+          document.getElementById('sortSelect').value = 'name-asc';
+          renderDirectoryTable();
+        });
+
+        // Add New Contact Button
+        document.getElementById('btnAddContact').addEventListener('click', () => openContactDrawer(null));
+
+        // Delegated Clicks for Opening Contacts & Chart Filtering
+        document.body.addEventListener('click', (e) => {
+          const openTarget = e.target.closest('[data-open-contact]');
+          if (openTarget) {
+            openContactDrawer(openTarget.getAttribute('data-open-contact'));
+            return;
+          }
+
+          const companyFilter = e.target.closest('[data-filter-company]');
+          if (companyFilter) {
+            const comp = companyFilter.getAttribute('data-filter-company');
+            state.filters.search = comp;
+            document.getElementById('searchInput').value = comp;
+            switchTab('directory');
+            renderDirectoryTable();
+            return;
+          }
+
+          const tagFilter = e.target.closest('[data-filter-tag]');
+          if (tagFilter) {
+            const tag = tagFilter.getAttribute('data-filter-tag');
+            state.filters.tag = tag;
+            document.getElementById('filterTag').value = tag;
+            switchTab('directory');
+            renderDirectoryTable();
+            return;
+          }
+
+          const strengthFilter = e.target.closest('[data-filter-strength]');
+          if (strengthFilter) {
+            const str = strengthFilter.getAttribute('data-filter-strength');
+            state.filters.strength = str;
+            document.getElementById('filterStrength').value = str;
+            switchTab('directory');
+            renderDirectoryTable();
+            return;
+          }
+
+          const addTagBtn = e.target.closest('[data-add-tag]');
+          if (addTagBtn) {
+            const tagToAdd = addTagBtn.getAttribute('data-add-tag');
+            const input = document.getElementById('fieldTags');
+            const current = parseTagsArray(input.value);
+            if (!current.includes(tagToAdd)) {
+              current.push(tagToAdd);
+              input.value = current.join(', ');
+            }
+          }
+        });
+
+        // Drawer Controls
+        document.getElementById('btnCloseDrawer').addEventListener('click', closeContactDrawer);
+        document.getElementById('btnCancelDrawer').addEventListener('click', closeContactDrawer);
+        document.getElementById('drawerBackdrop').addEventListener('click', closeContactDrawer);
+        document.getElementById('btnSaveContact').addEventListener('click', saveDrawerContact);
+        document.getElementById('btnDeleteContact').addEventListener('click', deleteCurrentDrawerContact);
+        document.getElementById('btnSetToday').addEventListener('click', () => {
+          document.getElementById('fieldLastContacted').value = getTodayISO();
+        });
+
+        // Tier 2 AI Assistant Controls
+        document.getElementById('btnGenerateAi').addEventListener('click', handleGenerateAi);
+
+        document.getElementById('btnCopyEnterprisePrompt').addEventListener('click', () => {
+          const contact = getDraftContactFromDrawer();
+          const mode = document.getElementById('aiTaskSelect').value;
+          const tone = document.getElementById('aiToneSelect').value;
+          const goal = document.getElementById('aiGoalInput').value.trim();
+          const prompt = buildSingleContactPrompt(contact, mode, tone, goal);
+          if (copyTextToClipboard(prompt)) {
+            showToast('Single-contact prompt copied for your enterprise AI tool.', 'success');
+          } else {
+            showToast('Could not copy prompt automatically.', 'error');
+          }
+        });
+
+        document.getElementById('btnCopyAiOutput').addEventListener('click', () => {
+          const text = document.getElementById('aiOutputText').value;
+          if (copyTextToClipboard(text)) {
+            showToast('Copied AI draft to clipboard.', 'success');
+          }
+        });
+
+        document.getElementById('btnAppendPrepNotes').addEventListener('click', () => {
+          const aiText = document.getElementById('aiOutputText').value.trim();
+          if (!aiText) return;
+          const prepBox = document.getElementById('fieldPrepNotes');
+          const header = `\n\n--- AI Prep (${getTodayISO()}) ---\n`;
+          prepBox.value = (prepBox.value.trim() ? prepBox.value.trim() + header : `--- AI Prep (${getTodayISO()}) ---\n`) + aiText;
+          showToast('Appended to Prep Notes. Click Save Changes to persist.', 'success');
+        });
+
+        // Settings Modal Controls
+        const settingsModal = document.getElementById('settingsModal');
+        document.getElementById('btnOpenSettings').addEventListener('click', () => {
+          document.getElementById('settingApiKey').value = state.settings.apiKey || '';
+          document.getElementById('btnInitiateClear').classList.remove('hidden');
+          document.getElementById('btnConfirmClear').classList.add('hidden');
+          document.getElementById('btnCancelClear').classList.add('hidden');
+          settingsModal.classList.remove('hidden');
+        });
+        document.getElementById('btnCloseSettings').addEventListener('click', () => settingsModal.classList.add('hidden'));
+        document.getElementById('btnSaveSettings').addEventListener('click', () => {
+          state.settings.apiKey = document.getElementById('settingApiKey').value.trim();
+          saveSettingsToStorage();
+          settingsModal.classList.add('hidden');
+          showToast('Settings saved locally.', 'success');
+        });
+
+        // Two-step Clear Local Data Confirmation (no window.confirm)
+        document.getElementById('btnInitiateClear').addEventListener('click', () => {
+          document.getElementById('btnInitiateClear').classList.add('hidden');
+          document.getElementById('btnConfirmClear').classList.remove('hidden');
+          document.getElementById('btnCancelClear').classList.remove('hidden');
+        });
+        document.getElementById('btnCancelClear').addEventListener('click', () => {
+          document.getElementById('btnInitiateClear').classList.remove('hidden');
+          document.getElementById('btnConfirmClear').classList.add('hidden');
+          document.getElementById('btnCancelClear').classList.add('hidden');
+        });
+        document.getElementById('btnConfirmClear').addEventListener('click', () => {
+          state.contacts = [];
+          saveContactsToStorage();
+          renderAll();
+          settingsModal.classList.add('hidden');
+          showToast('All local contact data has been cleared.', 'info');
+        });
+
+        // Escape key closes drawer or modal
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            if (!document.getElementById('contactDrawerWrapper').classList.contains('hidden')) {
+              closeContactDrawer();
+            }
+            if (!settingsModal.classList.contains('hidden')) {
+              settingsModal.classList.add('hidden');
+            }
+          }
+        });
+      }
+
+      // =========================================================================
+      // 10. INITIALIZATION
+      // =========================================================================
+      loadFromStorage();
+      bindEvents();
+      renderAll();
+    })();
+  </script>
+</body>
+</html>
