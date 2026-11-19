@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexus Private CRM — Pink &amp; White Edition (Tier 2)</title>
+<!-- ... existing code ... -->
+  <title>Pink &amp; White LinkedIn Personal CRM — Tier 1 &amp; Tier 2</title>
   <style>
     :root {
       --bg-page: #fff5f8;
       --bg-surface: #ffffff;
+      --bg-blush: #ffe4ee;
       --bg-tint: #fdf2f8;
       --bg-tint-hover: #fce7f3;
       --border-pink: #fbcfe8;
@@ -16,14 +13,12 @@
       --pink-primary-hover: #be185d;
       --pink-accent: #ec4899;
       --text-heading: #831843;
-      --text-body: #4a2535;
-      --text-muted: #7c4d63;
+      --text-body: #1f2937;
+      --text-muted: #6b3b52;
       --danger: #be123c;
       --danger-bg: #ffe4e6;
-      --success: #047857;
-      --success-bg: #d1fae5;
-      --shadow-sm: 0 1px 3px rgba(131, 24, 67, 0.06), 0 1px 2px rgba(131, 24, 67, 0.04);
-      --shadow-md: 0 10px 25px -5px rgba(131, 24, 67, 0.12), 0 4px 10px -2px rgba(131, 24, 67, 0.06);
+      --shadow-sm: 0 1px 3px rgba(131, 24, 67, 0.07), 0 1px 2px rgba(131, 24, 67, 0.04);
+      --shadow-md: 0 12px 28px -6px rgba(131, 24, 67, 0.14), 0 4px 12px -2px rgba(131, 24, 67, 0.07);
       --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 16px;
@@ -46,24 +41,42 @@
       overflow-x: hidden;
     }
 
-    /* Utility & Layout */
     .hidden { display: none !important; }
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
 
     .container {
-      max-width: 1280px;
+      max-width: 1320px;
       margin: 0 auto;
       padding: 0 16px;
+    }
+
+    /* Live Status Banner */
+    .status-strip {
+      background: var(--bg-blush);
+      border-bottom: 1px solid var(--border-pink);
+      color: var(--text-heading);
+      font-size: 12px;
+      padding: 6px 0;
+    }
+
+    .status-strip-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #ffffff;
+      border: 1px solid var(--border-pink);
+      border-radius: var(--radius-pill);
+      padding: 2px 10px;
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--pink-primary-hover);
     }
 
     /* Header */
@@ -82,7 +95,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 14px 0;
+      padding: 12px 0;
     }
 
     .brand {
@@ -103,14 +116,7 @@
       font-weight: 800;
       font-size: 18px;
       flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(219, 39, 119, 0.28);
-    }
-
-    .brand-title-row {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
+      box-shadow: 0 2px 6px rgba(219, 39, 119, 0.25);
     }
 
     .brand h1 {
@@ -119,19 +125,6 @@
       font-weight: 700;
       color: var(--text-heading);
       letter-spacing: -0.01em;
-    }
-
-    .privacy-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
-      background: var(--bg-tint);
-      border: 1px solid var(--border-pink);
-      color: var(--pink-primary);
-      font-size: 11px;
-      font-weight: 600;
     }
 
     .brand-sub {
@@ -153,7 +146,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 8px 14px;
+      padding: 8px 13px;
       border-radius: var(--radius-sm);
       font-size: 13px;
       font-weight: 600;
@@ -204,13 +197,13 @@
     }
 
     .btn-danger-soft {
-      background: #fff1f2;
+      background: var(--danger-bg);
       color: var(--danger);
       border-color: #fecdd3;
     }
 
     .btn-danger-soft:hover {
-      background: #ffe4e6;
+      background: #fecdd3;
     }
 
     .btn-sm {
@@ -222,9 +215,10 @@
     /* View Tabs */
     .nav-tabs {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 8px;
-      padding: 8px 0 12px;
+      padding: 6px 0 12px;
     }
 
     .tab-pill {
@@ -251,7 +245,7 @@
       background: var(--pink-primary);
       color: #ffffff;
       border-color: var(--pink-primary);
-      box-shadow: 0 2px 6px rgba(219, 39, 119, 0.24);
+      box-shadow: 0 2px 6px rgba(219, 39, 119, 0.22);
     }
 
     .tab-count {
@@ -264,13 +258,13 @@
     }
 
     .tab-pill.active .tab-count {
-      background: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.24);
       color: #ffffff;
     }
 
-    /* Main Content */
+    /* Main Workspace */
     .main-area {
-      padding: 24px 0 60px;
+      padding: 22px 0 60px;
     }
 
     .card {
@@ -280,18 +274,17 @@
       box-shadow: var(--shadow-sm);
     }
 
-    /* Onboarding / Dropzone */
     .dropzone-card {
-      padding: 28px 20px;
+      padding: 24px 20px;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       border: 2px dashed var(--border-strong);
       background: linear-gradient(180deg, #ffffff 0%, var(--bg-tint) 100%);
       transition: background 0.15s ease, border-color 0.15s ease;
     }
 
     .dropzone-card.drag-over {
-      background: var(--bg-tint-hover);
+      background: var(--bg-blush);
       border-color: var(--pink-primary);
     }
 
@@ -302,8 +295,8 @@
     }
 
     .dropzone-card p {
-      margin: 0 auto 16px;
-      max-width: 620px;
+      margin: 0 auto 14px;
+      max-width: 680px;
       font-size: 13px;
       color: var(--text-muted);
     }
@@ -323,10 +316,10 @@
       margin-bottom: 20px;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 960px) {
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width: 520px) {
+    @media (max-width: 540px) {
       .kpi-grid { grid-template-columns: 1fr; }
     }
 
@@ -378,12 +371,12 @@
       gap: 20px;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 960px) {
       .two-col-grid, .three-col-grid { grid-template-columns: 1fr; }
     }
 
     .panel-header {
-      padding: 16px 20px;
+      padding: 15px 20px;
       border-bottom: 1px solid var(--border-pink);
       display: flex;
       align-items: center;
@@ -533,7 +526,7 @@
     }
 
     .search-input {
-      flex: 1 1 260px;
+      flex: 1 1 240px;
     }
 
     .table-wrap {
@@ -611,9 +604,8 @@
 
     .strength-Strong { background: #db2777; color: #ffffff; border-color: #db2777; }
     .strength-Warm { background: #fce7f3; color: #9d174d; border-color: #f9a8d4; }
-    .strength-Casual { background: #fdf2f8; color: #be185d; border-color: #fbcfe8; }
-    .strength-New { background: #ffffff; color: #db2777; border-color: #f472b6; }
-    .strength-Dormant { background: #fff5f8; color: #7c4d63; border-color: #fbcfe8; }
+    .strength-Acquaintance { background: #fdf2f8; color: #be185d; border-color: #fbcfe8; }
+    .strength-Dormant { background: #fff5f8; color: #6b3b52; border-color: #fbcfe8; }
 
     .tag-pill {
       display: inline-block;
@@ -643,7 +635,7 @@
     .overlay-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(74, 37, 53, 0.45);
+      background: rgba(31, 41, 55, 0.45);
       z-index: 40;
       display: flex;
       justify-content: flex-end;
@@ -652,7 +644,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(74, 37, 53, 0.45);
+      background: rgba(31, 41, 55, 0.45);
       z-index: 50;
       display: flex;
       align-items: center;
@@ -662,7 +654,7 @@
 
     .drawer-panel {
       width: 100%;
-      max-width: 640px;
+      max-width: 650px;
       height: 100%;
       background: #ffffff;
       border-left: 1px solid var(--border-pink);
@@ -674,16 +666,19 @@
 
     .modal-card {
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
+      max-height: 90vh;
       background: #ffffff;
       border: 1px solid var(--border-pink);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
     }
 
     .drawer-header, .modal-header {
-      padding: 16px 20px;
+      padding: 15px 20px;
       background: var(--bg-tint);
       border-bottom: 1px solid var(--border-pink);
       display: flex;
@@ -693,19 +688,20 @@
     }
 
     .drawer-body, .modal-body {
-      padding: 20px;
+      padding: 18px 20px;
       overflow-y: auto;
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 15px;
     }
 
     .drawer-footer, .modal-footer {
-      padding: 14px 20px;
+      padding: 13px 20px;
       background: var(--bg-tint);
       border-top: 1px solid var(--border-pink);
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
@@ -734,6 +730,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 6px;
     }
 
     .section-box {
@@ -747,10 +744,10 @@
     }
 
     .ai-box {
-      background: linear-gradient(135deg, #fdf2f8 0%, #ffffff 60%, #fff5f8 100%);
+      background: linear-gradient(135deg, #fdf2f8 0%, #ffffff 62%, #fff5f8 100%);
       border: 1.5px solid var(--border-strong);
       border-radius: var(--radius-md);
-      padding: 16px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -771,6 +768,14 @@
       background: var(--bg-tint-hover);
     }
 
+    .app-footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border-pink);
+      padding: 14px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
     /* Toast Notification */
     .toast-stack {
       position: fixed;
@@ -781,12 +786,12 @@
       flex-direction: column;
       gap: 8px;
       pointer-events: none;
-      max-width: 360px;
+      max-width: 380px;
     }
 
     .toast {
       pointer-events: auto;
-      padding: 12px 16px;
+      padding: 11px 15px;
       border-radius: var(--radius-md);
       background: var(--text-heading);
       color: #ffffff;
@@ -794,135 +799,143 @@
       font-weight: 600;
       box-shadow: var(--shadow-md);
       border: 1px solid var(--border-strong);
-      animation: slideUp 0.2s ease-out;
     }
 
     .toast.error {
       background: #9f1239;
       border-color: #fda4af;
     }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
 <body>
 
-  <!-- Native File Input paired with <label for="csvFileInput"> for 100% reliable OS file dialog -->
-  <input type="file" id="csvFileInput" accept=".csv,text/csv,text/plain" class="sr-only" />
+  <!-- Hidden File Input (always available for programmatic or label-triggered selection) -->
+  <input type="file" id="csvFileInput" accept=".csv,text/csv,text/plain" style="display:none;" onchange="window.crmHandleFileChange(event)" />
 
-  <!-- Sticky Pink & White Top Navigation Header -->
+  <!-- Live Sandbox & Vault Status Banner -->
+  <div class="status-strip" id="liveStatusBanner">
+    <div class="container status-strip-inner">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+        <span class="status-pill" id="statusStorageMode">Storage: Checking...</span>
+        <span class="status-pill" id="statusContactCount">Contacts: 0</span>
+        <span id="statusLastAction" style="font-weight: 600;">Ready &bull; Solo Private Build (No raw data shared)</span>
+      </div>
+      <div style="font-size: 11px; color: var(--text-muted);">
+        Tier 1 &amp; Tier 2 &bull; Inline + Delegated Handlers Active
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Pink & White Header -->
   <header class="app-header">
     <div class="container">
       <div class="header-top">
         <div class="brand">
-          <div class="brand-icon" aria-hidden="true">N</div>
+          <div class="brand-icon" aria-hidden="true">P</div>
           <div>
-            <div class="brand-title-row">
-              <h1>Nexus Personal CRM</h1>
-              <span class="privacy-badge" title="All contact records remain strictly in your browser localStorage">
-                &#128274; Private Local Vault (Tier 2)
-              </span>
-            </div>
-            <p class="brand-sub">Pink &amp; White Solo Network Manager &bull; Zero server uploads</p>
+            <h1>Pink &amp; White LinkedIn Personal CRM</h1>
+            <p class="brand-sub">Solo Private Build (Tier 1 &amp; Tier 2) &bull; Browser Vault + Enterprise-Safe Prep</p>
           </div>
         </div>
 
         <div class="toolbar">
-          <label for="csvFileInput" role="button" tabindex="0" class="btn btn-soft" id="lblImportCsv">
+          <button type="button" class="btn btn-soft" id="btnTriggerFile" onclick="window.crmTriggerFileInput()">
             &#8679; Import CSV
-          </label>
-          <button type="button" class="btn btn-white" id="btnOpenPasteModal">
+          </button>
+          <button type="button" class="btn btn-white" id="btnOpenPasteModal" onclick="window.crmOpenPasteModal()">
             &#128203; Paste CSV
           </button>
-          <button type="button" class="btn btn-white" id="btnLoadSample">
+          <button type="button" class="btn btn-white" id="btnOpenAddModal" onclick="window.crmOpenAddModal()">
+            + Add Contact
+          </button>
+          <button type="button" class="btn btn-white" id="btnLoadSample" onclick="window.crmLoadSampleData()">
             &#10024; Load Sample Data
           </button>
-          <button type="button" class="btn btn-primary" id="btnExportCsv">
+          <button type="button" class="btn btn-primary" id="btnExportCsv" onclick="window.crmExportCsv()">
             &#8681; Export CSV
           </button>
-          <button type="button" class="btn btn-danger-soft" id="btnClearData">
-            Clear All Data
+          <button type="button" class="btn btn-danger-soft" id="btnClearData" onclick="window.crmOpenClearModal()">
+            Reset / Clear Data
           </button>
         </div>
       </div>
 
-      <!-- View Switcher Tabs -->
-      <nav class="nav-tabs" aria-label="Primary Views">
-        <button type="button" class="tab-pill active" id="tabDashboard" data-tab="dashboard">
+      <!-- Primary Navigation Tabs -->
+      <nav class="nav-tabs" aria-label="CRM Views">
+        <button type="button" class="tab-pill active" id="tabDashboard" data-tab="dashboard" onclick="window.crmSwitchTab('dashboard')">
           Network Dashboard
         </button>
-        <button type="button" class="tab-pill" id="tabDirectory" data-tab="directory">
-          Contacts Directory
+        <button type="button" class="tab-pill" id="tabDirectory" data-tab="directory" onclick="window.crmSwitchTab('directory')">
+          Connections Directory
           <span class="tab-count" id="badgeTotalContacts">0</span>
+        </button>
+        <button type="button" class="tab-pill" id="tabAiPrepQuick" onclick="window.crmOpenQuickAiModal()">
+          &#9889; Quick AI Prep
         </button>
       </nav>
     </div>
   </header>
 
-  <!-- Main Workspace -->
+  <!-- Main Content -->
   <main class="main-area">
     <div class="container">
 
-      <!-- Onboarding / Drag-and-Drop Banner (shown when vault is empty) -->
-      <section class="card dropzone-card" id="emptyDropzone">
-        <h2>Import Your LinkedIn Connections CSV</h2>
+      <!-- Onboarding & Dropzone Card -->
+      <section class="card dropzone-card" id="emptyDropzone" ondragover="window.crmHandleDragOver(event)" ondragleave="window.crmHandleDragLeave(event)" ondrop="window.crmHandleDrop(event)">
+        <h2>Import LinkedIn Connections.csv or Start with Sample Data</h2>
         <p>
-          Select or drag-and-drop your LinkedIn <strong>Connections.csv</strong> export (LinkedIn's top preamble notes and UTF-8 BOMs are stripped automatically), paste CSV text directly, or load 10 realistic sample contacts to explore all Tier 1 &amp; Tier 2 features.
+          Select or drop your exported LinkedIn <strong>Connections.csv</strong> (UTF-8 BOM and LinkedIn's top <code>Notes:</code> preamble rows are skipped automatically), paste CSV text, add a connection manually, or load 10 sample contacts.
         </p>
         <div class="dropzone-actions">
-          <label for="csvFileInput" role="button" tabindex="0" class="btn btn-primary">
-            &#8679; Choose Connections.csv File
-          </label>
-          <button type="button" class="btn btn-soft" id="btnEmptyPaste">
+          <button type="button" class="btn btn-primary" onclick="window.crmTriggerFileInput()">
+            &#8679; Select Connections.csv File
+          </button>
+          <button type="button" class="btn btn-soft" onclick="window.crmOpenPasteModal()">
             &#128203; Paste CSV Text
           </button>
-          <button type="button" class="btn btn-white" id="btnEmptySample">
+          <button type="button" class="btn btn-white" onclick="window.crmLoadSampleData()">
             &#10024; Load 10 Sample Contacts
           </button>
         </div>
       </section>
 
-      <!-- VIEW 1: NETWORK DASHBOARD -->
+      <!-- VIEW 1: DASHBOARD -->
       <section id="viewDashboard">
-        <!-- 4 Interactive KPI Cards -->
         <div class="kpi-grid">
-          <button type="button" class="card kpi-card" id="kpiCardTotal">
+          <button type="button" class="card kpi-card" id="kpiCardTotal" onclick="window.crmFilterFromKpi('all')">
             <div class="kpi-label">Total Connections</div>
             <div class="kpi-value" id="kpiTotal">0</div>
-            <div class="kpi-sub" id="kpiTaggedSub">0 tagged &bull; Click to view all</div>
+            <div class="kpi-sub" id="kpiTaggedSub">0 tagged &bull; Click for directory</div>
           </button>
 
-          <button type="button" class="card kpi-card" id="kpiCardStrong">
-            <div class="kpi-label">Strong / Warm Ties</div>
-            <div class="kpi-value" id="kpiStrongWarm">0</div>
-            <div class="kpi-sub">Active high-trust relationships</div>
-          </button>
-
-          <button type="button" class="card kpi-card" id="kpiCardDue">
+          <button type="button" class="card kpi-card" id="kpiCardDue" onclick="window.crmFilterFromKpi('due')">
             <div class="kpi-label">Follow-Ups Due</div>
             <div class="kpi-value" id="kpiDue" style="color: var(--pink-primary);">0</div>
             <div class="kpi-sub">Overdue or due within 7 days</div>
           </button>
 
-          <button type="button" class="card kpi-card" id="kpiCardStale">
+          <button type="button" class="card kpi-card" id="kpiCardStale" onclick="window.crmFilterFromKpi('stale')">
             <div class="kpi-label">Haven't Contacted (90+ Days)</div>
             <div class="kpi-value" id="kpiStale">0</div>
-            <div class="kpi-sub">Over 90 days or never logged</div>
+            <div class="kpi-sub">&gt;90 days ago or never contacted</div>
+          </button>
+
+          <button type="button" class="card kpi-card" id="kpiCardStrong" onclick="window.crmFilterFromKpi('strong')">
+            <div class="kpi-label">Strong Relationships</div>
+            <div class="kpi-value" id="kpiStrong">0</div>
+            <div class="kpi-sub">High-trust inner circle ties</div>
           </button>
         </div>
 
-        <!-- Actionable Queues -->
+        <!-- Follow-Ups Due & Haven't Contacted Lists -->
         <div class="two-col-grid">
           <div class="card">
             <div class="panel-header">
               <div>
                 <h3>Follow-Ups Due</h3>
-                <p>Click any contact to open their workspace &amp; AI prep drawer</p>
+                <p>Click any contact to open their detail &amp; AI prep panel</p>
               </div>
-              <button type="button" class="btn btn-soft btn-sm" id="btnJumpDue">View in Directory</button>
+              <button type="button" class="btn btn-soft btn-sm" onclick="window.crmFilterFromKpi('due')">Filter All</button>
             </div>
             <div class="queue-list" id="listDueQueue"></div>
           </div>
@@ -931,21 +944,21 @@
             <div class="panel-header">
               <div>
                 <h3>Haven't Contacted in a While</h3>
-                <p>Prioritizing Strong &amp; Warm ties overdue for a touchpoint</p>
+                <p>&gt;90 days since last contact or never logged</p>
               </div>
-              <button type="button" class="btn btn-soft btn-sm" id="btnJumpStale">Sort Oldest First</button>
+              <button type="button" class="btn btn-soft btn-sm" onclick="window.crmFilterFromKpi('stale')">Filter All</button>
             </div>
             <div class="queue-list" id="listStaleQueue"></div>
           </div>
         </div>
 
-        <!-- Network Breakdown Charts -->
+        <!-- Breakdowns by Company & Tag + Relationship Strength -->
         <div class="three-col-grid">
           <div class="card">
             <div class="panel-header">
               <div>
-                <h3>By Company</h3>
-                <p>Click a company bar to filter contacts</p>
+                <h3>Breakdown by Company</h3>
+                <p>Click a company to filter directory</p>
               </div>
             </div>
             <div class="panel-body" id="chartByCompany"></div>
@@ -954,8 +967,8 @@
           <div class="card">
             <div class="panel-header">
               <div>
-                <h3>By Tag</h3>
-                <p>Click a tag bar to filter contacts</p>
+                <h3>Breakdown by Tag</h3>
+                <p>Click a tag to filter directory</p>
               </div>
             </div>
             <div class="panel-body" id="chartByTag"></div>
@@ -964,8 +977,8 @@
           <div class="card">
             <div class="panel-header">
               <div>
-                <h3>By Relationship Strength</h3>
-                <p>Click a tier to filter contacts</p>
+                <h3>Relationship Strength</h3>
+                <p>Click a tier to filter directory</p>
               </div>
             </div>
             <div class="panel-body" id="chartByStrength"></div>
@@ -973,7 +986,7 @@
         </div>
       </section>
 
-      <!-- VIEW 2: CONTACTS DIRECTORY -->
+      <!-- VIEW 2: CONNECTIONS DIRECTORY -->
       <section id="viewDirectory" class="hidden">
         <div class="card filter-bar">
           <div class="filter-row">
@@ -981,48 +994,56 @@
               type="text"
               id="inputSearch"
               class="input search-input"
-              placeholder="Search name, company, position, tags, next action, or notes..."
-              aria-label="Search connections"
+              placeholder="Search name, company, position, tags, next action, notes..."
+              oninput="window.crmOnFilterChange()"
             />
 
-            <select id="selectStrengthFilter" class="select" aria-label="Filter by Relationship Strength">
-              <option value="All">Strength: All</option>
-              <option value="Strong">Strong</option>
-              <option value="Warm">Warm</option>
-              <option value="Casual">Casual</option>
-              <option value="Dormant">Dormant</option>
-              <option value="New">New</option>
-            </select>
+            <input
+              type="text"
+              id="inputCompanyFilter"
+              class="input"
+              style="width: 170px;"
+              placeholder="Filter company..."
+              oninput="window.crmOnFilterChange()"
+            />
 
-            <select id="selectTagFilter" class="select" aria-label="Filter by Tag">
+            <select id="selectTagFilter" class="select" onchange="window.crmOnFilterChange()">
               <option value="All">Tag: All</option>
             </select>
 
-            <select id="selectSortBy" class="select" aria-label="Sort contacts">
-              <option value="name-asc">Sort: Name A–Z</option>
-              <option value="company-asc">Sort: Company A–Z</option>
-              <option value="lastContacted-asc">Sort: Last Contacted (Oldest First)</option>
-              <option value="lastContacted-desc">Sort: Last Contacted (Newest First)</option>
-              <option value="nextActionDue-asc">Sort: Next Action Due</option>
-              <option value="connectedOn-desc">Sort: Connected On</option>
+            <select id="selectStrengthFilter" class="select" onchange="window.crmOnFilterChange()">
+              <option value="All">Strength: All</option>
+              <option value="Strong">Strong</option>
+              <option value="Warm">Warm</option>
+              <option value="Acquaintance">Acquaintance</option>
+              <option value="Dormant">Dormant</option>
             </select>
 
-            <button type="button" class="btn btn-primary" id="btnAddContact">
+            <select id="selectFollowUpFilter" class="select" onchange="window.crmOnFilterChange()">
+              <option value="All">Follow-Up: All</option>
+              <option value="due">Follow-Ups Due</option>
+              <option value="stale">Not Contacted (90+d)</option>
+            </select>
+
+            <select id="selectSortBy" class="select" onchange="window.crmOnFilterChange()">
+              <option value="name-asc">Sort: Name (A–Z)</option>
+              <option value="company-asc">Sort: Company (A–Z)</option>
+              <option value="position-asc">Sort: Position (A–Z)</option>
+              <option value="strength-desc">Sort: Strength (High–Low)</option>
+              <option value="lastContacted-asc">Sort: Last Contacted (Oldest)</option>
+              <option value="nextActionDue-asc">Sort: Next Action Due</option>
+            </select>
+
+            <button type="button" class="btn btn-primary" onclick="window.crmOpenAddModal()">
               + Add Contact
             </button>
           </div>
 
           <div class="filter-row" style="justify-content: space-between; font-size: 12px; color: var(--text-muted);">
             <span id="filterSummaryText">Showing 0 connections</span>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                <input type="checkbox" id="chkDueOnly" style="accent-color: var(--pink-primary);" />
-                <span>Follow-ups due only</span>
-              </label>
-              <button type="button" class="btn btn-white btn-sm hidden" id="btnResetFilters">
-                Reset Filters
-              </button>
-            </div>
+            <button type="button" class="btn btn-white btn-sm" id="btnResetFilters" onclick="window.crmResetFilters()">
+              Reset Filters
+            </button>
           </div>
         </div>
 
@@ -1030,13 +1051,13 @@
           <table>
             <thead>
               <tr>
-                <th>Contact</th>
+                <th>Name</th>
                 <th>Company &amp; Position</th>
                 <th>Strength</th>
                 <th>Tags</th>
                 <th>Last Contacted</th>
-                <th>Next Action</th>
-                <th style="text-align: right;">Workspace</th>
+                <th>Next Action &amp; Due</th>
+                <th style="text-align: right;">Actions</th>
               </tr>
             </thead>
             <tbody id="contactsTableBody"></tbody>
@@ -1047,26 +1068,36 @@
     </div>
   </main>
 
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;">
+      <span><strong>Privacy Reminder:</strong> Keep raw contact files private; submit the tool and description—never raw contact lists.</span>
+      <span id="footerStats">0 contacts in vault</span>
+    </div>
+  </footer>
+
   <!-- SLIDE-OVER CONTACT DETAIL & TIER 2 AI PREP DRAWER -->
-  <div class="overlay-backdrop hidden" id="drawerBackdrop" role="dialog" aria-modal="true" aria-labelledby="drawerHeading">
+  <div class="overlay-backdrop hidden" id="drawerBackdrop" role="dialog" aria-modal="true" onclick="window.crmHandleBackdropClick(event, 'drawer')">
     <div class="drawer-panel">
       <div class="drawer-header">
         <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
-          <div class="avatar" id="drawerAvatar" style="width: 42px; height: 42px; font-size: 14px;">JD</div>
+          <div class="avatar" id="drawerAvatar" style="width: 42px; height: 42px; font-size: 14px;">PC</div>
           <div style="min-width: 0;">
             <h2 id="drawerHeading" style="margin: 0; font-size: 16px; color: var(--text-heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              Contact Workspace
+              Contact Details &amp; AI Prep
             </h2>
             <p id="drawerSubheading" style="margin: 2px 0 0; font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              Edit CRM details &amp; prep with AI
+              Edit CRM fields &amp; generate tailored outreach or prep brief
             </p>
           </div>
         </div>
-        <button type="button" class="btn btn-white btn-sm" id="btnCloseDrawer">&#10005; Close</button>
+        <button type="button" class="btn btn-white btn-sm" onclick="window.crmCloseDrawer()">&#10005; Close</button>
       </div>
 
       <div class="drawer-body">
-        <!-- Core LinkedIn Identity Fields -->
+        <input type="hidden" id="editContactId" />
+
+        <!-- LinkedIn Core Fields -->
         <div class="section-box">
           <div class="form-grid-2">
             <div class="field-group">
@@ -1078,20 +1109,20 @@
               <input type="text" id="editLastName" class="input" placeholder="Last Name" />
             </div>
             <div class="field-group">
+              <label class="field-label" for="editEmail">Email</label>
+              <input type="email" id="editEmail" class="input" placeholder="Optional" />
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="editConnectedOn">Connected On</label>
+              <input type="text" id="editConnectedOn" class="input" placeholder="e.g., 15 Mar 2025" />
+            </div>
+            <div class="field-group">
               <label class="field-label" for="editCompany">Company</label>
               <input type="text" id="editCompany" class="input" placeholder="Company" />
             </div>
             <div class="field-group">
               <label class="field-label" for="editPosition">Position</label>
               <input type="text" id="editPosition" class="input" placeholder="Role / Title" />
-            </div>
-            <div class="field-group">
-              <label class="field-label" for="editEmail">Email Address</label>
-              <input type="email" id="editEmail" class="input" placeholder="Optional" />
-            </div>
-            <div class="field-group">
-              <label class="field-label" for="editConnectedOn">Connected On</label>
-              <input type="text" id="editConnectedOn" class="input" placeholder="e.g., 14 Mar 2025" />
             </div>
           </div>
         </div>
@@ -1103,16 +1134,15 @@
             <select id="editStrength" class="select">
               <option value="Strong">Strong</option>
               <option value="Warm">Warm</option>
-              <option value="Casual">Casual</option>
+              <option value="Acquaintance">Acquaintance</option>
               <option value="Dormant">Dormant</option>
-              <option value="New">New</option>
             </select>
           </div>
 
           <div class="field-group">
             <label class="field-label" for="editLastContacted">
               <span>Last Contacted</span>
-              <button type="button" class="chip-btn" id="btnSetToday">Today</button>
+              <button type="button" class="chip-btn" onclick="window.crmSetLastContactedToday()">Today</button>
             </label>
             <input type="date" id="editLastContacted" class="input" />
           </div>
@@ -1120,14 +1150,14 @@
 
         <div class="field-group">
           <label class="field-label" for="editTags">Tags (comma-separated)</label>
-          <input type="text" id="editTags" class="input" placeholder="e.g., Analytics, Hiring Manager, Mentor, Omaha" />
+          <input type="text" id="editTags" class="input" placeholder="e.g., Analytics, Mentor, Recruiting, Omaha" />
           <div id="quickTagChips" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;"></div>
         </div>
 
         <div class="form-grid-2">
           <div class="field-group">
             <label class="field-label" for="editNextAction">Next Action</label>
-            <input type="text" id="editNextAction" class="input" placeholder="e.g., Send BI portfolio link & ask for coffee" />
+            <input type="text" id="editNextAction" class="input" placeholder="e.g., Send portfolio & ask for 15-min call" />
           </div>
           <div class="field-group">
             <label class="field-label" for="editNextActionDue">Next Action Due</label>
@@ -1136,211 +1166,376 @@
         </div>
 
         <div class="field-group">
-          <label class="field-label" for="editNotes">General Notes</label>
-          <textarea id="editNotes" class="textarea" rows="3" placeholder="How you met, shared context, past conversations..."></textarea>
+          <label class="field-label" for="editNotes">Notes</label>
+          <textarea id="editNotes" class="textarea" rows="3" placeholder="Context, shared topics, conversation notes..."></textarea>
         </div>
 
         <div class="field-group">
-          <label class="field-label" for="editPrepNotes">
-            <span>Prep Notes (Deep-Research Brief / AI Prep)</span>
-          </label>
-          <textarea id="editPrepNotes" class="textarea" rows="4" placeholder="Drop a deep-research brief from Build 1 or append AI-generated prep notes here..."></textarea>
+          <label class="field-label" for="editPrepNotes">Prep Notes (Deep-Research Brief / AI Prep)</label>
+          <textarea id="editPrepNotes" class="textarea" rows="4" placeholder="Paste a deep-research brief from Build 1 or append AI-generated prep notes..."></textarea>
         </div>
 
-        <!-- TIER 2: AI PREP & OUTREACH ASSISTANT (RULE 8: ON USER'S COMMAND) -->
+        <!-- TIER 2: PREP WITH AI (USER-DIRECTED, RULE 8) -->
         <div class="ai-box">
           <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
             <div>
-              <strong style="color: var(--text-heading); font-size: 14px;">&#9889; Tier 2: Prep with AI (Single-Contact)</strong>
-              <div style="font-size: 12px; color: var(--text-muted);">Runs strictly when you click Generate for this selected contact.</div>
+              <strong style="color: var(--text-heading); font-size: 14px;">&#9889; Tier 2: Prep with AI (On Your Direction)</strong>
+              <div style="font-size: 12px; color: var(--text-muted);">Generate a tailored reach-out message or pre-call prep brief for this contact.</div>
             </div>
-            <span class="badge" style="background: #ffffff; color: var(--pink-primary);">Rule 8: User-Directed</span>
+            <span class="badge" style="background: #ffffff; color: var(--pink-primary);">Rule 8</span>
           </div>
 
           <div class="form-grid-2">
             <div class="field-group">
-              <label class="field-label" for="aiModeSelect">Prep Mode</label>
+              <label class="field-label" for="aiModeSelect">Output Type</label>
               <select id="aiModeSelect" class="select">
                 <option value="message">Tailored Reach-Out Message</option>
                 <option value="brief">Short Pre-Call Prep Brief</option>
               </select>
             </div>
             <div class="field-group">
-              <label class="field-label" for="aiGoalInput">Goal / Context</label>
-              <input type="text" id="aiGoalInput" class="input" placeholder="e.g., Catch up on BI & analytics roles" />
+              <label class="field-label" for="aiAngleInput">Angle / Context</label>
+              <input type="text" id="aiAngleInput" class="input" placeholder="e.g., Catch up on analytics roles & shared interests" />
             </div>
           </div>
 
-          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
-            <button type="button" class="btn btn-primary" id="btnGenerateAi">
-              &#10024; Generate with AI
+          <div class="field-group">
+            <label class="field-label" for="aiResearchInput">Optional Deep-Research Brief (Build 1)</label>
+            <textarea id="aiResearchInput" class="textarea" rows="2" placeholder="Optional: drop a Build 1 research brief here to weave into your draft or save to Prep Notes..."></textarea>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <button type="button" class="btn btn-primary" onclick="window.crmGenerateAiForDrawer()">
+              &#10024; Generate Draft
             </button>
-            <button type="button" class="btn btn-white" id="btnCopyEnterprisePrompt">
-              &#128203; Copy Prompt for Enterprise AI
+            <button type="button" class="btn btn-white" onclick="window.crmCopyEnterprisePromptForDrawer()">
+              &#128203; Copy Enterprise AI Prompt
+            </button>
+            <button type="button" class="btn btn-soft" onclick="window.crmSaveResearchBriefToPrep()">
+              &#128206; Save Brief to Prep Notes
             </button>
           </div>
 
-          <!-- Collapsed Optional Gemini API Key Setting -->
           <details style="font-size: 12px; color: var(--text-muted);">
             <summary style="cursor: pointer; font-weight: 600; color: var(--text-heading);">
-              Optional: Live Gemini API Key (Works offline without a key)
+              Optional Gemini API Key Settings (Works offline with smart local synthesis if blank)
             </summary>
             <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
-              <input type="password" id="inputApiKey" class="input" style="flex: 1;" placeholder="Optional enterprise/opted-out Gemini API key (stored locally)" />
-              <button type="button" class="btn btn-soft btn-sm" id="btnSaveApiKey">Save Key</button>
+              <input type="password" id="inputGeminiApiKey" class="input" style="flex: 1;" placeholder="Optional opted-out / enterprise Gemini API key" />
+              <button type="button" class="btn btn-soft btn-sm" onclick="window.crmSaveGeminiKey()">Save Key</button>
             </div>
           </details>
 
-          <!-- AI Output Area -->
-          <div id="aiResultArea" class="hidden" style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border-pink); padding-top: 10px;">
+          <div id="aiDrawerResultBox" class="hidden" style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border-pink); padding-top: 10px;">
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <span id="aiOutputBadge" style="font-size: 11px; font-weight: 700; color: var(--pink-primary);">GENERATED DRAFT</span>
+              <span id="aiDrawerResultLabel" style="font-size: 11px; font-weight: 700; color: var(--pink-primary);">DRAFT READY</span>
               <div style="display: flex; gap: 6px;">
-                <button type="button" class="btn btn-white btn-sm" id="btnCopyAiOutput">Copy Output</button>
-                <button type="button" class="btn btn-soft btn-sm" id="btnAppendPrep">Append to Prep Notes</button>
+                <button type="button" class="btn btn-white btn-sm" onclick="window.crmCopyDrawerAiOutput()">Copy</button>
+                <button type="button" class="btn btn-soft btn-sm" onclick="window.crmAppendDrawerAiToPrep()">Append to Prep Notes</button>
               </div>
             </div>
-            <textarea id="aiOutputTextarea" class="textarea" rows="6"></textarea>
+            <textarea id="aiDrawerOutput" class="textarea" rows="6"></textarea>
           </div>
         </div>
       </div>
 
       <div class="drawer-footer">
-        <button type="button" class="btn btn-danger-soft" id="btnDeleteContact">Delete Contact</button>
+        <button type="button" class="btn btn-danger-soft" id="btnDeleteContact" onclick="window.crmDeleteCurrentContact()">
+          Delete
+        </button>
         <div style="display: flex; gap: 8px;">
-          <button type="button" class="btn btn-white" id="btnCancelDrawer">Cancel</button>
-          <button type="button" class="btn btn-primary" id="btnSaveContact">Save Changes</button>
+          <button type="button" class="btn btn-white" onclick="window.crmCloseDrawer()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="window.crmSaveContactFromDrawer()">Save Contact</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD CONTACT MODAL -->
+  <div class="modal-backdrop hidden" id="addModalBackdrop" role="dialog" aria-modal="true" onclick="window.crmHandleBackdropClick(event, 'add')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin: 0; font-size: 16px; color: var(--text-heading);">Add Connection</h3>
+          <p style="margin: 2px 0 0; font-size: 12px; color: var(--text-muted);">Create a new contact entry in your local vault</p>
+        </div>
+        <button type="button" class="btn btn-white btn-sm" onclick="window.crmCloseAddModal()">&#10005;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label class="field-label" for="addFirstName">First Name</label>
+            <input type="text" id="addFirstName" class="input" placeholder="First Name" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="addLastName">Last Name</label>
+            <input type="text" id="addLastName" class="input" placeholder="Last Name" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="addCompany">Company</label>
+            <input type="text" id="addCompany" class="input" placeholder="Company" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="addPosition">Position</label>
+            <input type="text" id="addPosition" class="input" placeholder="Position / Title" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="addEmail">Email</label>
+            <input type="email" id="addEmail" class="input" placeholder="Optional" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="addStrength">Relationship Strength</label>
+            <select id="addStrength" class="select">
+              <option value="Strong">Strong</option>
+              <option value="Warm">Warm</option>
+              <option value="Acquaintance" selected>Acquaintance</option>
+              <option value="Dormant">Dormant</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="addTags">Tags (comma-separated)</label>
+          <input type="text" id="addTags" class="input" placeholder="e.g., Analytics, Product, Omaha" />
+        </div>
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label class="field-label" for="addNextAction">Next Action</label>
+            <input type="text" id="addNextAction" class="input" placeholder="Follow-up action" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="addNextActionDue">Next Action Due</label>
+            <input type="date" id="addNextActionDue" class="input" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="addNotes">Notes</label>
+          <textarea id="addNotes" class="textarea" rows="2" placeholder="Optional notes..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" onclick="window.crmCloseAddModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="window.crmCreateNewContact()">Add to CRM</button>
       </div>
     </div>
   </div>
 
   <!-- PASTE CSV MODAL -->
-  <div class="modal-backdrop hidden" id="pasteModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="pasteModalTitle">
+  <div class="modal-backdrop hidden" id="pasteModalBackdrop" role="dialog" aria-modal="true" onclick="window.crmHandleBackdropClick(event, 'paste')">
     <div class="modal-card">
       <div class="modal-header">
         <div>
-          <h3 id="pasteModalTitle" style="margin: 0; font-size: 16px; color: var(--text-heading);">Paste LinkedIn Connections CSV</h3>
-          <p style="margin: 2px 0 0; font-size: 12px; color: var(--text-muted);">Paste raw text from Connections.csv or a previously exported CRM CSV</p>
+          <h3 style="margin: 0; font-size: 16px; color: var(--text-heading);">Paste CSV Data</h3>
+          <p style="margin: 2px 0 0; font-size: 12px; color: var(--text-muted);">Paste LinkedIn Connections.csv or exported CRM CSV text</p>
         </div>
-        <button type="button" class="btn btn-white btn-sm" id="btnClosePasteModal">&#10005;</button>
+        <button type="button" class="btn btn-white btn-sm" onclick="window.crmClosePasteModal()">&#10005;</button>
       </div>
       <div class="modal-body">
-        <textarea id="textareaPasteCsv" class="textarea" rows="10" style="font-family: monospace; font-size: 12px;" placeholder="First Name,Last Name,URL,Email Address,Company,Position,Connected On&#10;Jane,Doe,https://linkedin.com/in/janedoe,,Acme Corp,VP of Analytics,12 Mar 2025"></textarea>
+        <textarea id="textareaPasteCsv" class="textarea" rows="10" style="font-family: monospace; font-size: 12px;" placeholder="First Name,Last Name,URL,Email Address,Company,Position,Connected On&#10;Jordan,Lee,https://linkedin.com/in/jordanlee,,Northwind Data,Analytics Lead,10 Feb 2025"></textarea>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-white" id="btnCancelPasteModal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="btnLoadPastedCsv">Load Pasted CSV</button>
+        <button type="button" class="btn btn-white" onclick="window.crmClosePasteModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="window.crmImportPastedCsv()">Import Pasted CSV</button>
       </div>
     </div>
   </div>
 
-  <!-- CLEAR DATA CONFIRMATION MODAL (No window.confirm) -->
-  <div class="modal-backdrop hidden" id="clearModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="clearModalTitle">
-    <div class="modal-card" style="max-width: 420px;">
+  <!-- QUICK AI PREP MODAL -->
+  <div class="modal-backdrop hidden" id="quickAiModalBackdrop" role="dialog" aria-modal="true" onclick="window.crmHandleBackdropClick(event, 'quickai')">
+    <div class="modal-card">
       <div class="modal-header">
-        <h3 id="clearModalTitle" style="margin: 0; font-size: 16px; color: var(--text-heading);">Clear All Local CRM Data?</h3>
-        <button type="button" class="btn btn-white btn-sm" id="btnCloseClearModal">&#10005;</button>
+        <div>
+          <h3 style="margin: 0; font-size: 16px; color: var(--text-heading);">&#9889; Quick AI Prep (Choose a Contact)</h3>
+          <p style="margin: 2px 0 0; font-size: 12px; color: var(--text-muted);">Select one contact to draft outreach or a prep brief and save to Prep Notes</p>
+        </div>
+        <button type="button" class="btn btn-white btn-sm" onclick="window.crmCloseQuickAiModal()">&#10005;</button>
+      </div>
+      <div class="modal-body">
+        <div class="field-group">
+          <label class="field-label" for="quickAiContactSelect">Select Contact</label>
+          <select id="quickAiContactSelect" class="select"></select>
+        </div>
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label class="field-label" for="quickAiModeSelect">Mode</label>
+            <select id="quickAiModeSelect" class="select">
+              <option value="message">Tailored Reach-Out Message</option>
+              <option value="brief">Short Pre-Call Prep Brief</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="quickAiAngleInput">Angle / Goal</label>
+            <input type="text" id="quickAiAngleInput" class="input" placeholder="e.g., Reconnect & share recent work" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="quickAiBriefInput">Optional Deep-Research Brief (Build 1)</label>
+          <textarea id="quickAiBriefInput" class="textarea" rows="2" placeholder="Optional research brief to include..."></textarea>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <button type="button" class="btn btn-primary" onclick="window.crmRunQuickAi()">&#10024; Generate Draft</button>
+          <button type="button" class="btn btn-white" onclick="window.crmCopyQuickEnterprisePrompt()">&#128203; Copy Enterprise AI Prompt</button>
+        </div>
+        <div id="quickAiResultWrap" class="hidden" style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border-pink); padding-top: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--pink-primary);">GENERATED DRAFT</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn btn-white btn-sm" onclick="window.crmCopyQuickAiOutput()">Copy</button>
+              <button type="button" class="btn btn-soft btn-sm" onclick="window.crmSaveQuickAiToContact()">Save to Contact Prep Notes</button>
+            </div>
+          </div>
+          <textarea id="quickAiOutput" class="textarea" rows="6"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" onclick="window.crmCloseQuickAiModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESET / CLEAR DATA MODAL -->
+  <div class="modal-backdrop hidden" id="clearModalBackdrop" role="dialog" aria-modal="true" onclick="window.crmHandleBackdropClick(event, 'clear')">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 style="margin: 0; font-size: 16px; color: var(--text-heading);">Reset / Clear CRM Data?</h3>
+        <button type="button" class="btn btn-white btn-sm" onclick="window.crmCloseClearModal()">&#10005;</button>
       </div>
       <div class="modal-body">
         <p style="margin: 0; font-size: 13px; color: var(--text-body);">
-          This will permanently remove all contacts and notes stored in this browser's <code>localStorage</code>. Make sure you have exported a backup CSV first if needed.
+          This clears all contacts and notes from the current vault (<code>localStorage</code> and session memory). Export a CSV first if you want a backup file.
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-white" id="btnCancelClearModal">Keep Data</button>
-        <button type="button" class="btn btn-primary" style="background: var(--danger); border-color: var(--danger);" id="btnConfirmClearAll">
-          Yes, Clear Everything
+        <button type="button" class="btn btn-white" onclick="window.crmCloseClearModal()">Keep Data</button>
+        <button type="button" class="btn btn-primary" style="background: var(--danger); border-color: var(--danger);" onclick="window.crmConfirmClearData()">
+          Clear Data
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Bottom-Right Toast Notification Stack -->
+  <!-- Toast Stack -->
   <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
   <script>
     (function () {
       'use strict';
 
-      // =========================================================================
-      // STORAGE KEYS & APPLICATION STATE
-      // =========================================================================
-      const STORAGE_CONTACTS = 'nexus_pink_crm_contacts_v2';
-      const STORAGE_API_KEY = 'nexus_pink_crm_apikey_v2';
+      var STORAGE_KEY = 'pink_white_linkedin_crm_v1';
+      var API_KEY_STORAGE = 'pink_white_linkedin_crm_apikey_v1';
+      var STRENGTH_LIST = ['Strong', 'Warm', 'Acquaintance', 'Dormant'];
+      var STRENGTH_WEIGHT = { Strong: 4, Warm: 3, Acquaintance: 2, Dormant: 1 };
 
-      const STRENGTH_VALUES = ['Strong', 'Warm', 'Casual', 'Dormant', 'New'];
-      const STRENGTH_RANK = { Strong: 5, Warm: 4, Casual: 3, New: 2, Dormant: 1 };
+      // Sandbox-safe storage layer with automatic Session Memory fallback
+      var memoryStore = {};
+      var storageModeLabel = 'Session Memory';
 
-      let appState = {
+      function safeGetItem(key) {
+        try {
+          if (window.localStorage) {
+            storageModeLabel = 'localStorage';
+            return window.localStorage.getItem(key);
+          }
+        } catch (err) {
+          storageModeLabel = 'Session Memory (Sandboxed)';
+        }
+        return Object.prototype.hasOwnProperty.call(memoryStore, key) ? memoryStore[key] : null;
+      }
+
+      function safeSetItem(key, val) {
+        memoryStore[key] = String(val);
+        try {
+          if (window.localStorage) {
+            window.localStorage.setItem(key, String(val));
+            storageModeLabel = 'localStorage';
+            return true;
+          }
+        } catch (err) {
+          storageModeLabel = 'Session Memory (Sandboxed)';
+        }
+        return false;
+      }
+
+      function safeRemoveItem(key) {
+        delete memoryStore[key];
+        try {
+          if (window.localStorage) {
+            window.localStorage.removeItem(key);
+            storageModeLabel = 'localStorage';
+          }
+        } catch (err) {
+          storageModeLabel = 'Session Memory (Sandboxed)';
+        }
+      }
+
+      var state = {
         contacts: [],
-        apiKey: '',
+        geminiApiKey: '',
         activeTab: 'dashboard',
         editingId: null,
+        lastAction: 'Initialized',
         filters: {
           search: '',
-          strength: 'All',
+          company: '',
           tag: 'All',
-          dueOnly: false,
+          strength: 'All',
+          followUp: 'All',
           sort: 'name-asc'
         }
       };
 
-      // =========================================================================
-      // SAFE HELPERS & TOAST FEEDBACK
-      // =========================================================================
-      function showToast(message, isError) {
+      function showToast(msg, isErr) {
         try {
-          const stack = document.getElementById('toastStack');
+          var stack = document.getElementById('toastStack');
           if (!stack) return;
-          const el = document.createElement('div');
-          el.className = 'toast' + (isError ? ' error' : '');
-          el.textContent = message;
-          stack.appendChild(el);
+          var toast = document.createElement('div');
+          toast.className = 'toast' + (isErr ? ' error' : '');
+          toast.textContent = msg;
+          stack.appendChild(toast);
           setTimeout(function () {
-            el.style.opacity = '0';
-            el.style.transition = 'opacity 0.25s ease';
-            setTimeout(function () {
-              if (el.parentNode) el.parentNode.removeChild(el);
-            }, 260);
-          }, 3000);
-        } catch (err) {
-          console.error('Toast error:', err);
-        }
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+          }, 3200);
+        } catch (e) {}
       }
 
-      function makeId() {
-        return 'id_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+      function setStatus(actionText, toastErr) {
+        state.lastAction = actionText;
+        var modeEl = document.getElementById('statusStorageMode');
+        var cntEl = document.getElementById('statusContactCount');
+        var actEl = document.getElementById('statusLastAction');
+        var footEl = document.getElementById('footerStats');
+        if (modeEl) modeEl.textContent = 'Storage: ' + storageModeLabel;
+        if (cntEl) cntEl.textContent = 'Contacts: ' + state.contacts.length;
+        if (actEl) actEl.textContent = actionText;
+        if (footEl) footEl.textContent = state.contacts.length + ' contacts \u2022 ' + storageModeLabel;
+        if (toastErr) showToast(actionText, true);
       }
 
-      function todayISO() {
-        const d = new Date();
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return y + '-' + m + '-' + day;
+      function uid() {
+        return 'c_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
       }
 
-      function shiftDaysISO(deltaDays) {
-        const d = new Date();
-        d.setDate(d.getDate() + deltaDays);
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return y + '-' + m + '-' + day;
+      function todayStr() {
+        var d = new Date();
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
       }
 
-      function diffDays(startISO, endISO) {
-        if (!startISO || !endISO) return null;
-        const a = new Date(startISO + 'T00:00:00');
-        const b = new Date(endISO + 'T00:00:00');
+      function offsetDateStr(days) {
+        var d = new Date();
+        d.setDate(d.getDate() + days);
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      }
+
+      function daysBetween(isoA, isoB) {
+        if (!isoA || !isoB) return null;
+        var a = new Date(isoA + 'T00:00:00');
+        var b = new Date(isoB + 'T00:00:00');
         if (isNaN(a.getTime()) || isNaN(b.getTime())) return null;
-        return Math.round((b - a) / 86400000);
+        return Math.round((b.getTime() - a.getTime()) / 86400000);
       }
 
-      function esc(val) {
-        if (val === null || val === undefined) return '';
-        return String(val)
+      function esc(s) {
+        if (s === null || s === undefined) return '';
+        return String(s)
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;')
@@ -1348,156 +1543,125 @@
           .replace(/'/g, '&#39;');
       }
 
-      function parseTags(raw) {
-        if (Array.isArray(raw)) return raw.map(function (t) { return String(t).trim(); }).filter(Boolean);
-        if (!raw) return [];
-        return String(raw).split(',').map(function (t) { return t.trim(); }).filter(Boolean);
+      function splitTags(val) {
+        if (Array.isArray(val)) return val.map(function (t) { return String(t).trim(); }).filter(Boolean);
+        if (!val) return [];
+        return String(val).split(',').map(function (t) { return t.trim(); }).filter(Boolean);
       }
 
-      function normalizeStrength(raw) {
-        if (!raw) return 'New';
-        const s = String(raw).trim().toLowerCase();
-        if (s.indexOf('strong') !== -1 || s.indexOf('inner') !== -1) return 'Strong';
-        if (s.indexOf('warm') !== -1) return 'Warm';
-        if (s.indexOf('casual') !== -1) return 'Casual';
-        if (s.indexOf('dormant') !== -1 || s.indexOf('cold') !== -1) return 'Dormant';
-        if (s.indexOf('new') !== -1) return 'New';
-        return 'New';
+      function normalizeStrength(val) {
+        if (!val) return 'Acquaintance';
+        var v = String(val).trim().toLowerCase();
+        if (v.indexOf('strong') !== -1) return 'Strong';
+        if (v.indexOf('warm') !== -1) return 'Warm';
+        if (v.indexOf('dormant') !== -1 || v.indexOf('cold') !== -1) return 'Dormant';
+        return 'Acquaintance';
       }
 
-      function isFollowUpDue(contact) {
-        if (!contact.nextActionDue) return false;
-        const delta = diffDays(todayISO(), contact.nextActionDue);
-        return delta !== null && delta <= 7;
+      function isDue(c) {
+        if (!c.nextActionDue) return false;
+        var diff = daysBetween(todayStr(), c.nextActionDue);
+        return diff !== null && diff <= 7;
       }
 
-      function isStaleContact(contact) {
-        if (!contact.lastContacted) return true;
-        const daysAgo = diffDays(contact.lastContacted, todayISO());
-        return daysAgo === null || daysAgo >= 90;
+      function isStale(c) {
+        if (!c.lastContacted) return true;
+        var ago = daysBetween(c.lastContacted, todayStr());
+        return ago === null || ago > 90;
       }
 
-      function copyToClipboard(text) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        let success = false;
-        try {
-          success = document.execCommand('copy');
-        } catch (e) {
-          success = false;
-        }
-        document.body.removeChild(ta);
-        return success;
+      function persistAll() {
+        safeSetItem(STORAGE_KEY, JSON.stringify(state.contacts));
       }
 
-      // =========================================================================
-      // LOCALSTORAGE PERSISTENCE
-      // =========================================================================
-      function loadState() {
-        try {
-          const savedContacts = localStorage.getItem(STORAGE_CONTACTS);
-          if (savedContacts) {
-            const parsed = JSON.parse(savedContacts);
-            if (Array.isArray(parsed)) appState.contacts = parsed;
+      function loadVault() {
+        var raw = safeGetItem(STORAGE_KEY);
+        if (raw) {
+          try {
+            var parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) state.contacts = parsed;
+          } catch (e) {
+            state.contacts = [];
           }
-          const savedKey = localStorage.getItem(STORAGE_API_KEY);
-          if (savedKey) appState.apiKey = savedKey;
-        } catch (err) {
-          console.error('Failed to load from localStorage:', err);
         }
-      }
-
-      function saveContacts() {
-        try {
-          localStorage.setItem(STORAGE_CONTACTS, JSON.stringify(appState.contacts));
-        } catch (err) {
-          console.error('Failed to save contacts:', err);
-          showToast('Browser storage full — please export a CSV backup.', true);
-        }
-      }
-
-      function saveApiKey(key) {
-        appState.apiKey = key;
-        try {
-          localStorage.setItem(STORAGE_API_KEY, key);
-        } catch (err) {
-          console.error('Failed to save API key:', err);
-        }
+        var keyRaw = safeGetItem(API_KEY_STORAGE);
+        if (keyRaw) state.geminiApiKey = keyRaw;
       }
 
       // =========================================================================
-      // CSV IMPORT & EXPORT (LINKEDIN PREAMBLE + BOM RESILIENT)
+      // CSV PARSER (BOM-FREE, LINKEDIN PREAMBLE-SKIPPING, QUOTED FIELDS)
       // =========================================================================
-      function parseCsvMatrix(text) {
-        const clean = String(text || '').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-        const rows = [];
-        let row = [];
-        let cell = '';
-        let inQuotes = false;
+      function parseCsv(text) {
+        var src = String(text || '').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        var table = [];
+        var row = [];
+        var field = '';
+        var quoted = false;
 
-        for (let i = 0; i < clean.length; i++) {
-          const ch = clean[i];
-          const next = clean[i + 1];
-          if (inQuotes) {
-            if (ch === '"' && next === '"') {
-              cell += '"';
+        for (var i = 0; i < src.length; i++) {
+          var ch = src[i];
+          var nxt = src[i + 1];
+          if (quoted) {
+            if (ch === '"' && nxt === '"') {
+              field += '"';
               i++;
             } else if (ch === '"') {
-              inQuotes = false;
+              quoted = false;
             } else {
-              cell += ch;
+              field += ch;
             }
           } else {
             if (ch === '"') {
-              inQuotes = true;
+              quoted = true;
             } else if (ch === ',') {
-              row.push(cell);
-              cell = '';
+              row.push(field);
+              field = '';
             } else if (ch === '\n') {
-              row.push(cell);
-              rows.push(row);
+              row.push(field);
+              table.push(row);
               row = [];
-              cell = '';
+              field = '';
             } else {
-              cell += ch;
+              field += ch;
             }
           }
         }
-        if (cell.length > 0 || row.length > 0) {
-          row.push(cell);
-          rows.push(row);
+        if (field.length > 0 || row.length > 0) {
+          row.push(field);
+          table.push(row);
         }
-        return rows;
+        return table;
       }
 
-      function ingestCsvText(csvText) {
-        const rows = parseCsvMatrix(csvText);
+      function processCsvString(csvText, sourceLabel) {
+        var rows = parseCsv(csvText);
         if (!rows.length) {
-          showToast('CSV file is empty.', true);
+          setStatus('CSV import failed: empty content.', true);
           return;
         }
 
-        // Find the header row containing "First Name" and "Last Name" (skips LinkedIn preamble notes)
-        let headerIdx = -1;
-        for (let i = 0; i < Math.min(rows.length, 25); i++) {
-          const lower = rows[i].map(function (c) { return c.replace(/^\uFEFF/, '').trim().toLowerCase(); });
-          if (lower.indexOf('first name') !== -1 && lower.indexOf('last name') !== -1) {
-            headerIdx = i;
+        // Skip LinkedIn preamble lines (e.g., "Notes:..." or blank lines) until header row
+        var headerIndex = -1;
+        for (var i = 0; i < Math.min(rows.length, 30); i++) {
+          var lowerCells = rows[i].map(function (c) {
+            return String(c || '').replace(/^\uFEFF/, '').trim().toLowerCase();
+          });
+          if (lowerCells.indexOf('first name') !== -1 && lowerCells.indexOf('last name') !== -1) {
+            headerIndex = i;
             break;
           }
         }
 
-        if (headerIdx === -1) {
-          showToast('Could not find "First Name" and "Last Name" columns in CSV.', true);
+        if (headerIndex === -1) {
+          setStatus('CSV import failed: missing "First Name" and "Last Name" header row.', true);
           return;
         }
 
-        const headers = rows[headerIdx].map(function (h) { return h.replace(/^\uFEFF/, '').trim().toLowerCase(); });
-        const idx = {
+        var headers = rows[headerIndex].map(function (h) {
+          return String(h || '').replace(/^\uFEFF/, '').trim().toLowerCase();
+        });
+
+        var col = {
           firstName: headers.indexOf('first name'),
           lastName: headers.indexOf('last name'),
           url: headers.indexOf('url'),
@@ -1514,101 +1678,111 @@
           prepNotes: headers.indexOf('prep notes')
         };
 
-        let added = 0;
-        let updated = 0;
+        var addedCount = 0;
+        var mergedCount = 0;
 
-        for (let r = headerIdx + 1; r < rows.length; r++) {
-          const line = rows[r];
-          if (!line || line.every(function (v) { return !v.trim(); })) continue;
+        for (var r = headerIndex + 1; r < rows.length; r++) {
+          var cells = rows[r];
+          if (!cells || cells.every(function (v) { return !String(v || '').trim(); })) continue;
 
-          const firstName = (line[idx.firstName] || '').trim();
-          const lastName = (line[idx.lastName] || '').trim();
-          if (!firstName && !lastName) continue;
+          var fn = col.firstName > -1 ? String(cells[col.firstName] || '').trim() : '';
+          var ln = col.lastName > -1 ? String(cells[col.lastName] || '').trim() : '';
+          if (!fn && !ln) continue;
 
-          const url = idx.url > -1 ? (line[idx.url] || '').trim() : '';
-          const email = idx.email > -1 ? (line[idx.email] || '').trim() : '';
-          const company = idx.company > -1 ? (line[idx.company] || '').trim() : '';
-          const position = idx.position > -1 ? (line[idx.position] || '').trim() : '';
-          const connectedOn = idx.connectedOn > -1 ? (line[idx.connectedOn] || '').trim() : '';
-          const tags = idx.tags > -1 ? parseTags(line[idx.tags]) : [];
-          const strengthRaw = idx.strength > -1 ? (line[idx.strength] || '').trim() : '';
-          const lastContacted = idx.lastContacted > -1 ? (line[idx.lastContacted] || '').trim() : '';
-          const nextAction = idx.nextAction > -1 ? (line[idx.nextAction] || '').trim() : '';
-          const nextActionDue = idx.nextActionDue > -1 ? (line[idx.nextActionDue] || '').trim() : '';
-          const notes = idx.notes > -1 ? (line[idx.notes] || '').trim() : '';
-          const prepNotes = idx.prepNotes > -1 ? (line[idx.prepNotes] || '').trim() : '';
+          var url = col.url > -1 ? String(cells[col.url] || '').trim() : '';
+          var email = col.email > -1 ? String(cells[col.email] || '').trim() : '';
+          var company = col.company > -1 ? String(cells[col.company] || '').trim() : '';
+          var position = col.position > -1 ? String(cells[col.position] || '').trim() : '';
+          var connectedOn = col.connectedOn > -1 ? String(cells[col.connectedOn] || '').trim() : '';
+          var tags = col.tags > -1 ? splitTags(cells[col.tags]) : [];
+          var strengthRaw = col.strength > -1 ? String(cells[col.strength] || '').trim() : '';
+          var lastContacted = col.lastContacted > -1 ? String(cells[col.lastContacted] || '').trim() : '';
+          var nextAction = col.nextAction > -1 ? String(cells[col.nextAction] || '').trim() : '';
+          var nextActionDue = col.nextActionDue > -1 ? String(cells[col.nextActionDue] || '').trim() : '';
+          var notes = col.notes > -1 ? String(cells[col.notes] || '').trim() : '';
+          var prepNotes = col.prepNotes > -1 ? String(cells[col.prepNotes] || '').trim() : '';
 
-          const existing = appState.contacts.find(function (c) {
-            if (url && c.url && c.url.toLowerCase() === url.toLowerCase()) return true;
-            return (
-              c.firstName.toLowerCase() === firstName.toLowerCase() &&
-              c.lastName.toLowerCase() === lastName.toLowerCase() &&
-              (c.company || '').toLowerCase() === company.toLowerCase()
-            );
-          });
+          var match = null;
+          for (var k = 0; k < state.contacts.length; k++) {
+            var existing = state.contacts[k];
+            if (url && existing.url && existing.url.toLowerCase() === url.toLowerCase()) {
+              match = existing;
+              break;
+            }
+            if (
+              existing.firstName.toLowerCase() === fn.toLowerCase() &&
+              existing.lastName.toLowerCase() === ln.toLowerCase() &&
+              String(existing.company || '').toLowerCase() === company.toLowerCase()
+            ) {
+              match = existing;
+              break;
+            }
+          }
 
-          if (existing) {
-            if (url) existing.url = url;
-            if (email) existing.email = email;
-            if (company) existing.company = company;
-            if (position) existing.position = position;
-            if (connectedOn) existing.connectedOn = connectedOn;
-            if (tags.length) existing.tags = Array.from(new Set(existing.tags.concat(tags)));
-            if (strengthRaw) existing.relationshipStrength = normalizeStrength(strengthRaw);
-            if (lastContacted) existing.lastContacted = lastContacted;
-            if (nextAction) existing.nextAction = nextAction;
-            if (nextActionDue) existing.nextActionDue = nextActionDue;
-            if (notes) existing.notes = notes;
-            if (prepNotes) existing.prepNotes = prepNotes;
-            updated++;
+          if (match) {
+            if (url) match.url = url;
+            if (email) match.email = email;
+            if (company) match.company = company;
+            if (position) match.position = position;
+            if (connectedOn) match.connectedOn = connectedOn;
+            if (tags.length) match.tags = Array.from(new Set((match.tags || []).concat(tags)));
+            if (strengthRaw) match.relationshipStrength = normalizeStrength(strengthRaw);
+            if (lastContacted) match.lastContacted = lastContacted;
+            if (nextAction) match.nextAction = nextAction;
+            if (nextActionDue) match.nextActionDue = nextActionDue;
+            if (notes) match.notes = notes;
+            if (prepNotes) match.prepNotes = prepNotes;
+            mergedCount++;
           } else {
-            appState.contacts.push({
-              id: makeId(),
-              firstName: firstName,
-              lastName: lastName,
+            state.contacts.push({
+              id: uid(),
+              firstName: fn,
+              lastName: ln,
               url: url,
               email: email,
               company: company,
               position: position,
               connectedOn: connectedOn,
               tags: tags,
-              relationshipStrength: strengthRaw ? normalizeStrength(strengthRaw) : 'New',
+              relationshipStrength: strengthRaw ? normalizeStrength(strengthRaw) : 'Acquaintance',
               lastContacted: lastContacted,
               nextAction: nextAction,
               nextActionDue: nextActionDue,
               notes: notes,
               prepNotes: prepNotes
             });
-            added++;
+            addedCount++;
           }
         }
 
-        saveContacts();
+        persistAll();
         renderAll();
-        showToast('Imported ' + added + ' new & updated ' + updated + ' contacts.');
+        var msg = (sourceLabel || 'CSV') + ': added ' + addedCount + ', merged ' + mergedCount + '.';
+        setStatus(msg);
+        showToast(msg);
       }
 
-      function csvEscape(val) {
-        const s = val === null || val === undefined ? '' : String(val);
-        if (s.indexOf('"') !== -1 || s.indexOf(',') !== -1 || s.indexOf('\n') !== -1) {
+      function csvCell(val) {
+        var s = val === null || val === undefined ? '' : String(val);
+        if (s.indexOf('"') !== -1 || s.indexOf(',') !== -1 || s.indexOf('\n') !== -1 || s.indexOf('\r') !== -1) {
           return '"' + s.replace(/"/g, '""') + '"';
         }
         return s;
       }
 
-      function handleExportCsv() {
-        if (!appState.contacts.length) {
-          showToast('No contacts to export yet.', true);
+      function exportCleanCsv() {
+        if (!state.contacts.length) {
+          setStatus('Nothing to export — load or add contacts first.', true);
           return;
         }
-        const headers = [
+        var cols = [
           'First Name', 'Last Name', 'URL', 'Email Address', 'Company', 'Position', 'Connected On',
           'Tags', 'Relationship Strength', 'Last Contacted', 'Next Action', 'Next Action Due', 'Notes', 'Prep Notes'
         ];
-        const lines = [headers.map(csvEscape).join(',')];
+        var out = [cols.map(csvCell).join(',')];
 
-        appState.contacts.forEach(function (c) {
-          lines.push([
+        state.contacts.forEach(function (c) {
+          out.push([
             c.firstName,
             c.lastName,
             c.url || '',
@@ -1617,582 +1791,581 @@
             c.position || '',
             c.connectedOn || '',
             (c.tags || []).join(', '),
-            c.relationshipStrength || 'New',
+            c.relationshipStrength || 'Acquaintance',
             c.lastContacted || '',
             c.nextAction || '',
             c.nextActionDue || '',
             c.notes || '',
             c.prepNotes || ''
-          ].map(csvEscape).join(','));
+          ].map(csvCell).join(','));
         });
 
-        const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'linkedin-personal-crm-' + todayISO() + '.csv';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast('Exported ' + appState.contacts.length + ' contacts to clean CSV.');
+        try {
+          var blob = new Blob([out.join('\n')], { type: 'text/csv;charset=utf-8;' });
+          var url = URL.createObjectURL(blob);
+          var link = document.createElement('a');
+          link.href = url;
+          link.download = 'linkedin-personal-crm-' + todayStr() + '.csv';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+          setStatus('Exported ' + state.contacts.length + ' contacts to CSV.');
+          showToast('Exported ' + state.contacts.length + ' contacts.');
+        } catch (err) {
+          setStatus('Export failed in sandbox: use Paste/Copy or open in a standard tab.', true);
+        }
       }
 
       // =========================================================================
-      // 10 REALISTIC SAMPLE CONTACTS
+      // SAMPLE DATA (10 REALISTIC CONTACTS)
       // =========================================================================
-      function loadSampleContacts() {
-        appState.contacts = [
+      function seedSampleData() {
+        state.contacts = [
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'Maya',
             lastName: 'Lin-Kowalski',
-            url: 'https://www.linkedin.com/in/example-maya-lk',
-            email: 'maya.lk@aethercloud.example',
-            company: 'Aether Cloud Systems',
+            url: 'https://www.linkedin.com/in/example-maya',
+            email: 'maya@aethercloud.example',
+            company: 'Aether Cloud',
             position: 'VP of AI Engineering',
             connectedOn: '14 Mar 2024',
             tags: ['AI Leaders', 'Enterprise', 'Speaker'],
             relationshipStrength: 'Strong',
-            lastContacted: shiftDaysISO(-16),
-            nextAction: 'Share BI & agentic workflow notes + confirm coffee chat',
-            nextActionDue: shiftDaysISO(2),
-            notes: 'Met at Enterprise AI Summit. Deep expertise in evaluation harnesses and private model deployments.',
-            prepNotes: 'Build 1 Brief: Aether recently launched VPC inference. Ask how enterprise analytics teams measure ROI.'
+            lastContacted: offsetDateStr(-15),
+            nextAction: 'Follow up on enterprise evaluation benchmarks',
+            nextActionDue: offsetDateStr(2),
+            notes: 'Met at AI leadership roundtable; strong advocate for private model governance.',
+            prepNotes: 'Build 1 Brief: Aether Cloud focuses on VPC model hosting and observability.'
           },
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'David',
             lastName: 'Okafor',
-            url: 'https://www.linkedin.com/in/example-david-okafor',
-            email: 'd.okafor@heartlandfintech.example',
-            company: 'Heartland FinTech Group',
+            url: 'https://www.linkedin.com/in/example-david',
+            email: 'd.okafor@heartlandfin.example',
+            company: 'Heartland FinTech',
             position: 'Director of Business Intelligence',
             connectedOn: '09 Nov 2023',
             tags: ['Analytics', 'FinTech', 'Omaha'],
             relationshipStrength: 'Strong',
-            lastContacted: shiftDaysISO(-114),
-            nextAction: 'Reconnect on Q4 BI & analytics leadership openings',
-            nextActionDue: shiftDaysISO(-1),
-            notes: 'Former colleague from data guild. Always generous with hiring insights and team intros.',
+            lastContacted: offsetDateStr(-112),
+            nextAction: 'Check in on analytics leadership & hiring roadmap',
+            nextActionDue: offsetDateStr(-1),
+            notes: 'Former data guild colleague; very helpful with hiring market context.',
             prepNotes: ''
           },
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'Elena',
             lastName: 'Rostova',
-            url: 'https://www.linkedin.com/in/example-elena-rostova',
+            url: 'https://www.linkedin.com/in/example-elena',
             email: 'elena@veridianhealth.example',
-            company: 'Veridian Health Labs',
-            position: 'Chief Information Security Officer',
+            company: 'Veridian Health',
+            position: 'CISO',
             connectedOn: '22 Jan 2025',
             tags: ['Security', 'Healthcare', 'Advisor'],
             relationshipStrength: 'Warm',
-            lastContacted: shiftDaysISO(-42),
-            nextAction: 'Send local-first data governance summary',
-            nextActionDue: shiftDaysISO(5),
-            notes: 'Focused on HIPAA compliance and zero-trust LLM governance.',
-            prepNotes: 'Key talking point: Client-side browser storage eliminates vendor data-retention risk.'
+            lastContacted: offsetDateStr(-38),
+            nextAction: 'Share local-first data privacy architecture notes',
+            nextActionDue: offsetDateStr(5),
+            notes: 'Focused on strict client-side data handling and zero-retention workflows.',
+            prepNotes: ''
           },
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'Marcus',
             lastName: 'Vance',
-            url: 'https://www.linkedin.com/in/example-marcus-vance',
+            url: 'https://www.linkedin.com/in/example-marcus',
             email: '',
-            company: 'Aether Cloud Systems',
+            company: 'Aether Cloud',
             position: 'Staff Data Architect',
             connectedOn: '03 Aug 2024',
             tags: ['Analytics', 'Enterprise'],
             relationshipStrength: 'Warm',
-            lastContacted: shiftDaysISO(-98),
-            nextAction: 'Follow up on semantic layer benchmark',
-            nextActionDue: shiftDaysISO(12),
-            notes: 'Works closely with Maya Lin-Kowalski on enterprise data warehouse migrations.',
+            lastContacted: offsetDateStr(-96),
+            nextAction: 'Ask about semantic layer rollout lessons',
+            nextActionDue: offsetDateStr(10),
+            notes: 'Works on warehouse performance and metric consistency.',
             prepNotes: ''
           },
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'Priya',
             lastName: 'Subramanian',
-            url: 'https://www.linkedin.com/in/example-priya-subramanian',
+            url: 'https://www.linkedin.com/in/example-priya',
             email: 'priya@northstarvc.example',
-            company: 'Northstar Seed Partners',
+            company: 'Northstar Seed',
             position: 'Principal',
             connectedOn: '19 May 2023',
             tags: ['Investor', 'Mentor', 'AI Leaders'],
             relationshipStrength: 'Strong',
-            lastContacted: shiftDaysISO(-11),
-            nextAction: 'Send monthly project update & request warm intro to portfolio CPO',
-            nextActionDue: shiftDaysISO(4),
-            notes: 'Backs B2B analytics and workflow automation founders.',
+            lastContacted: offsetDateStr(-10),
+            nextAction: 'Send monthly project update',
+            nextActionDue: offsetDateStr(4),
+            notes: 'Supports workflow automation and analytics builders.',
             prepNotes: ''
           },
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'Jonas',
             lastName: 'Lindqvist',
-            url: 'https://www.linkedin.com/in/example-jonas-lindqvist',
+            url: 'https://www.linkedin.com/in/example-jonas',
             email: '',
-            company: 'Nordic Logistics Tech',
+            company: 'Nordic Logistics',
             position: 'Head of Data Platform',
             connectedOn: '11 Feb 2022',
             tags: ['Analytics', 'Supply Chain'],
             relationshipStrength: 'Dormant',
-            lastContacted: shiftDaysISO(-185),
-            nextAction: 'Warm check-in on supply chain forecasting team',
+            lastContacted: offsetDateStr(-180),
+            nextAction: 'Light reconnect on supply chain forecasting',
             nextActionDue: '',
-            notes: 'Connected after webinar on modern lakehouse architectures.',
+            notes: 'Connected after data platform talk.',
             prepNotes: ''
           },
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'Hannah',
             lastName: 'Alvarez',
-            url: 'https://www.linkedin.com/in/example-hannah-alvarez',
-            email: 'halvarez@creightonmed.example',
-            company: 'Midwest Health Partners',
-            position: 'VP of Decision Support & BI',
+            url: 'https://www.linkedin.com/in/example-hannah',
+            email: 'hannah@midwesthealth.example',
+            company: 'Midwest Health',
+            position: 'VP of Decision Support',
             connectedOn: '28 Sep 2024',
             tags: ['Analytics', 'Healthcare', 'Omaha'],
             relationshipStrength: 'Warm',
-            lastContacted: shiftDaysISO(-64),
+            lastContacted: offsetDateStr(-60),
             nextAction: 'Share executive dashboard case study',
-            nextActionDue: shiftDaysISO(3),
-            notes: 'Leads a 25-person clinical & financial BI team.',
+            nextActionDue: offsetDateStr(3),
+            notes: 'Leads clinical and operational BI reporting.',
             prepNotes: ''
           },
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'Devon',
             lastName: 'Brooks',
-            url: 'https://www.linkedin.com/in/example-devon-brooks',
-            email: 'devon@peakretail.example',
-            company: 'Peak Commerce Group',
-            position: 'Senior Product Manager, Insights',
+            url: 'https://www.linkedin.com/in/example-devon',
+            email: 'devon@peakcommerce.example',
+            company: 'Peak Commerce',
+            position: 'Senior PM, Insights',
             connectedOn: '05 Feb 2025',
             tags: ['Product', 'Analytics'],
-            relationshipStrength: 'Casual',
-            lastContacted: shiftDaysISO(-102),
-            nextAction: 'Compare notes on self-serve customer analytics',
-            nextActionDue: shiftDaysISO(18),
-            notes: 'Met at local product management meetup.',
+            relationshipStrength: 'Acquaintance',
+            lastContacted: offsetDateStr(-105),
+            nextAction: 'Compare notes on self-serve analytics adoption',
+            nextActionDue: offsetDateStr(14),
+            notes: 'Met at product meetup.',
             prepNotes: ''
           },
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'Claire',
             lastName: 'Beaumont',
-            url: 'https://www.linkedin.com/in/example-claire-beaumont',
+            url: 'https://www.linkedin.com/in/example-claire',
             email: '',
-            company: 'Heartland FinTech Group',
-            position: 'Talent Partner, Data & Engineering',
+            company: 'Heartland FinTech',
+            position: 'Talent Partner, Data',
             connectedOn: '17 Apr 2025',
-            tags: ['Recruiter', 'FinTech', 'Omaha'],
-            relationshipStrength: 'New',
+            tags: ['Recruiting', 'FinTech', 'Omaha'],
+            relationshipStrength: 'Acquaintance',
             lastContacted: '',
-            nextAction: 'Send concise intro & highlight analytics portfolio',
-            nextActionDue: shiftDaysISO(1),
-            notes: 'Connected after she commented on David Okafor’s post.',
+            nextAction: 'Introduce & share analytics portfolio summary',
+            nextActionDue: offsetDateStr(1),
+            notes: 'Connected via mutual data network.',
             prepNotes: ''
           },
           {
-            id: makeId(),
+            id: uid(),
             firstName: 'Tariq',
             lastName: 'Al-Mansoor',
-            url: 'https://www.linkedin.com/in/example-tariq-almansoor',
+            url: 'https://www.linkedin.com/in/example-tariq',
             email: 'tariq@stratosphereops.example',
             company: 'Stratosphere Ops',
             position: 'Founder & CEO',
             connectedOn: '30 Jun 2023',
             tags: ['Founder', 'Mentor', 'Enterprise'],
             relationshipStrength: 'Strong',
-            lastContacted: shiftDaysISO(-95),
-            nextAction: 'Quarterly catch-up call on GTM & operations metrics',
-            nextActionDue: shiftDaysISO(6),
-            notes: 'Great sounding board for career strategy and executive storytelling.',
+            lastContacted: offsetDateStr(-94),
+            nextAction: 'Quarterly catch-up call',
+            nextActionDue: offsetDateStr(6),
+            notes: 'Great mentor for career framing and GTM clarity.',
             prepNotes: ''
           }
         ];
 
-        saveContacts();
+        persistAll();
         renderAll();
-        showToast('Loaded 10 sample contacts into your local vault.');
+        setStatus('Loaded 10 sample contacts into vault.');
+        showToast('Loaded 10 sample contacts.');
       }
 
       // =========================================================================
-      // TIER 2: AI PREP & OUTREACH GENERATOR (OFFLINE SYNTHESIZER + OPTIONAL GEMINI)
+      // TIER 2: AI PREP & OUTREACH GENERATOR (SINGLE-CONTACT, RULE 8)
       // =========================================================================
-      function buildSanitizedSinglePrompt(contact, mode, goal) {
-        const fullName = (contact.firstName + ' ' + contact.lastName).trim() || 'this contact';
-        const role = [contact.position, contact.company].filter(Boolean).join(' at ') || 'Professional';
-        const contextLines = [
-          'Contact: ' + fullName,
-          'Role & Company: ' + role,
-          'Connected On: ' + (contact.connectedOn || 'Unknown'),
-          'Relationship Strength: ' + (contact.relationshipStrength || 'New'),
-          'Tags: ' + ((contact.tags && contact.tags.length) ? contact.tags.join(', ') : 'None'),
-          'Last Contacted: ' + (contact.lastContacted || 'Not yet logged'),
-          'Planned Next Action: ' + (contact.nextAction || 'General check-in'),
-          'CRM Notes: ' + (contact.notes || 'None'),
-          'Prep Notes / Research Brief: ' + (contact.prepNotes || 'None'),
-          goal ? ('Specific Goal / Context: ' + goal) : ''
+      function buildPromptForContact(c, mode, angle, brief) {
+        var name = ((c.firstName || '') + ' ' + (c.lastName || '')).trim() || 'this connection';
+        var roleLine = [c.position, c.company].filter(Boolean).join(' at ') || 'Professional';
+        var lines = [
+          'Contact: ' + name,
+          'Role & Company: ' + roleLine,
+          'Relationship Strength: ' + (c.relationshipStrength || 'Acquaintance'),
+          'Tags: ' + ((c.tags && c.tags.length) ? c.tags.join(', ') : 'None'),
+          'Last Contacted: ' + (c.lastContacted || 'Not logged'),
+          'Next Action: ' + (c.nextAction || 'General check-in'),
+          'Notes: ' + (c.notes || 'None'),
+          'Existing Prep Notes: ' + (c.prepNotes || 'None'),
+          angle ? ('User Angle / Goal: ' + angle) : '',
+          brief ? ('Deep-Research Brief: ' + brief) : ''
         ].filter(Boolean).join('\n');
 
         if (mode === 'brief') {
-          return 'Prepare a concise, high-signal Pre-Call Prep Brief for this single professional contact:\n\n' +
-            contextLines +
-            '\n\nInclude:\n1. Relationship & Context Summary (2 sentences)\n2. 3 Tailored Talking Points / Smart Questions\n3. Recommended Next Action to deepen the relationship.';
+          return 'Create a concise Pre-Call Prep Brief for this single contact:\n\n' + lines +
+            '\n\nInclude:\n1. Quick Context Summary\n2. 3 Tailored Talking Points / Questions\n3. Suggested Next Step';
         }
-
-        return 'Draft a warm, concise, personalized reach-out message (under 110 words) for this single professional contact:\n\n' +
-          contextLines +
-          '\n\nKeep it natural, reference their specific role/company or shared notes, avoid generic clichés, and end with a low-friction next step.';
+        return 'Draft a concise, natural reach-out message (under 115 words) for this single contact:\n\n' + lines +
+          '\n\nReference their role/company or context naturally, avoid buzzword fluff, and propose a low-friction next step.';
       }
 
-      function synthesizeOfflineOutput(contact, mode, goal) {
-        const first = contact.firstName || 'there';
-        const fullName = (contact.firstName + ' ' + contact.lastName).trim() || 'Contact';
-        const position = contact.position || 'your current role';
-        const company = contact.company || 'your organization';
-        const strength = contact.relationshipStrength || 'New';
-        const focusTopic = goal || contact.nextAction || ('your work at ' + company);
-        const noteHook = (contact.prepNotes || contact.notes || '').split('\n')[0].trim().slice(0, 130);
+      function synthesizeDraftLocally(c, mode, angle, brief) {
+        var first = c.firstName || 'there';
+        var fullName = ((c.firstName || '') + ' ' + (c.lastName || '')).trim() || 'Contact';
+        var position = c.position || 'your role';
+        var company = c.company || 'your team';
+        var strength = c.relationshipStrength || 'Acquaintance';
+        var topic = angle || c.nextAction || ('your work at ' + company);
+        var researchLine = (brief || c.prepNotes || c.notes || '').split('\n')[0].trim().slice(0, 140);
 
         if (mode === 'brief') {
           return [
-            'PRE-CALL PREP BRIEF: ' + fullName.toUpperCase(),
-            'Role: ' + position + ' at ' + company + ' | Tier: ' + strength + ' | Connected: ' + (contact.connectedOn || 'N/A'),
+            'PREP BRIEF: ' + fullName.toUpperCase(),
+            'Role: ' + position + ' at ' + company + ' | Strength: ' + strength + ' | Last Contacted: ' + (c.lastContacted || 'Never'),
             '',
-            '1. CONTEXT SNAPSHOT',
-            '• Last touchpoint: ' + (contact.lastContacted || 'No prior outreach logged') + '.',
-            noteHook ? ('• Key background note: ' + noteHook) : ('• Focus area: Aligning on priorities across ' + company + '.'),
+            '1. CONTEXT SUMMARY',
+            researchLine ? ('• Context hook: ' + researchLine) : ('• Reconnecting around ' + topic + '.'),
+            '• Planned next action: ' + (c.nextAction || 'Schedule a brief catch-up.'),
             '',
-            '2. THREE TAILORED TALKING POINTS',
-            '• Anchor on ' + focusTopic + ' and ask what metrics or initiatives matter most to their team this quarter.',
-            '• Reference their perspective as ' + position + ' to compare notes on industry shifts and practical workflows.',
-            '• Offer a concrete, no-strings takeaway (a relevant article, benchmark, or peer connection) during the chat.',
+            '2. THREE TALKING POINTS',
+            '• Ask what is top-of-mind for ' + company + ' around ' + topic + '.',
+            '• Compare practical perspectives from ' + position + ' on recent workflows or trends.',
+            '• Share one useful insight, link, or introduction relevant to their priorities.',
             '',
-            '3. RECOMMENDED NEXT STEP',
-            '• ' + (contact.nextAction || 'Send a brief recap note within 24 hours with any promised resources.')
+            '3. NEXT STEP',
+            '• Confirm a concrete follow-up date and log key takeaways in Notes/Prep Notes.'
           ].join('\n');
         }
 
-        const openingHook = noteHook
-          ? ('I was revisiting my notes from our earlier context (' + noteHook.replace(/\.$/, '') + ') and wanted to reach out.')
-          : ('I have been following ' + company + '\'s work and wanted to reconnect around ' + focusTopic + '.');
+        var greeting = (strength === 'Strong' || strength === 'Warm')
+          ? ('Hi ' + first + ', hope you\'re doing well!')
+          : ('Hi ' + first + ', I hope your week is going smoothly!');
 
-        const greeting = (strength === 'Strong' || strength === 'Warm')
-          ? ('Hi ' + first + ', hope you\'ve been having a great week!')
-          : ('Hi ' + first + ', hope all is going well with you!');
+        var hook = researchLine
+          ? ('I was reviewing my notes (' + researchLine.replace(/\.$/, '') + ') and wanted to reach out.')
+          : ('I wanted to reconnect around ' + topic + '.');
 
         return [
           greeting,
           '',
-          openingHook + ' Given your vantage point as ' + position + ', I\'d love to compare notes briefly on ' + focusTopic + '.',
+          hook + ' With your perspective as ' + position + ' at ' + company + ', I\'d value a quick note on ' + topic + '.',
           '',
-          'No rush at all—would you be open to a quick 15-minute coffee or virtual catch-up sometime over the next couple of weeks?',
+          'Open to a brief 15-minute chat or email exchange sometime soon if timing works?',
           '',
           'Best,',
           '[Your Name]'
         ].join('\n');
       }
 
-      async function generateAiPrep() {
-        const contact = readDrawerFields();
-        const mode = document.getElementById('aiModeSelect').value;
-        const goal = document.getElementById('aiGoalInput').value.trim();
-        const btn = document.getElementById('btnGenerateAi');
-        const area = document.getElementById('aiResultArea');
-        const outBox = document.getElementById('aiOutputTextarea');
-        const badge = document.getElementById('aiOutputBadge');
-
-        btn.disabled = true;
-        btn.textContent = 'Generating...';
-
-        const prompt = buildSanitizedSinglePrompt(contact, mode, goal);
-
-        if (appState.apiKey) {
-          try {
-            const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(appState.apiKey);
-            const res = await fetch(url, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      function generateDraft(c, mode, angle, brief, onDone) {
+        var prompt = buildPromptForContact(c, mode, angle, brief);
+        if (state.geminiApiKey) {
+          var endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + encodeURIComponent(state.geminiApiKey);
+          fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+          })
+            .then(function (res) {
+              if (!res.ok) throw new Error('HTTP ' + res.status);
+              return res.json();
+            })
+            .then(function (data) {
+              var txt = data && data.candidates && data.candidates[0] && data.candidates[0].content &&
+                data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+              if (!txt) throw new Error('Empty response');
+              onDone(txt.trim(), 'Live Gemini Draft');
+            })
+            .catch(function () {
+              onDone(synthesizeDraftLocally(c, mode, angle, brief), 'Local Smart Draft (Gemini fallback)');
             });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const data = await res.json();
-            const text = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
-            if (!text) throw new Error('Empty AI text');
-            outBox.value = text.trim();
-            badge.textContent = 'LIVE GEMINI AI OUTPUT';
-            area.classList.remove('hidden');
-            btn.disabled = false;
-            btn.innerHTML = '&#10024; Generate with AI';
-            showToast('Generated live AI draft for ' + (contact.firstName || 'contact') + '.');
-            return;
-          } catch (err) {
-            console.warn('Falling back to offline synthesizer:', err);
-          }
+        } else {
+          onDone(synthesizeDraftLocally(c, mode, angle, brief), 'Local Smart Draft');
         }
+      }
 
-        outBox.value = synthesizeOfflineOutput(contact, mode, goal);
-        badge.textContent = 'SMART CONTEXT SYNTHESIZER (OFFLINE READY)';
-        area.classList.remove('hidden');
-        btn.disabled = false;
-        btn.innerHTML = '&#10024; Generate with AI';
-        showToast('Generated tailored draft for ' + (contact.firstName || 'contact') + '.');
+      function copyTextSafe(txt, label) {
+        if (!txt) {
+          setStatus('Nothing to copy.', true);
+          return;
+        }
+        var ok = false;
+        try {
+          if (document.execCommand) {
+            var ta = document.createElement('textarea');
+            ta.value = txt;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+          }
+        } catch (e) {
+          ok = false;
+        }
+        if (ok) {
+          setStatus('Copied ' + (label || 'text') + ' to clipboard.');
+          showToast('Copied ' + (label || 'text') + '.');
+        } else {
+          setStatus('Copy blocked by browser sandbox — copy manually from box.', true);
+        }
       }
 
       // =========================================================================
       // RENDERING: DASHBOARD & DIRECTORY
       // =========================================================================
       function renderAll() {
-        const count = appState.contacts.length;
-        document.getElementById('badgeTotalContacts').textContent = count;
-        document.getElementById('emptyDropzone').classList.toggle('hidden', count > 0);
+        var total = state.contacts.length;
+        var badge = document.getElementById('badgeTotalContacts');
+        var drop = document.getElementById('emptyDropzone');
+        if (badge) badge.textContent = total;
+        if (drop) drop.classList.toggle('hidden', total > 0);
 
         renderDashboard();
-        renderTagDropdown();
+        populateTagSelect();
         renderDirectory();
+        setStatus(state.lastAction);
       }
 
       function renderDashboard() {
-        const contacts = appState.contacts;
-        const total = contacts.length;
-        const tagged = contacts.filter(function (c) { return c.tags && c.tags.length > 0; }).length;
-        const strongWarm = contacts.filter(function (c) {
-          return c.relationshipStrength === 'Strong' || c.relationshipStrength === 'Warm';
-        }).length;
+        var contacts = state.contacts;
+        var tagged = contacts.filter(function (c) { return c.tags && c.tags.length > 0; }).length;
+        var due = contacts.filter(isDue).sort(function (a, b) {
+          return String(a.nextActionDue || '').localeCompare(String(b.nextActionDue || ''));
+        });
+        var stale = contacts.filter(isStale).sort(function (a, b) {
+          return String(a.lastContacted || '0000-00-00').localeCompare(String(b.lastContacted || '0000-00-00'));
+        });
+        var strong = contacts.filter(function (c) { return c.relationshipStrength === 'Strong'; }).length;
 
-        const dueList = contacts
-          .filter(isFollowUpDue)
-          .sort(function (a, b) { return (a.nextActionDue || '').localeCompare(b.nextActionDue || ''); });
+        document.getElementById('kpiTotal').textContent = contacts.length;
+        document.getElementById('kpiTaggedSub').textContent = tagged + ' tagged \u2022 Click for directory';
+        document.getElementById('kpiDue').textContent = due.length;
+        document.getElementById('kpiStale').textContent = stale.length;
+        document.getElementById('kpiStrong').textContent = strong;
 
-        const staleList = contacts
-          .filter(isStaleContact)
-          .sort(function (a, b) {
-            const rankDiff = (STRENGTH_RANK[b.relationshipStrength] || 1) - (STRENGTH_RANK[a.relationshipStrength] || 1);
-            if (rankDiff !== 0) return rankDiff;
-            return (a.lastContacted || '0000-00-00').localeCompare(b.lastContacted || '0000-00-00');
-          });
-
-        document.getElementById('kpiTotal').textContent = total;
-        document.getElementById('kpiTaggedSub').textContent = tagged + ' tagged \u2022 Click to view all';
-        document.getElementById('kpiStrongWarm').textContent = strongWarm;
-        document.getElementById('kpiDue').textContent = dueList.length;
-        document.getElementById('kpiStale').textContent = staleList.length;
-
-        // Follow-Ups Due List
-        const dueEl = document.getElementById('listDueQueue');
-        if (!dueList.length) {
-          dueEl.innerHTML = '<div style="padding: 24px; text-align: center; font-size: 12px; color: var(--text-muted);">No follow-ups due within the next 7 days.</div>';
+        var dueListEl = document.getElementById('listDueQueue');
+        if (!due.length) {
+          dueListEl.innerHTML = '<div style="padding: 20px; text-align: center; font-size: 12px; color: var(--text-muted);">No follow-ups due within 7 days.</div>';
         } else {
-          const today = todayISO();
-          dueEl.innerHTML = dueList.slice(0, 8).map(function (c) {
-            const delta = diffDays(today, c.nextActionDue);
-            const cls = delta < 0 ? 'due-overdue' : 'due-soon';
-            const label = delta < 0 ? (Math.abs(delta) + 'd overdue') : (delta === 0 ? 'Due today' : ('In ' + delta + 'd'));
+          dueListEl.innerHTML = due.slice(0, 8).map(function (c) {
+            var d = daysBetween(todayStr(), c.nextActionDue);
+            var cls = d < 0 ? 'due-overdue' : 'due-soon';
+            var tagTxt = d < 0 ? (Math.abs(d) + 'd overdue') : (d === 0 ? 'Due today' : ('In ' + d + 'd'));
             return (
-              '<button type="button" class="queue-item" data-open-id="' + esc(c.id) + '">' +
+              '<button type="button" class="queue-item" data-contact-id="' + esc(c.id) + '" onclick="window.crmOpenDrawer(\'' + esc(c.id) + '\')">' +
                 '<div style="min-width: 0;">' +
-                  '<div class="queue-item-title">' + esc(c.firstName + ' ' + c.lastName) + ' <span style="font-weight: 400; color: var(--text-muted);">\u2022 ' + esc(c.company || 'Independent') + '</span></div>' +
-                  '<div class="queue-item-sub">' + esc(c.nextAction || 'Follow-up scheduled') + '</div>' +
+                  '<div class="queue-item-title">' + esc((c.firstName + ' ' + c.lastName).trim()) + ' <span style="font-weight: 400; color: var(--text-muted);">\u2022 ' + esc(c.company || 'Independent') + '</span></div>' +
+                  '<div class="queue-item-sub">' + esc(c.nextAction || 'Scheduled follow-up') + '</div>' +
                 '</div>' +
-                '<span class="badge ' + cls + '">' + esc(label) + '</span>' +
+                '<span class="badge ' + cls + '">' + esc(tagTxt) + '</span>' +
               '</button>'
             );
           }).join('');
         }
 
-        // Haven't Contacted in a While List
-        const staleEl = document.getElementById('listStaleQueue');
-        if (!staleList.length) {
-          staleEl.innerHTML = '<div style="padding: 24px; text-align: center; font-size: 12px; color: var(--text-muted);">Everyone has been contacted within the last 90 days!</div>';
+        var staleListEl = document.getElementById('listStaleQueue');
+        if (!stale.length) {
+          staleListEl.innerHTML = '<div style="padding: 20px; text-align: center; font-size: 12px; color: var(--text-muted);">All contacts have been reached within 90 days.</div>';
         } else {
-          const today = todayISO();
-          staleEl.innerHTML = staleList.slice(0, 8).map(function (c) {
-            const daysAgo = c.lastContacted ? diffDays(c.lastContacted, today) : null;
-            const recency = daysAgo !== null ? (daysAgo + 'd ago') : 'Never logged';
-            const st = c.relationshipStrength || 'New';
+          staleListEl.innerHTML = stale.slice(0, 8).map(function (c) {
+            var ago = c.lastContacted ? daysBetween(c.lastContacted, todayStr()) : null;
+            var agoLabel = ago !== null ? (ago + 'd ago') : 'Never';
             return (
-              '<button type="button" class="queue-item" data-open-id="' + esc(c.id) + '">' +
+              '<button type="button" class="queue-item" data-contact-id="' + esc(c.id) + '" onclick="window.crmOpenDrawer(\'' + esc(c.id) + '\')">' +
                 '<div style="min-width: 0;">' +
-                  '<div class="queue-item-title">' + esc(c.firstName + ' ' + c.lastName) + ' <span class="badge strength-' + esc(st) + '" style="margin-left: 6px;">' + esc(st) + '</span></div>' +
+                  '<div class="queue-item-title">' + esc((c.firstName + ' ' + c.lastName).trim()) + ' <span class="badge strength-' + esc(c.relationshipStrength || 'Acquaintance') + '" style="margin-left: 4px;">' + esc(c.relationshipStrength || 'Acquaintance') + '</span></div>' +
                   '<div class="queue-item-sub">' + esc([c.position, c.company].filter(Boolean).join(' at ') || 'Connection') + '</div>' +
                 '</div>' +
-                '<span style="font-size: 12px; font-weight: 600; color: var(--text-muted); flex-shrink: 0;">' + esc(recency) + '</span>' +
+                '<span style="font-size: 12px; font-weight: 600; color: var(--text-muted); flex-shrink: 0;">' + esc(agoLabel) + '</span>' +
               '</button>'
             );
           }).join('');
         }
 
-        // Chart: By Company
-        const compMap = {};
+        // Breakdown by Company
+        var compCounts = {};
         contacts.forEach(function (c) {
-          const comp = (c.company || '').trim();
-          if (comp) compMap[comp] = (compMap[comp] || 0) + 1;
+          var comp = (c.company || '').trim();
+          if (comp) compCounts[comp] = (compCounts[comp] || 0) + 1;
         });
-        const topCompanies = Object.entries(compMap).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 6);
-        renderBars('chartByCompany', topCompanies, 'company');
+        var topComp = Object.entries(compCounts).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 6);
+        renderBarList('chartByCompany', topComp, 'company');
 
-        // Chart: By Tag
-        const tagMap = {};
+        // Breakdown by Tag
+        var tagCounts = {};
         contacts.forEach(function (c) {
-          (c.tags || []).forEach(function (t) {
-            tagMap[t] = (tagMap[t] || 0) + 1;
-          });
+          (c.tags || []).forEach(function (t) { tagCounts[t] = (tagCounts[t] || 0) + 1; });
         });
-        const topTags = Object.entries(tagMap).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 6);
-        renderBars('chartByTag', topTags, 'tag');
+        var topTags = Object.entries(tagCounts).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 6);
+        renderBarList('chartByTag', topTags, 'tag');
 
-        // Chart: By Relationship Strength
-        const strengthItems = STRENGTH_VALUES.map(function (st) {
-          const count = contacts.filter(function (c) { return (c.relationshipStrength || 'New') === st; }).length;
-          return [st, count];
+        // Breakdown by Relationship Strength
+        var strPairs = STRENGTH_LIST.map(function (s) {
+          return [s, contacts.filter(function (c) { return (c.relationshipStrength || 'Acquaintance') === s; }).length];
         });
-        renderBars('chartByStrength', strengthItems, 'strength', total || 1);
+        renderBarList('chartByStrength', strPairs, 'strength', contacts.length || 1);
       }
 
-      function renderBars(containerId, entries, filterKind, explicitMax) {
-        const el = document.getElementById(containerId);
-        if (!entries.length) {
-          el.innerHTML = '<div style="font-size: 12px; color: var(--text-muted);">No data recorded yet.</div>';
+      function renderBarList(elId, pairs, kind, maxOverride) {
+        var el = document.getElementById(elId);
+        if (!pairs.length) {
+          el.innerHTML = '<div style="font-size: 12px; color: var(--text-muted);">No items yet.</div>';
           return;
         }
-        const maxVal = explicitMax || entries[0][1] || 1;
-        el.innerHTML = entries.map(function (pair) {
-          const label = pair[0];
-          const count = pair[1];
-          const pct = count === 0 ? 0 : Math.max(6, Math.round((count / maxVal) * 100));
+        var maxV = maxOverride || pairs[0][1] || 1;
+        el.innerHTML = pairs.map(function (p) {
+          var lbl = p[0];
+          var cnt = p[1];
+          var pct = cnt === 0 ? 0 : Math.max(6, Math.round((cnt / maxV) * 100));
           return (
-            '<button type="button" class="bar-row" data-bar-kind="' + esc(filterKind) + '" data-bar-val="' + esc(label) + '">' +
+            '<button type="button" class="bar-row" onclick="window.crmFilterByBar(\'' + esc(kind) + '\', \'' + esc(lbl) + '\')">' +
               '<div class="bar-meta">' +
-                '<span class="bar-label">' + esc(label) + '</span>' +
-                '<span class="bar-count">' + count + '</span>' +
+                '<span class="bar-label">' + esc(lbl) + '</span>' +
+                '<span class="bar-count">' + cnt + '</span>' +
               '</div>' +
-              '<div class="bar-track"><div class="bar-fill" style="width: ' + pct + '%;"></div></div>' +
+              '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;"></div></div>' +
             '</button>'
           );
         }).join('');
       }
 
-      function renderTagDropdown() {
-        const select = document.getElementById('selectTagFilter');
-        const set = new Set();
-        appState.contacts.forEach(function (c) {
+      function populateTagSelect() {
+        var sel = document.getElementById('selectTagFilter');
+        if (!sel) return;
+        var set = new Set();
+        state.contacts.forEach(function (c) {
           (c.tags || []).forEach(function (t) { set.add(t); });
         });
-        const sorted = Array.from(set).sort(function (a, b) { return a.localeCompare(b); });
-        select.innerHTML = '<option value="All">Tag: All (' + sorted.length + ')</option>' +
-          sorted.map(function (t) {
-            const sel = appState.filters.tag === t ? ' selected' : '';
-            return '<option value="' + esc(t) + '"' + sel + '>' + esc(t) + '</option>';
-          }).join('');
+        var sorted = Array.from(set).sort(function (a, b) { return a.localeCompare(b); });
+        sel.innerHTML = '<option value="All">Tag: All</option>' + sorted.map(function (t) {
+          var chosen = state.filters.tag === t ? ' selected' : '';
+          return '<option value="' + esc(t) + '"' + chosen + '>' + esc(t) + '</option>';
+        }).join('');
       }
 
-      function getFilteredContacts() {
-        const f = appState.filters;
-        const q = f.search.trim().toLowerCase();
+      function getFilteredSortedContacts() {
+        var f = state.filters;
+        var q = (f.search || '').trim().toLowerCase();
+        var compQ = (f.company || '').trim().toLowerCase();
 
-        const list = appState.contacts.filter(function (c) {
-          if (f.strength !== 'All' && (c.relationshipStrength || 'New') !== f.strength) return false;
+        var filtered = state.contacts.filter(function (c) {
+          if (f.strength !== 'All' && (c.relationshipStrength || 'Acquaintance') !== f.strength) return false;
           if (f.tag !== 'All' && (c.tags || []).indexOf(f.tag) === -1) return false;
-          if (f.dueOnly && !isFollowUpDue(c)) return false;
+          if (f.followUp === 'due' && !isDue(c)) return false;
+          if (f.followUp === 'stale' && !isStale(c)) return false;
+          if (compQ && String(c.company || '').toLowerCase().indexOf(compQ) === -1) return false;
           if (q) {
-            const blob = [
+            var hay = [
               c.firstName, c.lastName, c.firstName + ' ' + c.lastName,
               c.company, c.position, (c.tags || []).join(' '),
               c.nextAction, c.notes, c.prepNotes
             ].join(' ').toLowerCase();
-            if (blob.indexOf(q) === -1) return false;
+            if (hay.indexOf(q) === -1) return false;
           }
           return true;
         });
 
-        list.sort(function (a, b) {
+        filtered.sort(function (a, b) {
           switch (f.sort) {
             case 'name-asc':
-              return (a.firstName + ' ' + a.lastName).localeCompare(b.firstName + ' ' + b.lastName);
+              return ((a.firstName || '') + ' ' + (a.lastName || '')).localeCompare((b.firstName || '') + ' ' + (b.lastName || ''));
             case 'company-asc':
-              return (a.company || 'zzz').localeCompare(b.company || 'zzz');
+              return String(a.company || 'zzz').localeCompare(String(b.company || 'zzz'));
+            case 'position-asc':
+              return String(a.position || 'zzz').localeCompare(String(b.position || 'zzz'));
+            case 'strength-desc':
+              return (STRENGTH_WEIGHT[b.relationshipStrength] || 0) - (STRENGTH_WEIGHT[a.relationshipStrength] || 0);
             case 'lastContacted-asc':
-              return (a.lastContacted || '0000-00-00').localeCompare(b.lastContacted || '0000-00-00');
-            case 'lastContacted-desc':
-              return (b.lastContacted || '0000-00-00').localeCompare(a.lastContacted || '0000-00-00');
+              return String(a.lastContacted || '0000-00-00').localeCompare(String(b.lastContacted || '0000-00-00'));
             case 'nextActionDue-asc':
-              return (a.nextActionDue || '9999-12-31').localeCompare(b.nextActionDue || '9999-12-31');
-            case 'connectedOn-desc':
-              return (b.connectedOn || '').localeCompare(a.connectedOn || '');
+              return String(a.nextActionDue || '9999-12-31').localeCompare(String(b.nextActionDue || '9999-12-31'));
             default:
               return 0;
           }
         });
 
-        return list;
+        return filtered;
       }
 
       function renderDirectory() {
-        const list = getFilteredContacts();
-        const tbody = document.getElementById('contactsTableBody');
-        const hasFilters = appState.filters.search !== '' || appState.filters.strength !== 'All' || appState.filters.tag !== 'All' || appState.filters.dueOnly;
-
-        document.getElementById('filterSummaryText').textContent = 'Showing ' + list.length + ' of ' + appState.contacts.length + ' connections';
-        document.getElementById('btnResetFilters').classList.toggle('hidden', !hasFilters);
+        var list = getFilteredSortedContacts();
+        var tbody = document.getElementById('contactsTableBody');
+        document.getElementById('filterSummaryText').textContent = 'Showing ' + list.length + ' of ' + state.contacts.length + ' connections';
 
         if (!list.length) {
-          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 36px 16px; color: var(--text-muted);">No connections match your current search or filters.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted);">No matching connections found.</td></tr>';
           return;
         }
 
-        const today = todayISO();
         tbody.innerHTML = list.map(function (c) {
-          const initials = ((c.firstName || '?')[0] + ((c.lastName || '')[0] || '')).toUpperCase();
-          const st = c.relationshipStrength || 'New';
-          const tagsHtml = (c.tags && c.tags.length)
-            ? c.tags.map(function (t) { return '<span class="tag-pill">' + esc(t) + '</span>'; }).join('')
-            : '<span style="color: var(--text-muted); font-size: 12px;">\u2014</span>';
+          var fullName = ((c.firstName || '') + ' ' + (c.lastName || '')).trim() || 'Unnamed';
+          var initials = ((c.firstName || '?')[0] + ((c.lastName || '')[0] || '')).toUpperCase();
+          var st = c.relationshipStrength || 'Acquaintance';
 
-          let lastHtml = '<span style="color: var(--text-muted); font-size: 12px;">Never</span>';
+          var tagsHtml = (c.tags && c.tags.length)
+            ? c.tags.map(function (t) { return '<span class="tag-pill">' + esc(t) + '</span>'; }).join('')
+            : '<span style="color:var(--text-muted); font-size:12px;">\u2014</span>';
+
+          var lastTxt = '<span style="color:var(--text-muted); font-size:12px;">Never</span>';
           if (c.lastContacted) {
-            const ago = diffDays(c.lastContacted, today);
-            lastHtml = '<div style="font-weight: 600;">' + esc(c.lastContacted) + '</div>' +
-              '<div style="font-size: 11px; color: var(--text-muted);">' + (ago === 0 ? 'Today' : (ago + 'd ago')) + '</div>';
+            var ago = daysBetween(c.lastContacted, todayStr());
+            lastTxt = '<div style="font-weight:600;">' + esc(c.lastContacted) + '</div>' +
+              '<div style="font-size:11px; color:var(--text-muted);">' + (ago === 0 ? 'Today' : (ago + 'd ago')) + '</div>';
           }
 
-          let actionHtml = '<span style="color: var(--text-muted); font-size: 12px;">\u2014</span>';
+          var nextHtml = '<span style="color:var(--text-muted); font-size:12px;">\u2014</span>';
           if (c.nextAction || c.nextActionDue) {
-            let dueBadge = '';
+            var dueBadge = '';
             if (c.nextActionDue) {
-              const delta = diffDays(today, c.nextActionDue);
-              const cls = delta < 0 ? 'due-overdue' : (delta <= 7 ? 'due-soon' : '');
-              const txt = delta < 0 ? ('Overdue ' + c.nextActionDue) : ('Due ' + c.nextActionDue);
-              dueBadge = '<div><span class="badge ' + cls + '" style="margin-top: 4px;">' + esc(txt) + '</span></div>';
+              var diff = daysBetween(todayStr(), c.nextActionDue);
+              var cls = diff < 0 ? 'due-overdue' : (diff <= 7 ? 'due-soon' : '');
+              var lbl = diff < 0 ? ('Overdue ' + c.nextActionDue) : ('Due ' + c.nextActionDue);
+              dueBadge = '<div><span class="badge ' + cls + '" style="margin-top:3px;">' + esc(lbl) + '</span></div>';
             }
-            actionHtml = '<div style="max-width: 240px;">' + esc(c.nextAction || 'Scheduled follow-up') + '</div>' + dueBadge;
+            nextHtml = '<div>' + esc(c.nextAction || 'Follow-up') + '</div>' + dueBadge;
           }
 
           return (
-            '<tr data-open-id="' + esc(c.id) + '">' +
+            '<tr data-contact-id="' + esc(c.id) + '" onclick="window.crmOpenDrawer(\'' + esc(c.id) + '\')">' +
               '<td>' +
                 '<div class="contact-cell">' +
                   '<div class="avatar">' + esc(initials) + '</div>' +
                   '<div>' +
-                    '<div style="font-weight: 700; color: var(--text-heading);">' + esc(c.firstName + ' ' + c.lastName) + '</div>' +
-                    (c.prepNotes ? '<div style="font-size: 11px; color: var(--pink-primary); font-weight: 600;">&#9733; Has Prep Notes</div>' : '') +
+                    '<div style="font-weight:700; color:var(--text-heading);">' + esc(fullName) + '</div>' +
+                    (c.prepNotes ? '<div style="font-size:11px; color:var(--pink-primary); font-weight:600;">&#9733; Prep Notes</div>' : '') +
                   '</div>' +
                 '</div>' +
               '</td>' +
               '<td>' +
-                '<div style="font-weight: 600;">' + esc(c.company || '\u2014') + '</div>' +
-                '<div style="font-size: 12px; color: var(--text-muted);">' + esc(c.position || '') + '</div>' +
+                '<div style="font-weight:600;">' + esc(c.company || '\u2014') + '</div>' +
+                '<div style="font-size:12px; color:var(--text-muted);">' + esc(c.position || '') + '</div>' +
               '</td>' +
               '<td><span class="badge strength-' + esc(st) + '">' + esc(st) + '</span></td>' +
-              '<td><div style="max-width: 210px;">' + tagsHtml + '</div></td>' +
-              '<td>' + lastHtml + '</td>' +
-              '<td>' + actionHtml + '</td>' +
-              '<td style="text-align: right;">' +
-                '<button type="button" class="btn btn-soft btn-sm" data-open-id="' + esc(c.id) + '">Open &amp; Prep</button>' +
+              '<td><div style="max-width:210px;">' + tagsHtml + '</div></td>' +
+              '<td>' + lastTxt + '</td>' +
+              '<td><div style="max-width:220px;">' + nextHtml + '</div></td>' +
+              '<td style="text-align:right;" onclick="event.stopPropagation()">' +
+                '<button type="button" class="btn btn-soft btn-sm" onclick="window.crmOpenDrawer(\'' + esc(c.id) + '\')">Open &amp; Prep</button>' +
               '</td>' +
             '</tr>'
           );
@@ -2200,89 +2373,279 @@
       }
 
       // =========================================================================
-      // CONTACT SLIDE-OVER DRAWER
+      // WINDOW HANDLERS FOR INLINE ONCLICK + DELEGATED EVENTS
       // =========================================================================
-      function openDrawer(contactId) {
-        const isNew = !contactId;
-        const contact = isNew
-          ? {
-              id: null,
-              firstName: '',
-              lastName: '',
-              url: '',
-              email: '',
-              company: '',
-              position: '',
-              connectedOn: todayISO(),
-              tags: [],
-              relationshipStrength: 'New',
-              lastContacted: '',
-              nextAction: '',
-              nextActionDue: '',
-              notes: '',
-              prepNotes: ''
-            }
-          : appState.contacts.find(function (c) { return c.id === contactId; });
+      window.crmTriggerFileInput = function () {
+        var inp = document.getElementById('csvFileInput');
+        if (inp) {
+          inp.value = '';
+          inp.click();
+        }
+      };
 
-        if (!contact) return;
-        appState.editingId = contact.id;
+      window.crmHandleFileChange = function (e) {
+        var file = e && e.target && e.target.files && e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+          processCsvString(evt.target.result, file.name);
+        };
+        reader.onerror = function () {
+          setStatus('FileReader error — try Paste CSV instead.', true);
+        };
+        reader.readAsText(file);
+      };
 
-        const fullName = (contact.firstName + ' ' + contact.lastName).trim() || 'New Contact';
-        const initials = ((contact.firstName || 'N')[0] + (contact.lastName || 'C')[0]).toUpperCase();
+      window.crmHandleDragOver = function (e) {
+        e.preventDefault();
+        var el = document.getElementById('emptyDropzone');
+        if (el) el.classList.add('drag-over');
+      };
 
-        document.getElementById('drawerAvatar').textContent = initials;
+      window.crmHandleDragLeave = function () {
+        var el = document.getElementById('emptyDropzone');
+        if (el) el.classList.remove('drag-over');
+      };
+
+      window.crmHandleDrop = function (e) {
+        e.preventDefault();
+        window.crmHandleDragLeave();
+        var file = e && e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+          processCsvString(evt.target.result, file.name);
+        };
+        reader.readAsText(file);
+      };
+
+      window.crmSwitchTab = function (tab) {
+        state.activeTab = tab;
+        var isDash = tab === 'dashboard';
+        document.getElementById('viewDashboard').classList.toggle('hidden', !isDash);
+        document.getElementById('viewDirectory').classList.toggle('hidden', isDash);
+        document.getElementById('tabDashboard').classList.toggle('active', isDash);
+        document.getElementById('tabDirectory').classList.toggle('active', !isDash);
+        setStatus('Switched to ' + (isDash ? 'Network Dashboard' : 'Connections Directory') + '.');
+      };
+
+      window.crmFilterFromKpi = function (mode) {
+        state.filters = { search: '', company: '', tag: 'All', strength: 'All', followUp: 'All', sort: 'name-asc' };
+        if (mode === 'due') {
+          state.filters.followUp = 'due';
+          state.filters.sort = 'nextActionDue-asc';
+        } else if (mode === 'stale') {
+          state.filters.followUp = 'stale';
+          state.filters.sort = 'lastContacted-asc';
+        } else if (mode === 'strong') {
+          state.filters.strength = 'Strong';
+        }
+        syncFilterInputs();
+        window.crmSwitchTab('directory');
+        renderDirectory();
+      };
+
+      window.crmFilterByBar = function (kind, val) {
+        state.filters = { search: '', company: '', tag: 'All', strength: 'All', followUp: 'All', sort: 'name-asc' };
+        if (kind === 'company') state.filters.company = val;
+        if (kind === 'tag') state.filters.tag = val;
+        if (kind === 'strength') state.filters.strength = val;
+        syncFilterInputs();
+        window.crmSwitchTab('directory');
+        renderDirectory();
+      };
+
+      function syncFilterInputs() {
+        document.getElementById('inputSearch').value = state.filters.search;
+        document.getElementById('inputCompanyFilter').value = state.filters.company;
+        document.getElementById('selectTagFilter').value = state.filters.tag;
+        document.getElementById('selectStrengthFilter').value = state.filters.strength;
+        document.getElementById('selectFollowUpFilter').value = state.filters.followUp;
+        document.getElementById('selectSortBy').value = state.filters.sort;
+      }
+
+      window.crmOnFilterChange = function () {
+        state.filters.search = document.getElementById('inputSearch').value;
+        state.filters.company = document.getElementById('inputCompanyFilter').value;
+        state.filters.tag = document.getElementById('selectTagFilter').value;
+        state.filters.strength = document.getElementById('selectStrengthFilter').value;
+        state.filters.followUp = document.getElementById('selectFollowUpFilter').value;
+        state.filters.sort = document.getElementById('selectSortBy').value;
+        renderDirectory();
+      };
+
+      window.crmResetFilters = function () {
+        state.filters = { search: '', company: '', tag: 'All', strength: 'All', followUp: 'All', sort: 'name-asc' };
+        syncFilterInputs();
+        renderDirectory();
+        setStatus('Filters cleared.');
+      };
+
+      window.crmLoadSampleData = seedSampleData;
+      window.crmExportCsv = exportCleanCsv;
+
+      // Add Contact Modal
+      window.crmOpenAddModal = function () {
+        document.getElementById('addFirstName').value = '';
+        document.getElementById('addLastName').value = '';
+        document.getElementById('addCompany').value = '';
+        document.getElementById('addPosition').value = '';
+        document.getElementById('addEmail').value = '';
+        document.getElementById('addStrength').value = 'Acquaintance';
+        document.getElementById('addTags').value = '';
+        document.getElementById('addNextAction').value = '';
+        document.getElementById('addNextActionDue').value = '';
+        document.getElementById('addNotes').value = '';
+        document.getElementById('addModalBackdrop').classList.remove('hidden');
+      };
+
+      window.crmCloseAddModal = function () {
+        document.getElementById('addModalBackdrop').classList.add('hidden');
+      };
+
+      window.crmCreateNewContact = function () {
+        var fn = document.getElementById('addFirstName').value.trim();
+        var ln = document.getElementById('addLastName').value.trim();
+        if (!fn && !ln) {
+          setStatus('Please enter a First Name or Last Name.', true);
+          return;
+        }
+        var newC = {
+          id: uid(),
+          firstName: fn,
+          lastName: ln,
+          url: '',
+          email: document.getElementById('addEmail').value.trim(),
+          company: document.getElementById('addCompany').value.trim(),
+          position: document.getElementById('addPosition').value.trim(),
+          connectedOn: todayStr(),
+          tags: splitTags(document.getElementById('addTags').value),
+          relationshipStrength: document.getElementById('addStrength').value,
+          lastContacted: '',
+          nextAction: document.getElementById('addNextAction').value.trim(),
+          nextActionDue: document.getElementById('addNextActionDue').value,
+          notes: document.getElementById('addNotes').value.trim(),
+          prepNotes: ''
+        };
+        state.contacts.unshift(newC);
+        persistAll();
+        renderAll();
+        window.crmCloseAddModal();
+        setStatus('Added ' + ((fn + ' ' + ln).trim()) + '.');
+        showToast('Contact added.');
+      };
+
+      // Paste CSV Modal
+      window.crmOpenPasteModal = function () {
+        document.getElementById('pasteModalBackdrop').classList.remove('hidden');
+      };
+
+      window.crmClosePasteModal = function () {
+        document.getElementById('pasteModalBackdrop').classList.add('hidden');
+      };
+
+      window.crmImportPastedCsv = function () {
+        var txt = document.getElementById('textareaPasteCsv').value;
+        if (!txt.trim()) {
+          setStatus('Paste CSV rows before importing.', true);
+          return;
+        }
+        processCsvString(txt, 'Pasted CSV');
+        document.getElementById('textareaPasteCsv').value = '';
+        window.crmClosePasteModal();
+      };
+
+      // Clear Data Modal
+      window.crmOpenClearModal = function () {
+        document.getElementById('clearModalBackdrop').classList.remove('hidden');
+      };
+
+      window.crmCloseClearModal = function () {
+        document.getElementById('clearModalBackdrop').classList.add('hidden');
+      };
+
+      window.crmConfirmClearData = function () {
+        state.contacts = [];
+        safeRemoveItem(STORAGE_KEY);
+        renderAll();
+        window.crmCloseClearModal();
+        setStatus('Cleared all CRM data.');
+        showToast('CRM data cleared.');
+      };
+
+      // Drawer
+      window.crmOpenDrawer = function (id) {
+        var c = state.contacts.find(function (item) { return item.id === id; });
+        if (!c) return;
+        state.editingId = c.id;
+
+        var fullName = ((c.firstName || '') + ' ' + (c.lastName || '')).trim() || 'Contact';
+        document.getElementById('drawerAvatar').textContent = ((c.firstName || '?')[0] + ((c.lastName || '')[0] || '')).toUpperCase();
         document.getElementById('drawerHeading').textContent = fullName;
-        document.getElementById('drawerSubheading').textContent = [contact.position, contact.company].filter(Boolean).join(' at ') || 'Fill in contact details below';
+        document.getElementById('drawerSubheading').textContent = [c.position, c.company].filter(Boolean).join(' at ') || 'Edit fields & prep with AI';
 
-        document.getElementById('editFirstName').value = contact.firstName || '';
-        document.getElementById('editLastName').value = contact.lastName || '';
-        document.getElementById('editCompany').value = contact.company || '';
-        document.getElementById('editPosition').value = contact.position || '';
-        document.getElementById('editEmail').value = contact.email || '';
-        document.getElementById('editConnectedOn').value = contact.connectedOn || '';
-        document.getElementById('editStrength').value = STRENGTH_VALUES.indexOf(contact.relationshipStrength) !== -1 ? contact.relationshipStrength : 'New';
-        document.getElementById('editLastContacted').value = contact.lastContacted || '';
-        document.getElementById('editTags').value = (contact.tags || []).join(', ');
-        document.getElementById('editNextAction').value = contact.nextAction || '';
-        document.getElementById('editNextActionDue').value = contact.nextActionDue || '';
-        document.getElementById('editNotes').value = contact.notes || '';
-        document.getElementById('editPrepNotes').value = contact.prepNotes || '';
-        document.getElementById('inputApiKey').value = appState.apiKey || '';
+        document.getElementById('editContactId').value = c.id;
+        document.getElementById('editFirstName').value = c.firstName || '';
+        document.getElementById('editLastName').value = c.lastName || '';
+        document.getElementById('editEmail').value = c.email || '';
+        document.getElementById('editConnectedOn').value = c.connectedOn || '';
+        document.getElementById('editCompany').value = c.company || '';
+        document.getElementById('editPosition').value = c.position || '';
+        document.getElementById('editStrength').value = STRENGTH_LIST.indexOf(c.relationshipStrength) !== -1 ? c.relationshipStrength : 'Acquaintance';
+        document.getElementById('editLastContacted').value = c.lastContacted || '';
+        document.getElementById('editTags').value = (c.tags || []).join(', ');
+        document.getElementById('editNextAction').value = c.nextAction || '';
+        document.getElementById('editNextActionDue').value = c.nextActionDue || '';
+        document.getElementById('editNotes').value = c.notes || '';
+        document.getElementById('editPrepNotes').value = c.prepNotes || '';
+        document.getElementById('inputGeminiApiKey').value = state.geminiApiKey || '';
 
-        // Quick-add tag chips from existing tags
-        const tagSet = new Set();
-        appState.contacts.forEach(function (c) { (c.tags || []).forEach(function (t) { tagSet.add(t); }); });
-        const chipsEl = document.getElementById('quickTagChips');
-        chipsEl.innerHTML = Array.from(tagSet).slice(0, 8).map(function (t) {
-          return '<button type="button" class="chip-btn" data-quick-tag="' + esc(t) + '">+ ' + esc(t) + '</button>';
+        var tagPool = new Set();
+        state.contacts.forEach(function (item) {
+          (item.tags || []).forEach(function (t) { tagPool.add(t); });
+        });
+        document.getElementById('quickTagChips').innerHTML = Array.from(tagPool).slice(0, 8).map(function (t) {
+          return '<button type="button" class="chip-btn" onclick="window.crmAddQuickTag(\'' + esc(t) + '\')">+ ' + esc(t) + '</button>';
         }).join('');
 
-        // Reset AI panel
-        document.getElementById('aiGoalInput').value = '';
-        document.getElementById('aiResultArea').classList.add('hidden');
-        document.getElementById('aiOutputTextarea').value = '';
-        document.getElementById('btnDeleteContact').classList.toggle('hidden', isNew);
+        document.getElementById('aiAngleInput').value = '';
+        document.getElementById('aiResearchInput').value = '';
+        document.getElementById('aiDrawerResultBox').classList.add('hidden');
+        document.getElementById('aiDrawerOutput').value = '';
 
         document.getElementById('drawerBackdrop').classList.remove('hidden');
-      }
+      };
 
-      function closeDrawer() {
+      window.crmCloseDrawer = function () {
         document.getElementById('drawerBackdrop').classList.add('hidden');
-        appState.editingId = null;
-      }
+        state.editingId = null;
+      };
 
-      function readDrawerFields() {
+      window.crmAddQuickTag = function (tag) {
+        var inp = document.getElementById('editTags');
+        var list = splitTags(inp.value);
+        if (list.indexOf(tag) === -1) {
+          list.push(tag);
+          inp.value = list.join(', ');
+        }
+      };
+
+      window.crmSetLastContactedToday = function () {
+        document.getElementById('editLastContacted').value = todayStr();
+      };
+
+      function readDrawerAsContact() {
         return {
-          id: appState.editingId || makeId(),
+          id: state.editingId,
           firstName: document.getElementById('editFirstName').value.trim(),
           lastName: document.getElementById('editLastName').value.trim(),
-          company: document.getElementById('editCompany').value.trim(),
-          position: document.getElementById('editPosition').value.trim(),
           email: document.getElementById('editEmail').value.trim(),
           connectedOn: document.getElementById('editConnectedOn').value.trim(),
+          company: document.getElementById('editCompany').value.trim(),
+          position: document.getElementById('editPosition').value.trim(),
           relationshipStrength: document.getElementById('editStrength').value,
           lastContacted: document.getElementById('editLastContacted').value,
-          tags: parseTags(document.getElementById('editTags').value),
+          tags: splitTags(document.getElementById('editTags').value),
           nextAction: document.getElementById('editNextAction').value.trim(),
           nextActionDue: document.getElementById('editNextActionDue').value,
           notes: document.getElementById('editNotes').value.trim(),
@@ -2290,338 +2653,192 @@
         };
       }
 
-      function saveDrawerChanges() {
-        const draft = readDrawerFields();
-        if (!draft.firstName && !draft.lastName) {
-          showToast('Please enter at least a First Name or Last Name.', true);
+      window.crmSaveContactFromDrawer = function () {
+        if (!state.editingId) return;
+        var updated = readDrawerAsContact();
+        if (!updated.firstName && !updated.lastName) {
+          setStatus('Name cannot be empty.', true);
           return;
         }
-
-        if (appState.editingId) {
-          const idx = appState.contacts.findIndex(function (c) { return c.id === appState.editingId; });
-          if (idx !== -1) {
-            appState.contacts[idx] = Object.assign({}, appState.contacts[idx], draft);
-          }
-        } else {
-          appState.contacts.unshift(draft);
+        var idx = state.contacts.findIndex(function (c) { return c.id === state.editingId; });
+        if (idx !== -1) {
+          state.contacts[idx] = Object.assign({}, state.contacts[idx], updated);
         }
-
-        saveContacts();
+        persistAll();
         renderAll();
-        closeDrawer();
-        showToast('Saved changes for ' + (draft.firstName + ' ' + draft.lastName).trim() + '.');
-      }
+        window.crmCloseDrawer();
+        setStatus('Saved changes for ' + ((updated.firstName + ' ' + updated.lastName).trim()) + '.');
+        showToast('Contact saved.');
+      };
 
-      function deleteDrawerContact() {
-        if (!appState.editingId) return;
-        appState.contacts = appState.contacts.filter(function (c) { return c.id !== appState.editingId; });
-        saveContacts();
+      window.crmDeleteCurrentContact = function () {
+        if (!state.editingId) return;
+        state.contacts = state.contacts.filter(function (c) { return c.id !== state.editingId; });
+        persistAll();
         renderAll();
-        closeDrawer();
-        showToast('Contact deleted from local vault.');
-      }
+        window.crmCloseDrawer();
+        setStatus('Deleted contact.');
+        showToast('Contact removed.');
+      };
 
-      // =========================================================================
-      // TAB & FILTER HELPERS
-      // =========================================================================
-      function switchView(viewName) {
-        appState.activeTab = viewName;
-        const isDash = viewName === 'dashboard';
-        document.getElementById('viewDashboard').classList.toggle('hidden', !isDash);
-        document.getElementById('viewDirectory').classList.toggle('hidden', isDash);
-        document.getElementById('tabDashboard').classList.toggle('active', isDash);
-        document.getElementById('tabDirectory').classList.toggle('active', !isDash);
-      }
-
-      function syncFilterControlsFromState() {
-        document.getElementById('inputSearch').value = appState.filters.search;
-        document.getElementById('selectStrengthFilter').value = appState.filters.strength;
-        document.getElementById('selectTagFilter').value = appState.filters.tag;
-        document.getElementById('chkDueOnly').checked = appState.filters.dueOnly;
-        document.getElementById('selectSortBy').value = appState.filters.sort;
-      }
-
-      // =========================================================================
-      // EVENT WIRING (DEFENSIVE & ZERO INLINE HANDLERS)
-      // =========================================================================
-      function wireAllEvents() {
-        // File input change + drag & drop
-        const fileInput = document.getElementById('csvFileInput');
-        fileInput.addEventListener('change', function (e) {
-          const file = e.target.files && e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = function (evt) {
-            ingestCsvText(evt.target.result);
-            fileInput.value = '';
-          };
-          reader.onerror = function () {
-            fileInput.value = '';
-            showToast('Could not read file. Use Paste CSV instead.', true);
-          };
-          reader.readAsText(file);
+      // Drawer Tier 2 AI Actions
+      window.crmGenerateAiForDrawer = function () {
+        var c = readDrawerAsContact();
+        var mode = document.getElementById('aiModeSelect').value;
+        var angle = document.getElementById('aiAngleInput').value.trim();
+        var brief = document.getElementById('aiResearchInput').value.trim();
+        generateDraft(c, mode, angle, brief, function (draftText, sourceLabel) {
+          document.getElementById('aiDrawerOutput').value = draftText;
+          document.getElementById('aiDrawerResultLabel').textContent = sourceLabel.toUpperCase();
+          document.getElementById('aiDrawerResultBox').classList.remove('hidden');
+          setStatus(sourceLabel + ' generated for ' + ((c.firstName || 'contact')) + '.');
         });
+      };
 
-        // Keyboard accessibility for <label for="csvFileInput">
-        document.querySelectorAll('label[for="csvFileInput"]').forEach(function (lbl) {
-          lbl.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              fileInput.click();
-            }
-          });
-        });
+      window.crmCopyEnterprisePromptForDrawer = function () {
+        var c = readDrawerAsContact();
+        var mode = document.getElementById('aiModeSelect').value;
+        var angle = document.getElementById('aiAngleInput').value.trim();
+        var brief = document.getElementById('aiResearchInput').value.trim();
+        copyTextSafe(buildPromptForContact(c, mode, angle, brief), 'Enterprise AI prompt');
+      };
 
-        // Drag and drop on page/dropzone
-        const dropzone = document.getElementById('emptyDropzone');
-        ['dragenter', 'dragover'].forEach(function (ev) {
-          document.body.addEventListener(ev, function (e) {
-            e.preventDefault();
-            if (dropzone) dropzone.classList.add('drag-over');
-          });
-        });
-        ['dragleave', 'drop'].forEach(function (ev) {
-          document.body.addEventListener(ev, function (e) {
-            e.preventDefault();
-            if (dropzone) dropzone.classList.remove('drag-over');
-          });
-        });
-        document.body.addEventListener('drop', function (e) {
-          const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function (evt) { ingestCsvText(evt.target.result); };
-            reader.readAsText(file);
-          }
-        });
-
-        // Paste CSV Modal
-        const pasteBackdrop = document.getElementById('pasteModalBackdrop');
-        function openPasteModal() { pasteBackdrop.classList.remove('hidden'); }
-        function closePasteModal() { pasteBackdrop.classList.add('hidden'); }
-
-        document.getElementById('btnOpenPasteModal').addEventListener('click', openPasteModal);
-        document.getElementById('btnEmptyPaste').addEventListener('click', openPasteModal);
-        document.getElementById('btnClosePasteModal').addEventListener('click', closePasteModal);
-        document.getElementById('btnCancelPasteModal').addEventListener('click', closePasteModal);
-        document.getElementById('btnLoadPastedCsv').addEventListener('click', function () {
-          const raw = document.getElementById('textareaPasteCsv').value;
-          if (!raw.trim()) {
-            showToast('Please paste CSV text first.', true);
-            return;
-          }
-          ingestCsvText(raw);
-          document.getElementById('textareaPasteCsv').value = '';
-          closePasteModal();
-        });
-
-        // Load Sample Data & Export CSV
-        document.getElementById('btnLoadSample').addEventListener('click', loadSampleContacts);
-        document.getElementById('btnEmptySample').addEventListener('click', loadSampleContacts);
-        document.getElementById('btnExportCsv').addEventListener('click', handleExportCsv);
-
-        // Clear All Data Modal
-        const clearBackdrop = document.getElementById('clearModalBackdrop');
-        document.getElementById('btnClearData').addEventListener('click', function () {
-          clearBackdrop.classList.remove('hidden');
-        });
-        document.getElementById('btnCloseClearModal').addEventListener('click', function () {
-          clearBackdrop.classList.add('hidden');
-        });
-        document.getElementById('btnCancelClearModal').addEventListener('click', function () {
-          clearBackdrop.classList.add('hidden');
-        });
-        document.getElementById('btnConfirmClearAll').addEventListener('click', function () {
-          appState.contacts = [];
-          saveContacts();
-          renderAll();
-          clearBackdrop.classList.add('hidden');
-          showToast('All local CRM data cleared.');
-        });
-
-        // Tabs
-        document.getElementById('tabDashboard').addEventListener('click', function () { switchView('dashboard'); });
-        document.getElementById('tabDirectory').addEventListener('click', function () { switchView('directory'); });
-
-        // Dashboard KPI & Queue Jump Buttons
-        document.getElementById('kpiCardTotal').addEventListener('click', function () {
-          appState.filters = { search: '', strength: 'All', tag: 'All', dueOnly: false, sort: 'name-asc' };
-          syncFilterControlsFromState();
-          switchView('directory');
-          renderDirectory();
-        });
-
-        document.getElementById('kpiCardStrong').addEventListener('click', function () {
-          appState.filters = { search: '', strength: 'Strong', tag: 'All', dueOnly: false, sort: 'name-asc' };
-          syncFilterControlsFromState();
-          switchView('directory');
-          renderDirectory();
-        });
-
-        function jumpToDue() {
-          appState.filters.dueOnly = true;
-          appState.filters.sort = 'nextActionDue-asc';
-          syncFilterControlsFromState();
-          switchView('directory');
-          renderDirectory();
+      window.crmSaveResearchBriefToPrep = function () {
+        var brief = document.getElementById('aiResearchInput').value.trim();
+        if (!brief) {
+          setStatus('Enter a deep-research brief first.', true);
+          return;
         }
-        document.getElementById('kpiCardDue').addEventListener('click', jumpToDue);
-        document.getElementById('btnJumpDue').addEventListener('click', jumpToDue);
+        var prepEl = document.getElementById('editPrepNotes');
+        var header = '[Build 1 Research Brief \u2022 ' + todayStr() + ']\n';
+        prepEl.value = prepEl.value.trim() ? (prepEl.value.trim() + '\n\n' + header + brief) : (header + brief);
+        setStatus('Research brief added to Prep Notes (click Save Contact to persist).');
+        showToast('Added to Prep Notes.');
+      };
 
-        function jumpToStale() {
-          appState.filters.dueOnly = false;
-          appState.filters.sort = 'lastContacted-asc';
-          syncFilterControlsFromState();
-          switchView('directory');
-          renderDirectory();
+      window.crmCopyDrawerAiOutput = function () {
+        copyTextSafe(document.getElementById('aiDrawerOutput').value, 'AI draft');
+      };
+
+      window.crmAppendDrawerAiToPrep = function () {
+        var draft = document.getElementById('aiDrawerOutput').value.trim();
+        if (!draft) return;
+        var prepEl = document.getElementById('editPrepNotes');
+        var header = '[AI Prep \u2022 ' + todayStr() + ']\n';
+        prepEl.value = prepEl.value.trim() ? (prepEl.value.trim() + '\n\n' + header + draft) : (header + draft);
+        setStatus('Appended AI draft to Prep Notes (click Save Contact to persist).');
+        showToast('Appended to Prep Notes.');
+      };
+
+      window.crmSaveGeminiKey = function () {
+        var k = document.getElementById('inputGeminiApiKey').value.trim();
+        state.geminiApiKey = k;
+        safeSetItem(API_KEY_STORAGE, k);
+        setStatus(k ? 'Saved optional Gemini API key locally.' : 'Cleared Gemini API key (local draft mode).');
+        showToast(k ? 'API key saved.' : 'Using local draft synthesizer.');
+      };
+
+      // Quick AI Modal
+      window.crmOpenQuickAiModal = function () {
+        if (!state.contacts.length) {
+          setStatus('Load or add a contact before using Quick AI Prep.', true);
+          return;
         }
-        document.getElementById('kpiCardStale').addEventListener('click', jumpToStale);
-        document.getElementById('btnJumpStale').addEventListener('click', jumpToStale);
+        var sel = document.getElementById('quickAiContactSelect');
+        sel.innerHTML = state.contacts.map(function (c) {
+          var label = ((c.firstName || '') + ' ' + (c.lastName || '')).trim() + (c.company ? (' \u2014 ' + c.company) : '');
+          return '<option value="' + esc(c.id) + '">' + esc(label) + '</option>';
+        }).join('');
+        document.getElementById('quickAiAngleInput').value = '';
+        document.getElementById('quickAiBriefInput').value = '';
+        document.getElementById('quickAiOutput').value = '';
+        document.getElementById('quickAiResultWrap').classList.add('hidden');
+        document.getElementById('quickAiModalBackdrop').classList.remove('hidden');
+      };
 
-        // Directory Search, Filters, Sort & Add Contact
-        document.getElementById('inputSearch').addEventListener('input', function (e) {
-          appState.filters.search = e.target.value;
-          renderDirectory();
-        });
-        document.getElementById('selectStrengthFilter').addEventListener('change', function (e) {
-          appState.filters.strength = e.target.value;
-          renderDirectory();
-        });
-        document.getElementById('selectTagFilter').addEventListener('change', function (e) {
-          appState.filters.tag = e.target.value;
-          renderDirectory();
-        });
-        document.getElementById('selectSortBy').addEventListener('change', function (e) {
-          appState.filters.sort = e.target.value;
-          renderDirectory();
-        });
-        document.getElementById('chkDueOnly').addEventListener('change', function (e) {
-          appState.filters.dueOnly = e.target.checked;
-          renderDirectory();
-        });
-        document.getElementById('btnResetFilters').addEventListener('click', function () {
-          appState.filters = { search: '', strength: 'All', tag: 'All', dueOnly: false, sort: 'name-asc' };
-          syncFilterControlsFromState();
-          renderDirectory();
-          showToast('Filters reset.');
-        });
-        document.getElementById('btnAddContact').addEventListener('click', function () {
-          openDrawer(null);
-        });
+      window.crmCloseQuickAiModal = function () {
+        document.getElementById('quickAiModalBackdrop').classList.add('hidden');
+      };
 
-        // Delegated Clicks for Opening Contact Drawer, Chart Bars, and Quick Tags
-        document.body.addEventListener('click', function (e) {
-          const openBtn = e.target.closest('[data-open-id]');
-          if (openBtn) {
-            openDrawer(openBtn.getAttribute('data-open-id'));
-            return;
-          }
-
-          const barBtn = e.target.closest('[data-bar-kind]');
-          if (barBtn) {
-            const kind = barBtn.getAttribute('data-bar-kind');
-            const val = barBtn.getAttribute('data-bar-val');
-            appState.filters = { search: '', strength: 'All', tag: 'All', dueOnly: false, sort: 'name-asc' };
-            if (kind === 'company') appState.filters.search = val;
-            if (kind === 'tag') appState.filters.tag = val;
-            if (kind === 'strength') appState.filters.strength = val;
-            syncFilterControlsFromState();
-            switchView('directory');
-            renderDirectory();
-            return;
-          }
-
-          const tagChip = e.target.closest('[data-quick-tag]');
-          if (tagChip) {
-            const tag = tagChip.getAttribute('data-quick-tag');
-            const input = document.getElementById('editTags');
-            const existing = parseTags(input.value);
-            if (existing.indexOf(tag) === -1) {
-              existing.push(tag);
-              input.value = existing.join(', ');
-            }
-          }
+      window.crmRunQuickAi = function () {
+        var id = document.getElementById('quickAiContactSelect').value;
+        var c = state.contacts.find(function (item) { return item.id === id; });
+        if (!c) return;
+        var mode = document.getElementById('quickAiModeSelect').value;
+        var angle = document.getElementById('quickAiAngleInput').value.trim();
+        var brief = document.getElementById('quickAiBriefInput').value.trim();
+        generateDraft(c, mode, angle, brief, function (txt, srcLabel) {
+          document.getElementById('quickAiOutput').value = txt;
+          document.getElementById('quickAiResultWrap').classList.remove('hidden');
+          setStatus(srcLabel + ' ready for ' + ((c.firstName || 'contact')) + '.');
         });
+      };
 
-        // Drawer Buttons
-        document.getElementById('btnCloseDrawer').addEventListener('click', closeDrawer);
-        document.getElementById('btnCancelDrawer').addEventListener('click', closeDrawer);
-        document.getElementById('drawerBackdrop').addEventListener('click', function (e) {
-          if (e.target === document.getElementById('drawerBackdrop')) closeDrawer();
-        });
-        document.getElementById('btnSetToday').addEventListener('click', function () {
-          document.getElementById('editLastContacted').value = todayISO();
-        });
-        document.getElementById('btnSaveContact').addEventListener('click', saveDrawerChanges);
-        document.getElementById('btnDeleteContact').addEventListener('click', deleteDrawerContact);
+      window.crmCopyQuickEnterprisePrompt = function () {
+        var id = document.getElementById('quickAiContactSelect').value;
+        var c = state.contacts.find(function (item) { return item.id === id; });
+        if (!c) return;
+        var mode = document.getElementById('quickAiModeSelect').value;
+        var angle = document.getElementById('quickAiAngleInput').value.trim();
+        var brief = document.getElementById('quickAiBriefInput').value.trim();
+        copyTextSafe(buildPromptForContact(c, mode, angle, brief), 'Enterprise AI prompt');
+      };
 
-        // Tier 2 AI Buttons
-        document.getElementById('btnGenerateAi').addEventListener('click', generateAiPrep);
+      window.crmCopyQuickAiOutput = function () {
+        copyTextSafe(document.getElementById('quickAiOutput').value, 'Quick AI draft');
+      };
 
-        document.getElementById('btnCopyEnterprisePrompt').addEventListener('click', function () {
-          const contact = readDrawerFields();
-          const mode = document.getElementById('aiModeSelect').value;
-          const goal = document.getElementById('aiGoalInput').value.trim();
-          const prompt = buildSanitizedSinglePrompt(contact, mode, goal);
-          if (copyToClipboard(prompt)) {
-            showToast('Single-contact prompt copied for your enterprise AI tool.');
-          } else {
-            showToast('Unable to copy automatically — please copy manually.', true);
-          }
-        });
+      window.crmSaveQuickAiToContact = function () {
+        var id = document.getElementById('quickAiContactSelect').value;
+        var draft = document.getElementById('quickAiOutput').value.trim();
+        var c = state.contacts.find(function (item) { return item.id === id; });
+        if (!c || !draft) return;
+        var entry = '[AI Prep \u2022 ' + todayStr() + ']\n' + draft;
+        c.prepNotes = c.prepNotes ? (c.prepNotes.trim() + '\n\n' + entry) : entry;
+        persistAll();
+        renderAll();
+        setStatus('Saved AI draft to ' + ((c.firstName || 'contact')) + '\'s Prep Notes.');
+        showToast('Saved to Prep Notes.');
+      };
 
-        document.getElementById('btnCopyAiOutput').addEventListener('click', function () {
-          const text = document.getElementById('aiOutputTextarea').value;
-          if (copyToClipboard(text)) {
-            showToast('Copied AI output to clipboard.');
-          }
-        });
+      window.crmHandleBackdropClick = function (e, which) {
+        if (e.target !== e.currentTarget) return;
+        if (which === 'drawer') window.crmCloseDrawer();
+        if (which === 'add') window.crmCloseAddModal();
+        if (which === 'paste') window.crmClosePasteModal();
+        if (which === 'quickai') window.crmCloseQuickAiModal();
+        if (which === 'clear') window.crmCloseClearModal();
+      };
 
-        document.getElementById('btnAppendPrep').addEventListener('click', function () {
-          const draft = document.getElementById('aiOutputTextarea').value.trim();
-          if (!draft) return;
-          const prepField = document.getElementById('editPrepNotes');
-          const stamp = '--- AI Prep (' + todayISO() + ') ---\n';
-          prepField.value = prepField.value.trim()
-            ? (prepField.value.trim() + '\n\n' + stamp + draft)
-            : (stamp + draft);
-          showToast('Appended to Prep Notes. Click Save Changes to persist.');
-        });
-
-        document.getElementById('btnSaveApiKey').addEventListener('click', function () {
-          const key = document.getElementById('inputApiKey').value.trim();
-          saveApiKey(key);
-          showToast(key ? 'Optional Gemini API key saved locally.' : 'API key cleared; using offline synthesizer.');
-        });
-
-        // Escape key closes active modal or drawer
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape') {
-            closeDrawer();
-            closePasteModal();
-            clearBackdrop.classList.add('hidden');
-          }
-        });
-      }
-
-      // =========================================================================
-      // BOOTSTRAP ON DOMCONTENTLOADED
-      // =========================================================================
-      function init() {
-        try {
-          loadState();
-          wireAllEvents();
-          renderAll();
-        } catch (err) {
-          console.error('Initialization error:', err);
-          showToast('Initialization error: ' + err.message, true);
+      // Delegated listener backup alongside inline onclick handlers
+      document.addEventListener('click', function (e) {
+        var tabBtn = e.target.closest('[data-tab]');
+        if (tabBtn && tabBtn.getAttribute('data-tab')) {
+          window.crmSwitchTab(tabBtn.getAttribute('data-tab'));
         }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          window.crmCloseDrawer();
+          window.crmCloseAddModal();
+          window.crmClosePasteModal();
+          window.crmCloseQuickAiModal();
+          window.crmCloseClearModal();
+        }
+      });
+
+      // Immediate + DOMContentLoaded bootstrap
+      function boot() {
+        loadVault();
+        renderAll();
+        setStatus('Ready (' + storageModeLabel + ').');
       }
 
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', boot);
       } else {
-        init();
+        boot();
       }
     })();
   </script>
