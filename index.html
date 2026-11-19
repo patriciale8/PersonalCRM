@@ -1995,6 +1995,16 @@
             lastContacted: offsetDateStr(-94),
             nextAction: 'Quarterly catch-up call',
             nextActionDue: offsetDateStr(6),
+            notes: 'Founder with a strong interest in enterprise analytics and AI.',
+            prepNotes: ''
+          }
+        ];
+        persistAll();
+        renderAll();
+        setStatus('Loaded ' + state.contacts.length + ' sample contacts.');
+        showToast('Sample contacts loaded.');
+      }
+
       function isDue(c) {
         if (!c.nextAction) return false;
         return Boolean(String(c.nextAction).trim());
